@@ -130,7 +130,7 @@ class LoginView extends StatelessWidget {
                                   Const.LOADIG(context);
                                   if (!keyForm.currentState!.validate()) {
                                     print("OK USER!!");
-                                    Navigator.of(context).pushReplacement(
+                                    Navigator.of(context).push(
                                         MaterialPageRoute(
                                             builder: (ctx) => QuestionsView()));
                                   }

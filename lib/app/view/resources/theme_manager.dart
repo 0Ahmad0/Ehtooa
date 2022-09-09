@@ -167,6 +167,12 @@ ThemeData getApplicationTheme({bool isDark = false}){
           )
       ),
     ),
+    appBarTheme: AppBarTheme(
+        centerTitle: true,
+        elevation: AppSize.s4,
+        titleTextStyle: getRegularStyle(
+            color: ColorManager.white, fontSize: FontSize.s16)
+    ),
 
 
   );

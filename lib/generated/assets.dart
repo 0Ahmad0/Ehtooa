@@ -14,6 +14,8 @@ class Assets {
   static const String fontsMontserrat-SemiBold = 'assets/fonts/Montserrat-SemiBold.ttf';
   static const String imagesLoginBack = 'assets/images/loginBack.svg';
   static const String imagesLogo = 'assets/images/logo.svg';
+  static const String imagesNoDataFound = 'assets/images/no_data_found.svg';
+  static const String imagesNoNotifcation = 'assets/images/no_notifcation.svg';
   static const String imagesOnboarding1 = 'assets/images/onboarding1.svg';
   static const String imagesOnboarding2 = 'assets/images/onboarding2.svg';
   static const String imagesOnboarding3 = 'assets/images/onboarding3.svg';

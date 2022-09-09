@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TextFiledProvider with ChangeNotifier{
-  bool isPassword = false;
+  bool isPassword = true;
 
   void changeState(){
     isPassword = !isPassword;
