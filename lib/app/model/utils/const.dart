@@ -42,10 +42,10 @@ class Const{
 
    static SHOWRATEDIALOOG(BuildContext context){
       Get.dialog(
+
         Center(
           child: Material(
             color: Colors.transparent,
-
             child: Container(
               margin: const EdgeInsets.symmetric(
                   horizontal: AppMargin.m10,
@@ -55,7 +55,7 @@ class Const{
                   vertical: AppPadding.p10),
               width: Sizer.getW(context),
               decoration: BoxDecoration(
-                  color: ColorManager.white,
+                  color: Theme.of(context).cardColor,
                   borderRadius:
                   BorderRadius.circular(AppSize.s14)),
               child: Column(
@@ -65,7 +65,7 @@ class Const{
                   Text(
                     tr(LocaleKeys.rate),
                     style: getRegularStyle(
-                        color: ColorManager.black,
+                        color: Theme.of(context).textTheme.bodyText1!.color,
                         fontSize: Sizer.getW(context) * 0.045
                     ),
                   ),

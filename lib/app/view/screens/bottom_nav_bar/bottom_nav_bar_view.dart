@@ -43,6 +43,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
       child: Consumer<BottomNavBarProvider>(
         builder: (_, bottombar, __) {
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             drawer: Drawer(
               child: Column(
                 children: [

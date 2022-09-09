@@ -45,7 +45,30 @@ class Answer {
 
   Answer({required this.answerText,required this.proportion});
 }
+
+//InteractiveSessions
+class InteractiveSessions{
+  String name;
+  String id_link;
+  bool isSold;
+  InteractiveSessions({
+    required this.name,
+    required this.id_link,
+    required this.isSold
+  });
+}
+
+//Doctor
+class Doctor{
+  String id;
+  String name;
+  String carer;
+  String description;
+  Doctor({required this.id,required this.name,required this.carer,required this.description});
+}
+
 /*
+
 flutter pub run easy_localization:generate -S "assets/translations/" -O "lib/translations"
 flutter pub run easy_localization:generate -S "assets/translations/" -O "lib/translations" -o "locale_keys.g.dart" -f keys
 flutter build apk --split-per-abi

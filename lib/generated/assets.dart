@@ -19,7 +19,10 @@ class Assets {
   static const String imagesOnboarding1 = 'assets/images/onboarding1.svg';
   static const String imagesOnboarding2 = 'assets/images/onboarding2.svg';
   static const String imagesOnboarding3 = 'assets/images/onboarding3.svg';
+  static const String imagesPaymentBack = 'assets/images/payment_back.svg';
+  static const String imagesPaymentDone = 'assets/images/payment_done.svg';
   static const String imagesSignupBack = 'assets/images/signupBack.svg';
+  static const String imagesUndrawPayOnlineReAqe6 - Copy = 'assets/images/payment_back1.svg';
   static const String translationsAr = 'assets/translations/ar.json';
   static const String translationsEn = 'assets/translations/en.json';
 

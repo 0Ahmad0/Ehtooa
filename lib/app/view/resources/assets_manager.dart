@@ -5,6 +5,8 @@ class ImagesAssets{
   static const signupBack = "$imagePath/signupBack.svg";
   static const noNotifications = "$imagePath/no_notifcation.svg";
   static const noDataFound = "$imagePath/no_data_found.svg";
+  static const paymentBack = "$imagePath/payment_back.svg";
+  static const paymentDone = "$imagePath/payment_done.svg";
 
 
   static const onBoardingIMG1 = "$imagePath/onboarding1.svg";
