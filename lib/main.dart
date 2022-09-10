@@ -2,6 +2,7 @@ import 'package:ehtooa/app/controller/on_boarding_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/utils/local/change_theme.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
+import 'package:ehtooa/app/view/resources/globals.dart';
 import 'package:ehtooa/app/view/screens/bottom_nav_bar/bottom_nav_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
@@ -18,6 +19,7 @@ void main() async{
   await WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   await GetStorage.init();
+  await Globals.init();
   Provider.debugCheckInvalidValueType = null;
   runApp(
     EasyLocalization(

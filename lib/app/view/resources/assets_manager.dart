@@ -7,6 +7,7 @@ class ImagesAssets{
   static const noDataFound = "$imagePath/no_data_found.svg";
   static const paymentBack = "$imagePath/payment_back.svg";
   static const paymentDone = "$imagePath/payment_done.svg";
+  static const backgroundChat = "$imagePath/background_chat.png";
   static const List<String> imagesInteractiveSessions = [
     "$imagePath/img1.svg",
     "$imagePath/img2.svg",
