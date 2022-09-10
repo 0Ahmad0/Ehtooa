@@ -35,7 +35,8 @@ class User {
 class Question {
   String questionText;
   List<Answer> answer;
-  Question({required this.questionText,required this.answer});
+
+  Question({required this.questionText, required this.answer});
 }
 
 //Answer
@@ -43,30 +44,74 @@ class Answer {
   String answerText;
   int proportion;
 
-  Answer({required this.answerText,required this.proportion});
+  Answer({required this.answerText, required this.proportion});
 }
 
 //InteractiveSessions
-class InteractiveSessions{
+class InteractiveSessions {
   String name;
   String id_link;
+  String doctorName;
+  String price;
   bool isSold;
+
   InteractiveSessions({
     required this.name,
     required this.id_link,
-    required this.isSold
+    required this.isSold,
+    required this.doctorName,
+    required this.price,
   });
 }
 
 //Doctor
-class Doctor{
+class Doctor {
   String id;
   String name;
   String carer;
   String description;
-  Doctor({required this.id,required this.name,required this.carer,required this.description});
+
+  Doctor(
+      {required this.id,
+      required this.name,
+      required this.carer,
+      required this.description});
 }
 
+//Message
+class Message {
+  String textMessage;
+  String senderName;
+  DateTime sendingTime;
+
+  Message(
+      {required this.textMessage,
+      required this.senderName,
+      required this.sendingTime});
+}
+
+//Admin
+class Admin {
+  String id;
+  String name;
+
+  Admin({required this.id, required this.name});
+}
+
+//Chat
+class Chat {
+  String id;
+  List<User> users;
+  List<Message> messages;
+  Admin admin;
+
+  Chat({
+    required this.id,
+    required this.users,
+    required this.messages,
+    required this.admin,
+  });
+}
 /*
 
 flutter pub run easy_localization:generate -S "assets/translations/" -O "lib/translations"

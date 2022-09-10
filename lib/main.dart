@@ -6,7 +6,6 @@ import 'package:ehtooa/app/view/screens/bottom_nav_bar/bottom_nav_bar_view.dart'
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'app/controller/bottom_nav_bar_provider.dart';
 import 'app/view/resources/theme_manager.dart';
 import 'app/view/screens/splash/splash_view.dart';

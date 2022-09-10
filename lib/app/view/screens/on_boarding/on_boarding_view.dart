@@ -64,7 +64,7 @@ class OnBoardingView extends StatelessWidget {
                       style: TextButton.styleFrom(
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero),
-                          primary: Theme.of(context).textTheme.bodySmall!.color,
+                          primary: ColorManager.white,
                           backgroundColor: Theme.of(context).primaryColor,
                           minimumSize: Size.fromHeight(AppSize.s80)),
                       onPressed: () {
@@ -74,7 +74,7 @@ class OnBoardingView extends StatelessWidget {
                       child: Text(
                         tr(LocaleKeys.get_started),
                         style: getRegularStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            color: ColorManager.white,
                             fontSize: Sizer.getW(context) / 22
                         ),
                       ))

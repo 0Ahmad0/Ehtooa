@@ -12,6 +12,19 @@ class Assets {
   static const String fontsMontserrat-Medium = 'assets/fonts/Montserrat-Medium.ttf';
   static const String fontsMontserrat-Regular = 'assets/fonts/Montserrat-Regular.ttf';
   static const String fontsMontserrat-SemiBold = 'assets/fonts/Montserrat-SemiBold.ttf';
+  static const String iconLogo = 'assets/icon/logo.png';
+  static const String imagesImg1 = 'assets/images/img1.svg';
+  static const String imagesImg10 = 'assets/images/img10.svg';
+  static const String imagesImg11 = 'assets/images/img11.svg';
+  static const String imagesImg12 = 'assets/images/img12.svg';
+  static const String imagesImg2 = 'assets/images/img2.svg';
+  static const String imagesImg3 = 'assets/images/img3.svg';
+  static const String imagesImg4 = 'assets/images/img4.svg';
+  static const String imagesImg5 = 'assets/images/img5.svg';
+  static const String imagesImg6 = 'assets/images/img6.svg';
+  static const String imagesImg7 = 'assets/images/img7.svg';
+  static const String imagesImg8 = 'assets/images/img8.svg';
+  static const String imagesImg9 = 'assets/images/img9.svg';
   static const String imagesLoginBack = 'assets/images/loginBack.svg';
   static const String imagesLogo = 'assets/images/logo.svg';
   static const String imagesNoDataFound = 'assets/images/no_data_found.svg';
@@ -20,9 +33,9 @@ class Assets {
   static const String imagesOnboarding2 = 'assets/images/onboarding2.svg';
   static const String imagesOnboarding3 = 'assets/images/onboarding3.svg';
   static const String imagesPaymentBack = 'assets/images/payment_back.svg';
+  static const String imagesPaymentBack1 = 'assets/images/payment_back1.svg';
   static const String imagesPaymentDone = 'assets/images/payment_done.svg';
   static const String imagesSignupBack = 'assets/images/signupBack.svg';
-  static const String imagesUndrawPayOnlineReAqe6 - Copy = 'assets/images/payment_back1.svg';
   static const String translationsAr = 'assets/translations/ar.json';
   static const String translationsEn = 'assets/translations/en.json';
 
