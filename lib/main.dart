@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'app/controller/bottom_nav_bar_provider.dart';
+import 'app/controller/profile_provider.dart';
 import 'app/view/resources/theme_manager.dart';
 import 'app/view/screens/splash/splash_view.dart';
 import 'package:provider/provider.dart';
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         Provider<OnBoardingProvider>(create: (_)=>OnBoardingProvider()),
         Provider<TextFiledProvider>(create: (_)=>TextFiledProvider()),
         Provider<BottomNavBarProvider>(create: (_)=>BottomNavBarProvider()),
+        Provider<ProfileProvider>(create: (_)=>ProfileProvider()),
       ],
       child: ChangeNotifierProvider<AppProvider>.value(
         value: appProvider,
