@@ -18,20 +18,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import '../../../controller/signup_provider.dart';
 import '../../resources/values_manager.dart';
 import 'package:provider/provider.dart';
 
 class SignupView extends StatelessWidget {
+ /*
   final name = TextEditingController();
   final email = TextEditingController();
   final phoneNumber = TextEditingController();
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
   final keyForm = GlobalKey<FormState>();
-
+*/
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final signupProvider = Provider.of<SignupProvider>(context);
+    return  ChangeNotifierProvider<SignupProvider>(
+        create: (_)=> SignupProvider(),
+    child: Consumer<SignupProvider>(
+    builder: (context, value, child) =>
+        Scaffold(
         resizeToAvoidBottomInset: false,
         body: Column(
           children: [
@@ -41,7 +48,7 @@ class SignupView extends StatelessWidget {
                   horizontal: AppSize.s20, vertical: AppSize.s10),
               child: SingleChildScrollView(
                 child: Form(
-                  key: keyForm,
+                  key: signupProvider.keyForm,
                   child: FadeInRightBig(
                     delay: Duration(milliseconds: AppConstants.onBoardingDelay),
                     child: Column(
@@ -69,7 +76,7 @@ class SignupView extends StatelessWidget {
                           height: AppSize.s20,
                         ),
                         CustomTextFiled(
-                          controller: name,
+                          controller: signupProvider.name,
                           maxLength: null,
                           validator: (String? val) {
                             if (val!.trim().isEmpty) {
@@ -87,7 +94,7 @@ class SignupView extends StatelessWidget {
                           height: AppSize.s20,
                         ),
                         CustomTextFiled(
-                          controller: email,
+                          controller: signupProvider.email,
                           maxLength: null,
                           validator: (String? val) {
                             if (val!.trim().isEmpty) {
@@ -107,7 +114,7 @@ class SignupView extends StatelessWidget {
                           height: AppSize.s20,
                         ),
                         CustomTextFiled(
-                          controller: phoneNumber,
+                          controller: signupProvider.phoneNumber,
                           maxLength: null,
                           validator: (String? val) {
                             if (val!.trim().isEmpty) {
@@ -132,7 +139,7 @@ class SignupView extends StatelessWidget {
                           child: Consumer<TextFiledProvider>(builder: (_, textFiled, c__) {
                             return TextFormField(
                                 obscureText: textFiled.isPassword,
-                                controller: password,
+                                controller: signupProvider.password,
                                 textInputAction: TextInputAction.next,
                                 validator: (String? val) {
                                   if (val!.trim().isEmpty) {
@@ -168,12 +175,12 @@ class SignupView extends StatelessWidget {
                           child: Consumer<TextFiledProvider>(builder: (_, textFiled, c__) {
                             return TextFormField(
                                 obscureText: textFiled.isPassword,
-                                controller: confirmPassword,
+                                controller: signupProvider.confirmPassword,
                                 textInputAction: TextInputAction.done,
                                 validator: (String? val) {
                                   if (val!.trim().isEmpty) {
                                     return tr(LocaleKeys.field_required);
-                                  } else if (password.text != confirmPassword.text) {
+                                  } else if (signupProvider.password.text != signupProvider.confirmPassword.text) {
                                     return tr(LocaleKeys.confirm_password_match);
                                   } else {
                                     return null;
@@ -201,9 +208,10 @@ class SignupView extends StatelessWidget {
                           height: AppSize.s20,
                         ),
                         ButtonApp(
-                            text: tr(LocaleKeys.login),
+                            text: tr(LocaleKeys.signup),
                             onTap: () {
-                              if (keyForm.currentState!.validate()) {
+                              signupProvider.signup();
+                              if (signupProvider.keyForm.currentState!.validate()) {
                                 Const.LOADIG(context);
                                 print("OK USER!!");
                                 Navigator.of(context).pushReplacement(
@@ -249,6 +257,7 @@ class SignupView extends StatelessWidget {
             ),
             )
           ],
-        ));
+        )),
+    ));
   }
 }

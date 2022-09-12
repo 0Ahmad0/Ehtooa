@@ -10,4 +10,9 @@ class AppConstants{
   static const emailKey = "email";
   static const tokenKEY = "token";
   static const idKEY = "id";
+
+  static String storageUrl="gs://ehtooa-266e1.appspot.com";
+  static String photoProfilePatient="$storageUrl/const/images/photoProfilePatient.png";
+  static String photoProfileAdmin="$storageUrl/const/images/photoProfileAdmin.png";
+  static String photoProfileDoctor="$storageUrl/const/images/photoProfileDoctor.png";
 }

@@ -133,9 +133,11 @@ class HomeView extends StatelessWidget {
             "خريج من جامعة فرنسا للامراض والطب النفسي "
             "حاصل على جائزة أفضل طبيب لعام 2016"),
   ];
-ProfileProvider profileProvider = ProfileProvider();
+// ProfileProvider profileProvider = ProfileProvider();
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+
     return Container(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -168,7 +170,7 @@ ProfileProvider profileProvider = ProfileProvider();
                               child: Consumer<ProfileProvider>(
                                 builder: (context, value, child) =>
                                     Text(
-                                      profileProvider.user!.name,
+                                      profileProvider.user.name,
                                   //"أحمد",
                                   style: getBoldStyle(
                                     color: ColorManager.white,

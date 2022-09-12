@@ -17,19 +17,42 @@ class OnBoarding {
 
 //user
 class User {
-  int id;
+  String id;
   String name;
+  String photoUrl;
   String email;
   String phoneNumber;
   String password;
+  String typeUser;
 
   User(
       {required this.id,
       required this.name,
       required this.email,
       required this.phoneNumber,
-      required this.password});
+      required this.password,
+        required this.typeUser,
+        required this.photoUrl});
+  factory User.fromJson(Map<String,dynamic> json){
+    return User(id: json["id"],
+                name: json["name"],
+                email: json["email"],
+                phoneNumber: json["phoneNumber"],
+                password: json["password"],
+                typeUser: json["typeUser"],
+                photoUrl: json["photoUrl"]);
+  }
+  Map<String,dynamic> toJson()=>{
+    'id':id,
+    'name':name,
+    'email':email,
+    'phoneNumber':phoneNumber,
+    'password':password,
+    'typeUser':typeUser,
+    'photoUrl':photoUrl,
+  };
 }
+
 
 //Question
 class Question {
