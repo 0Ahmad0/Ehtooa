@@ -23,12 +23,10 @@ o(error){
 }
 void main() async{
   await WidgetsFlutterBinding.ensureInitialized();
-
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   await GetStorage.init();
   await Globals.init();
-
   Provider.debugCheckInvalidValueType = null;
   runApp(
     EasyLocalization(
@@ -42,7 +40,6 @@ void main() async{
       assetLoader: CodegenLoader(),
       child: MyApp(),
     ),
-
   );
 }
 class MyApp extends StatelessWidget {

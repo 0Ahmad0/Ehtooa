@@ -64,9 +64,6 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
             onComplete: () {
               Navigator.pop(context);
             },
-            onChange: (String timeStamp) {
-              debugPrint('Countdown Changed $timeStamp');
-            },
           ));
     });
     super.initState();
