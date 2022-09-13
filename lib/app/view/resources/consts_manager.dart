@@ -15,4 +15,11 @@ class AppConstants{
   static String photoProfilePatient="$storageUrl/const/images/photoProfilePatient.png";
   static String photoProfileAdmin="$storageUrl/const/images/photoProfileAdmin.png";
   static String photoProfileDoctor="$storageUrl/const/images/photoProfileDoctor.png";
+
+
+  //collection
+  static String collection="";
+  static String collectionAdmin="Admin";
+  static String collectionDoctor="Doctor";
+  static String collectionPatient="Patient";
 }

@@ -209,11 +209,12 @@ class SignupView extends StatelessWidget {
                         ),
                         ButtonApp(
                             text: tr(LocaleKeys.signup),
-                            onTap: () {
-                              signupProvider.signup();
+                            onTap: () async {
                               if (signupProvider.keyForm.currentState!.validate()) {
                                 Const.LOADIG(context);
-                                print("OK USER!!");
+                              final result =await signupProvider.signup(context);
+                              Navigator.of(context).pop();
+                              if(result['status']&&false)
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (ctx) => QuestionsView()));
