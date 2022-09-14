@@ -84,5 +84,7 @@
   "toast_Unsuccessfully_created": "فشل إنشاء الحساب",
   "toast_email_already_use": "البريد الإلكتروني قيد الاستخدام بالفعل",
   "toast_short_password": "كلمة المرور قصيرة\nيجب ألا تقل عن 6 أحرف",
-  "toast_successfully_logged":"تم تسجيل الدخول بنجاح"
+  "toast_successfully_logged":"تم تسجيل الدخول بنجاح",
+  "toast_email_invalid":"البريد غير صحيح",
+  "toast_password_invalid":"كلمة السر غير صحيحة"
 }

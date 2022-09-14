@@ -18,6 +18,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
+import '../../../controller/profile_provider.dart';
 import '../../../controller/signup_provider.dart';
 import '../../resources/values_manager.dart';
 import 'package:provider/provider.dart';
@@ -33,6 +34,7 @@ class SignupView extends StatelessWidget {
 */
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
     final signupProvider = Provider.of<SignupProvider>(context);
     return  ChangeNotifierProvider<SignupProvider>(
         create: (_)=> SignupProvider(),
@@ -214,10 +216,13 @@ class SignupView extends StatelessWidget {
                                 Const.LOADIG(context);
                               final result =await signupProvider.signup(context);
                               Navigator.of(context).pop();
-                              if(result['status']&&false)
+                              if(result['status']){
+                                profileProvider.user=User.fromJson(result['body']);
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (ctx) => QuestionsView()));
+                              }
+
                               }
                             }),
                         SizedBox(

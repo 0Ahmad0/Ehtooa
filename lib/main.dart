@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'app/controller/bottom_nav_bar_provider.dart';
+import 'app/controller/login_provider.dart';
 import 'app/controller/profile_provider.dart';
 import 'app/controller/signup_provider.dart';
 import 'app/view/resources/theme_manager.dart';
@@ -56,6 +57,7 @@ class MyApp extends StatelessWidget {
         Provider<BottomNavBarProvider>(create: (_)=>BottomNavBarProvider()),
         Provider<ProfileProvider>(create: (_)=>ProfileProvider()),
         Provider<SignupProvider>(create: (_)=>SignupProvider()),
+        Provider<LoginProvider>(create: (_)=>LoginProvider()),
       ],
       child: ChangeNotifierProvider<AppProvider>.value(
         value: appProvider,

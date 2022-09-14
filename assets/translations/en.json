@@ -84,5 +84,7 @@
   "toast_Unsuccessfully_created": "Account Unsuccessfully created",
   "toast_email_already_use": "The email address is already in use",
   "toast_short_password": "short password\nshould be at least 6 characters",
-  "toast_successfully_logged":"successfully logged"
+  "toast_successfully_logged":"successfully logged",
+  "toast_email_invalid":"The email is invalid",
+  "toast_password_invalid":"The password is invalid"
 }

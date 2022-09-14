@@ -16,17 +16,26 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:animate_do/animate_do.dart';
+import '../../../controller/login_provider.dart';
+import '../../../controller/profile_provider.dart';
 import '../../resources/values_manager.dart';
 import 'package:provider/provider.dart';
 
 class LoginView extends StatelessWidget {
+  /*
   final email = TextEditingController();
   final password = TextEditingController();
   final keyForm = GlobalKey<FormState>();
-
+*/
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
+    return  ChangeNotifierProvider<LoginProvider>(
+        create: (_)=> LoginProvider(),
+    child: Consumer<LoginProvider>(
+    builder: (context, value, child) =>
+     Scaffold(
         resizeToAvoidBottomInset: false,
         body: Stack(
           alignment: Alignment.bottomCenter,
@@ -37,7 +46,7 @@ class LoginView extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppSize.s20, vertical: AppSize.s10),
                 child: Form(
-                  key: keyForm,
+                  key: loginProvider.keyForm,
                   child: Column(
                     children: [
                       SizedBox(
@@ -68,7 +77,7 @@ class LoginView extends StatelessWidget {
                         child: Column(
                           children: [
                             CustomTextFiled(
-                              controller: email,
+                              controller: loginProvider.email,
                               maxLength: null,
                               validator: (String? val) {
                                 if (val!.trim().isEmpty) {
@@ -92,7 +101,7 @@ class LoginView extends StatelessWidget {
                               child: Consumer<TextFiledProvider>(builder: (_, textFiled, c__) {
                                 return TextFormField(
                                     obscureText: textFiled.isPassword,
-                                    controller: password,
+                                    controller: loginProvider.password,
                                     textInputAction: TextInputAction.done,
                                     validator: (String? val) {
                                       if (val!.trim().isEmpty) {
@@ -126,13 +135,17 @@ class LoginView extends StatelessWidget {
                             ),
                             ButtonApp(
                                 text: tr(LocaleKeys.login),
-                                onTap: () {
+                                onTap: () async {
                                   Const.LOADIG(context);
-                                  if (!keyForm.currentState!.validate()) {
-                                    print("OK USER!!");
-                                    Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                            builder: (ctx) => QuestionsView()));
+                                  if (loginProvider.keyForm.currentState!.validate()) {
+                                    final result =await loginProvider.login(context);
+                                    Navigator.of(context).pop();
+                                    if(result['status']){
+                                      profileProvider.user=User.fromJson(result['body']);
+                                      Navigator.of(context).pushReplacement(
+                                          MaterialPageRoute(
+                                              builder: (ctx) => QuestionsView()));
+                                    }
                                   }
                                 }),
                             SizedBox(
@@ -173,6 +186,7 @@ class LoginView extends StatelessWidget {
               ),
             ),
           ],
-        ));
+        ))
+    ));
   }
 }

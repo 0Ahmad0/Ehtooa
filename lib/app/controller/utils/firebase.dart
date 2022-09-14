@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/model/models.dart' as model;
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
+import 'package:flutter/services.dart';
 import '../../../translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -69,6 +70,23 @@ class FirebaseFun{
       }
       return result;
    }
+  static login( {required String email,required String password})  async {
+    final result=await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: email,///"temp@gmail.com",
+      password: password,///"123456"
+    ).then((onValuelogin))
+        .catchError(onError);
+    return result;
+  }
+  static fetchUser( {required String uid,required String typeUser})  async {
+    final result=await FirebaseFirestore.instance.collection(typeUser)
+        .where('uid',isEqualTo: uid)
+        .get()
+        .then((onValueFetchUser))
+        .catchError(onError);
+    return result;
+  }
+
    static Future<Map<String,dynamic>>  onError(error) async {
     print(false);
     print(error);
@@ -97,7 +115,26 @@ class FirebaseFun{
     //  'body': user.toJson()
     };
   }
-  
+  static Future<Map<String,dynamic>> onValuelogin(value) async{
+    //print(true);
+   // print(value.user.uid);
+    return {
+      'status':true,
+      'message':'Account successfully logged',
+      'body':{
+        'uid':value.user.uid}
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchUser(value) async{
+    print(true);
+    print("user : ${model.User.fromJson(value.docs[0]).toJson()}");
+    return {
+      'status':true,
+      'message':'Account successfully logged',
+      'body':model.User.fromJson(value.docs[0]).toJson()
+    };
+  }
+
   static String findTextToast(String text){
      if(text.contains("Password should be at least 6 characters")){
        return tr(LocaleKeys.toast_short_password);
@@ -110,11 +147,17 @@ class FirebaseFun{
      else if(text.contains("Account successfully created")){
        return tr(LocaleKeys.toast_successfully_created);
      }
-     else if(text.contains("Password should be at least 6 characters")){
-
+     else if(text.contains("The password is invalid or the user does not have a password")){
+       return tr(LocaleKeys.toast_password_invalid);
      }
-     else if(text.contains("Password should be at least 6 characters")){
-
+     else if(text.contains("There is no user record corresponding to this identifier")){
+       return tr(LocaleKeys.toast_email_invalid);
+     }
+     else if(text.contains("Account successfully logged")){
+       return tr(LocaleKeys.toast_successfully_logged);
+     }
+     else if(text.contains("Account successfully logged")){
+       return tr(LocaleKeys.toast);
      }
      return text;
   }
