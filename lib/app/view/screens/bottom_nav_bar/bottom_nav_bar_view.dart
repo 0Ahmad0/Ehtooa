@@ -3,6 +3,8 @@ import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/color_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
+import 'package:ehtooa/app/view/screens/admin/add_doctor/add_doctor_view.dart';
+import 'package:ehtooa/app/view/screens/admin/create_sessions/create_sessions_view.dart';
 import 'package:ehtooa/app/view/screens/home/home_view.dart';
 import 'package:ehtooa/app/view/screens/login/login_view.dart';
 import 'package:ehtooa/app/view/screens/notification/notification_view.dart';
@@ -78,6 +80,32 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                     height: 0.0,
                   ),
                   _buildListTile(
+                    text: tr(LocaleKeys.add_doctor),
+                    icon: Icons.add_box_outlined,
+                    onTap: (){
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (ctx)=>AddDoctorView()));
+                    },
+                  ),
+                  Divider(
+                    thickness: AppSize.s1_5,
+                    height: 0.0,
+                  ),
+                  _buildListTile(
+                    text: tr(LocaleKeys.create_session),
+                    icon: Icons.cast_connected_sharp,
+                    onTap: (){
+                      Navigator.pushReplacement(
+                          context, MaterialPageRoute(builder: (ctx)=>CreateSessionsView()));
+                    },
+                  ),
+
+                  Divider(
+                    thickness: AppSize.s1_5,
+                    height: 0.0,
+                  ),
+                  _buildListTile(
                     text: tr(LocaleKeys.rate),
                     icon: Icons.star_rate,
                     onTap: (){
@@ -94,10 +122,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                     onTap: (){
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>LoginView()));
                     },
-                  ),
-                  Divider(
-                    thickness: AppSize.s1_5,
-                    height: 0.0,
+
                   ),
                 ],
               ),

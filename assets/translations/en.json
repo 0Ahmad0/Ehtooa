@@ -1,5 +1,10 @@
 {
-  "on_boarding1": "containment application offers you\nComplete care of your mental health",
+  "doctor_name": "Doctor name",
+  "doctor_email": "Doctor email",
+  "session_link": "Session interactive link",
+  "description": "Description",
+  "valid_session": "Enter valid session interactive",
+  "on_boarding1": "Containment application offers you\nComplete care of your mental health",
   "on_boarding2": "Get help\nWhenever and when you need",
   "on_boarding3": "Self-care and your mental health\ncome first",
   "welcome_back": "welcome back!!",
@@ -200,6 +205,7 @@
   "sleep_disturbance_text": "Sleep disturbance",
   "anxiety_text": "Anxiety",
   "good_mental_health" : "You're in good mental health.",
-  "another_test" : "Take another test"
-
+  "another_test" : "Take another test",
+  "add_doctor": "Add Doctor",
+  "create_session": "Create interactive session"
 }

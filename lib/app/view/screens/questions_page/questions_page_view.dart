@@ -228,7 +228,7 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                                           :tr(LocaleKeys.another_test),
                                                                       onTap: () {
                                                                         Navigator.pop(context);
-                                                                        if(testResult-10>50){
+                                                                        if(testResult*10>50){
                                                                           Navigator.pushReplacement(
                                                                             context,
                                                                             MaterialPageRoute(builder: (ctx)=>BottomNavBarView()
@@ -237,7 +237,7 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                                           Navigator.pushReplacement(
                                                                             context,
                                                                             MaterialPageRoute(builder: (ctx)=>QuestionsView(
-                                                                                indexTaken: [1]
+                                                                                indexTaken: [index]
                                                                             )
                                                                             ),);
                                                                         }
