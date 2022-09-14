@@ -132,7 +132,9 @@ class LoginView extends StatelessWidget {
                                     print("OK USER!!");
                                     Navigator.of(context).push(
                                         MaterialPageRoute(
-                                            builder: (ctx) => QuestionsView()));
+                                            builder: (ctx) => QuestionsView(
+                                              indexTaken: [],
+                                            )));
                                   }
                                 }),
                             SizedBox(

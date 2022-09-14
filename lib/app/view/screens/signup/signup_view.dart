@@ -217,7 +217,9 @@ class SignupView extends StatelessWidget {
                               if(result['status']&&false)
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
-                                        builder: (ctx) => QuestionsView()));
+                                        builder: (ctx) => QuestionsView(
+                                          indexTaken: [],
+                                        )));
                               }
                             }),
                         SizedBox(

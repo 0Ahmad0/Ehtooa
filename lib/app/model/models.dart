@@ -69,7 +69,7 @@ class Question {
 //Answer
 class Answer {
   String answerText;
-  int proportion;
+  double proportion;
 
   Answer({required this.answerText, required this.proportion});
 }

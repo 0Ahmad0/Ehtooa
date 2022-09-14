@@ -7,6 +7,7 @@ import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/app/view/screens/bottom_nav_bar/bottom_nav_bar_view.dart';
+import 'package:ehtooa/app/view/screens/questions/questions_view.dart';
 import 'package:ehtooa/app/view/widgets/custome_button.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
@@ -19,30 +20,35 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:animate_do/animate_do.dart';
 class QuestionsPageView extends StatefulWidget {
   late List<Question> questions;
+  String descriptionDisease;
+  String diseaseName;
+  int index;
 
-  QuestionsPageView({required this.questions});
+  QuestionsPageView({required this.questions,required this.descriptionDisease,required this.diseaseName,required this.index});
 
   @override
   State<QuestionsPageView> createState() => _QuestionsPageViewState();
 }
 
 class _QuestionsPageViewState extends State<QuestionsPageView> {
+  late double testResult;
   @override
   void initState() {
+    testResult = 0.0;
     Timer(Duration(milliseconds: 1), () {
       Get.defaultDialog(
           barrierDismissible: false,
           onWillPop: () async => false,
-          title: tr(LocaleKeys.started_after5seconds),
+          title: tr(LocaleKeys.started_after10seconds)+"\n"+tr(widget.descriptionDisease),
           titleStyle: getRegularStyle(
               color: Theme.of(context).textTheme.bodyText1!.color,
-              fontSize: Sizer.getW(context) / 22),
+              fontSize: Sizer.getW(context) / 30),
           content: CircularCountDownTimer(
-            duration: AppConstants.splashDelay + 1,
+            duration: AppConstants.splashDelay +6,
             initialDuration: 0,
             controller: CountDownController(),
-            width: Sizer.getW(context) / 2.5,
-            height: Sizer.getW(context) / 2.5,
+            width: Sizer.getW(context) / 3.5,
+            height: Sizer.getW(context) / 3.5,
             ringColor: Colors.grey[300]!,
             ringGradient: null,
             fillColor: Theme.of(context).primaryColor,
@@ -71,12 +77,12 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
 
   bool isSelected = false;
   final pageController = PageController();
-
   @override
   Widget build(BuildContext context) {
+    print(widget.index);
     return Scaffold(
         body: FutureBuilder(
-            future: Future.delayed(Duration(seconds: AppConstants.splashDelay+2)),
+            future: Future.delayed(Duration(seconds: AppConstants.splashDelay+7)),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.done)
                 return FadeInLeft(
@@ -97,7 +103,7 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                     height: AppSize.s20,
                                   ),
                                   Text(
-                                    widget.questions[index].questionText,
+                                   tr(widget.questions[index].questionText),
                                     textAlign: TextAlign.center,
                                     style: getMediumStyle(
                                         color: Theme.of(context).textTheme.bodyText1!.color,
@@ -121,8 +127,10 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                               onTap: () {
                                                 setState1(() {
                                                   isSelected = true;
+                                                  testResult+=e.proportion;
+                                                  print(testResult);
                                                 });
-                                                Timer(Duration(milliseconds: 600), () {
+                                                Timer(Duration(milliseconds: 500), () {
                                                   if (pageController.page ==
                                                       widget.questions.length - 1) {
                                                     Get.dialog(
@@ -137,8 +145,7 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                                     AppSize.s14)),
                                                             width: Sizer.getW(context) -
                                                                 AppSize.s20,
-                                                            height: Sizer.getH(context) / 1.5,
-
+                                                            height: Sizer.getH(context) / 1.4,
                                                             child: Column(
                                                               children: [
                                                                 Expanded(
@@ -150,6 +157,7 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                                           BorderRadius.only(
                                                                               topLeft: Radius
                                                                                   .circular(
+
                                                                                   AppSize
                                                                                       .s14),
                                                                               topRight: Radius
@@ -175,8 +183,9 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                                   padding: EdgeInsets.all(
                                                                       AppSize.s10),
                                                                   child: Text(
-                                                                    tr(LocaleKeys
-                                                                        .anxiety_criterion),
+                                                                    (testResult*10 >50)
+                                                                        ?tr(widget.diseaseName)
+                                                                        :tr(LocaleKeys.good_mental_health),
                                                                     style: getBoldStyle(
                                                                         color:
                                                                         Theme.of(context)
@@ -186,7 +195,8 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                                             20),
                                                                   ),
                                                                 ),
-                                                                Expanded(
+                                                                if(testResult*10 >50)
+                                                                    Expanded(
                                                                     child: Text(
                                                                       tr(LocaleKeys.add_to_group),
                                                                       textAlign: TextAlign.center,
@@ -213,13 +223,24 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                                       .symmetric(
                                                                       horizontal: AppSize.s10),
                                                                   child: ButtonApp(
-                                                                      text: tr(LocaleKeys.ok),
+                                                                      text:  (testResult*10 >50)
+                                                                          ?tr(LocaleKeys.ok)
+                                                                          :tr(LocaleKeys.another_test),
                                                                       onTap: () {
                                                                         Navigator.pop(context);
-                                                                        Navigator.pushReplacement(
-                                                                          context,
-                                                                          MaterialPageRoute(builder: (ctx)=>BottomNavBarView()
-                                                                          ),);
+                                                                        if(testResult-10>50){
+                                                                          Navigator.pushReplacement(
+                                                                            context,
+                                                                            MaterialPageRoute(builder: (ctx)=>BottomNavBarView()
+                                                                            ),);
+                                                                        }else{
+                                                                          Navigator.pushReplacement(
+                                                                            context,
+                                                                            MaterialPageRoute(builder: (ctx)=>QuestionsView(
+                                                                                indexTaken: [1]
+                                                                            )
+                                                                            ),);
+                                                                        }
                                                                       }),
                                                                 ),
                                                                 SizedBox(
@@ -285,16 +306,18 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                     SizedBox(
                                                       width: AppSize.s14,
                                                     ),
-                                                    Text(
-                                                      e.answerText,
-                                                      style: getRegularStyle(
-                                                          color: isSelected
-                                                              ? ColorManager.white
-                                                              : Theme.of(context)
-                                                              .textTheme
-                                                              .bodyText1!
-                                                              .color,
-                                                          fontSize: Sizer.getW(context) / 24),
+                                                    Flexible(
+                                                      child: Text(
+                                                        tr(e.answerText),
+                                                        style: getRegularStyle(
+                                                            color: isSelected
+                                                                ? ColorManager.white
+                                                                : Theme.of(context)
+                                                                .textTheme
+                                                                .bodyText1!
+                                                                .color,
+                                                            fontSize: Sizer.getW(context) / 28),
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
