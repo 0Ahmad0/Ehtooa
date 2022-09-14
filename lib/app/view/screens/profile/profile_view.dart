@@ -96,7 +96,7 @@ class ProfileView extends StatelessWidget {
                                 const SizedBox(height: AppSize.s20,),
                                 CustomTextFiled(
                                     readOnly: true,
-                                    controller: TextEditingController(text: "055 895 658"),
+                                    controller: TextEditingController(text: value.user.phoneNumber/*"055 895 658"*/),
                                     validator: (String? val) {},
                                     onChange: (val) {},
                                     prefixIcon: Icons.phone_android,

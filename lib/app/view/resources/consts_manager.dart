@@ -22,12 +22,16 @@ class AppConstants {
       "$storageUrl/const/images/photoProfileAdmin.png";
   static String photoProfileDoctor =
       "$storageUrl/const/images/photoProfileDoctor.png";
+  static String photoGroup =
+      "$storageUrl/const/images/photoGroup.png";
 
   //collection
   static String collection = "";
   static String collectionAdmin = "Admin";
   static String collectionDoctor = "Doctor";
   static String collectionPatient = "Patient";
+  static String collectionGroup = "Group";
+  static String collectionChat = "Chat";
 
   static List<Question> questionsDepression = [
     Question(questionText: LocaleKeys.depression_q1, answer: [

@@ -21,10 +21,11 @@ class LoginProvider with ChangeNotifier{
    var result;
    if(resultUser['status']){
       result = await FirebaseFun.fetchUser(uid: resultUser['body']['uid'], typeUser: AppConstants.collectionPatient);
-     if(result['status']&&result['body']!=null){
+     // print(result);
+      if(result['status']&&result['body']==null){
        result = await FirebaseFun.fetchUser(uid: resultUser['body']['uid'], typeUser: AppConstants.collectionDoctor);
        if(result['status']&&result['body']==null){
-         print(result);
+
          result = await FirebaseFun.fetchUser(uid: resultUser['body']['uid'], typeUser: AppConstants.collectionAdmin);
          if(result['status']&&result['body']==null){
            result={
@@ -41,6 +42,7 @@ class LoginProvider with ChangeNotifier{
      }
       // print(result);
    }else{
+     result=resultUser;
      //print(result);
    }
    print(result);

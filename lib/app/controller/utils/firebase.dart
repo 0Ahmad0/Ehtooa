@@ -1,6 +1,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/model/models.dart' as model;
+import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/services.dart';
@@ -78,6 +79,12 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+  static logout()  async {
+    final result=await FirebaseAuth.instance.signOut()
+        .then((onValuelogout))
+        .catchError(onError);
+    return result;
+  }
   static fetchUser( {required String uid,required String typeUser})  async {
     final result=await FirebaseFirestore.instance.collection(typeUser)
         .where('uid',isEqualTo: uid)
@@ -86,6 +93,81 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+  static createGroup( {required model.Group group}) async {
+    final result= await FirebaseFirestore.instance.collection(AppConstants.collectionGroup).add(
+        group.toJsonFire()
+    ).then((value){
+      group.chat.id=value.id;
+      //print(true);
+      // print(value.id);
+      return {
+        'status':true,
+        'message':'Group successfully created',
+        'body': {
+          'id':value.id
+        }
+      };
+    }).catchError(onError);
+    if(result['status'] == true){
+      final result2=await createChat(chat: group.chat);
+      if(result2['status'] == true){
+        return{
+          'status':true,
+          'message':'Group successfully created',
+          'body': group.toJson()
+        };
+      }else{
+        return{
+          'status':false,
+          'message':"Group Unsuccessfully created"
+        };
+      }
+    }else{
+      return result;
+    }
+
+  }
+  static createChat( {required model.Chat chat}) async {
+    final result =await FirebaseFirestore.instance
+        .collection(AppConstants.collectionGroup)
+        .doc(chat.id)
+        .collection(AppConstants.collectionChat)
+        .add(
+        model.Message(textMessage: "",typeMessage: model.ChatMessageType.text.name,senderId: "",sendingTime:DateTime.now()).toJson()
+    ).then(onValueCreateChat)
+        .catchError(onError);
+    if(result['status']){
+      print(true);
+      // print(user.id);
+      print("id : ${chat.id}");
+      return {
+        'status':true,
+        'message':'ok',
+        'body': chat.toJson()
+      };
+    }
+    return result;
+  }
+  static fetchGroup( {required String id})  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
+        .doc(id)
+        .get()
+        .then((onValueFetchGroup))
+        .catchError(onError);
+    return result;
+  }
+  static updateGroup( {required model.Group group,required String id}) async {
+    final result =await FirebaseFirestore.instance
+        .collection(AppConstants.collectionGroup)
+        .doc(id).update(
+        group.toJsonFire()
+    ).then(onValueUpdateGroup)
+        .catchError(onError);
+    return result;
+  }
+
+
+
 
    static Future<Map<String,dynamic>>  onError(error) async {
     print(false);
@@ -118,6 +200,7 @@ class FirebaseFun{
   static Future<Map<String,dynamic>> onValuelogin(value) async{
     //print(true);
    // print(value.user.uid);
+
     return {
       'status':true,
       'message':'Account successfully logged',
@@ -125,13 +208,47 @@ class FirebaseFun{
         'uid':value.user.uid}
     };
   }
+  static Future<Map<String,dynamic>> onValuelogout(value) async{
+     print(true);
+     print("logout");
+    return {
+      'status':true,
+      'message':'Account successfully logout',
+      'body':{}
+    };
+  }
   static Future<Map<String,dynamic>> onValueFetchUser(value) async{
     print(true);
+    print(await value.docs[0]['uid']);
     print("user : ${(value.docs.length>0)?model.User.fromJson(value.docs[0]).toJson():null}");
     return {
       'status':true,
       'message':'Account successfully logged',
       'body':(value.docs.length>0)?model.User.fromJson(value.docs[0]).toJson():null
+    };
+  }
+  static Future<Map<String,dynamic>> onValueCreateChat(value) async{
+    return {
+      'status':true,
+      'message':'Chat successfully created',
+      //  'body': user.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchGroup(value) async{
+    print(true);
+    //print(await value.docs[0]);
+    print("Group : ${(value.data()!=null)?model.Group.fromJsonFire(value.data()).toJson():null}");
+    return {
+      'status':true,
+      'message':'group successfully fetch',
+      'body':(value.data()!=null)?model.Group.fromJsonFire(value.data()).toJson():null
+    };
+  }
+  static Future<Map<String,dynamic>> onValueUpdateGroup(value) async{
+    return {
+      'status':true,
+      'message':'group successfully update',
+      //  'body': user.toJson()
     };
   }
 
@@ -161,8 +278,8 @@ class FirebaseFun{
      }
      else if(text.contains("An internal error has occurred")){
        return tr(LocaleKeys.toast_network_error);
-     }else if(text.contains("Account successfully logged")){
-       return tr(LocaleKeys.toast);
+     }else if(text.contains("field does not exist within the DocumentSnapshotPlatform")){
+       return tr(LocaleKeys.toast_Bad_data_fetch);
      }else if(text.contains("Account successfully logged")){
        return tr(LocaleKeys.toast);
      }

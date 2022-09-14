@@ -227,6 +227,18 @@ class SignupView extends StatelessWidget {
 
                               }
                             }),
+                  /*
+                  SizedBox(
+                          height: AppSize.s10,
+                        ),
+                        ButtonApp(
+                            text: tr(LocaleKeys.yes),
+                            onTap: () async {
+                                Const.LOADIG(context);
+                                final result =await signupProvider.signupAD(context);
+                                Navigator.of(context).pop();
+                                print(result);
+                            }),*/
                         SizedBox(
                           height: AppSize.s10,
                         ),

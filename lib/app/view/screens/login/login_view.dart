@@ -1,3 +1,4 @@
+import 'package:ehtooa/app/controller/create_environment_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
@@ -148,6 +149,19 @@ class LoginView extends StatelessWidget {
                                     }
                                   }
                                 }),
+                            ///create group
+
+                            SizedBox(
+                              height: AppSize.s20,
+                            ),
+                            ButtonApp(
+                                text: tr(LocaleKeys.yes),
+                                onTap: () async {
+                                    Const.LOADIG(context);
+                                    final result =await CreateEnvironmentProvider().fetchGroup(context);
+                                    Navigator.of(context).pop();
+                                }),                            
+
                             SizedBox(
                               height: AppSize.s10,
                             ),

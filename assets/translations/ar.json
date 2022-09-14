@@ -99,6 +99,7 @@
   "toast_password_invalid":"كلمة السر غير صحيحة",
   "toast_network_error":"حدث خطأ في الاتصال",
   "toast_account_invalid":"الحساب غير صحيح",
+  "toast_Bad_data_fetch":"خطأ داخلي: جلب سيء للبيانات",
 
 
 

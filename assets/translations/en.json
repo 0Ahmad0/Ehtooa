@@ -89,6 +89,7 @@
   "toast_password_invalid":"The password is invalid",
   "toast_network_error":"A network error",
   "toast_account_invalid":"Account is invalid",
+  "toast_Bad_data_fetch":"Internal Error: Bad data fetch",
 
 
   "depression_q1": "1. I have lost the desire and pleasure in doing things I used to do before.",

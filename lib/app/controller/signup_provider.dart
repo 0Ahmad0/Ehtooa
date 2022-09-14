@@ -44,6 +44,82 @@ class SignupProvider with ChangeNotifier{
     }*/
    // user.uid=result['body']['uid'];
   }
+
+  signupAD(context) async{
+    name.text ="Admin hiba";
+    email.text ="admin4@gmail.com";
+    phoneNumber.text ="0999888774";
+    password.text ="123456";
+    String description="";
+    String photoUrl=AppConstants.photoProfileAdmin;
+    String typeUser=AppConstants.collectionAdmin;
+    var result =await FirebaseFun.signup(email: email.text, password: password.text);
+    if(result['status']){
+      user= models.User(id: "",uid:result['body']['uid'],
+          name: name.text,
+          email: email.text,
+          phoneNumber: phoneNumber.text,
+          password: password.text
+          ,photoUrl: photoUrl,
+          typeUser: typeUser,
+          description: description);
+      result = await FirebaseFun.createUser(user: user);
+      if(result['status']){
+        user= models.User.fromJson(result['body']);
+        // print(result);
+
+      }else{
+        // print(result);
+      }
+    }else{
+      //print(result);
+    }
+    print(result);
+    Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+    return result;
+    /*if(result['status']){
+    }else{
+    }*/
+    // user.uid=result['body']['uid'];
+  }
+  signupGroup(context) async{
+    name.text ="Admin hiba";
+    email.text ="admin4@gmail.com";
+    phoneNumber.text ="0999888774";
+    password.text ="123456";
+    String description="";
+    String photoUrl=AppConstants.photoProfileAdmin;
+    String typeUser=AppConstants.collectionAdmin;
+    var result =await FirebaseFun.signup(email: email.text, password: password.text);
+    if(result['status']){
+      user= models.User(id: "",uid:result['body']['uid'],
+          name: name.text,
+          email: email.text,
+          phoneNumber: phoneNumber.text,
+          password: password.text
+          ,photoUrl: photoUrl,
+          typeUser: typeUser,
+          description: description);
+      result = await FirebaseFun.createUser(user: user);
+      if(result['status']){
+        user= models.User.fromJson(result['body']);
+        // print(result);
+
+      }else{
+        // print(result);
+      }
+    }else{
+      //print(result);
+    }
+    print(result);
+    Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+    return result;
+    /*if(result['status']){
+    }else{
+    }*/
+    // user.uid=result['body']['uid'];
+  }
+
   onError(error){
     print(false);
     print(error);

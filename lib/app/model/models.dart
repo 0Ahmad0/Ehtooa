@@ -1,3 +1,11 @@
+import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+
+import 'models.dart';
+
 class Advance {
   static bool theme = false;
   static bool language = false;
@@ -25,6 +33,7 @@ class User {
   String phoneNumber;
   String password;
   String typeUser;
+  String description;
 
   User(
       {required this.id,
@@ -34,7 +43,8 @@ class User {
       required this.phoneNumber,
       required this.password,
         required this.typeUser,
-        required this.photoUrl});
+        required this.photoUrl,
+        this.description=""});
   factory User.fromJson( json){
     return User(id: json["id"],
                 uid: json["uid"],
@@ -43,7 +53,8 @@ class User {
                 phoneNumber: json["phoneNumber"],
                 password: json["password"],
                 typeUser: json["typeUser"],
-                photoUrl: json["photoUrl"]);
+                photoUrl: json["photoUrl"],
+               description: (json["description"]!=null)?json["description"]:"");
   }
   Map<String,dynamic> toJson()=>{
     'id':id,
@@ -54,6 +65,7 @@ class User {
     'password':password,
     'typeUser':typeUser,
     'photoUrl':photoUrl,
+    'description':description,
   };
 }
 
@@ -108,13 +120,28 @@ class Doctor {
 //Message
 class Message {
   String textMessage;
-  String senderName;
+  String typeMessage;
+  String senderId;
   DateTime sendingTime;
 
   Message(
       {required this.textMessage,
-      required this.senderName,
+      required this.typeMessage,
+      required this.senderId,
       required this.sendingTime});
+  factory Message.fromJson( json){
+    return Message(
+        textMessage: json["textMessage"],
+        typeMessage: json["typeMessage"],
+        sendingTime: json["sendingTime"].toDate(),
+        senderId: json["senderId"]);
+  }
+  Map<String,dynamic> toJson()=>{
+    'textMessage':textMessage,
+    'typeMessage':typeMessage,
+    'sendingTime':sendingTime,
+    'senderId':senderId,
+  };
 }
 
 //Admin
@@ -128,16 +155,136 @@ class Admin {
 //Chat
 class Chat {
   String id;
-  List<User> users;
   List<Message> messages;
-  Admin admin;
+  DateTime date;
 
   Chat({
     required this.id,
-    required this.users,
+    required this.date,
     required this.messages,
-    required this.admin,
   });
+  factory Chat.fromJson( json){
+    List<Message> tempMessages = [];
+    for(Message message in json["messages"]){
+      tempMessages.add(Message.fromJson(message));
+    }
+    return Chat(
+        id: json["id"],
+        messages: tempMessages,//json["messages"],
+        date: json["date"]);
+  }
+  Map<String,dynamic> toJson(){
+    List<Map<String,dynamic>> tempMessages = [];
+    for(Message message in messages){
+      tempMessages.add(message.toJson());
+    }
+    return {
+    'id':id,
+    'date':date,
+    'messages':tempMessages,
+  };
+  }
+}
+
+//Group
+class Group {
+  String idAmin;
+  String nameAr;
+  String nameEn;
+  Chat chat;
+  List<String> listUsers;
+  List<String> listBlockUsers;
+  String photoUrl;
+  DateTime date;
+
+  Group(
+      {required this.idAmin,
+        required this.nameAr,
+        required this.nameEn,
+        required this.chat,
+        required this.photoUrl,
+        required this.listUsers,
+        required this.listBlockUsers,
+        required this.date});
+  factory Group.fromJson( json){
+    List<String> tempUsers = [];
+    List<String> tempBlockUsers = [];
+    for(String user in json["listUsers"]){
+      tempUsers.add(user);
+    }
+    for(String user in json["listBlockUsers"]){
+      tempBlockUsers.add(user);
+      Timestamp t;
+    }
+    return Group(
+        idAmin: json["idAmin"],
+        nameAr: json["nameAr"],
+        nameEn: json["nameEn"],
+        chat: Chat.fromJson(json["chat"]),
+        photoUrl: json["photoUrl"],
+        listUsers: tempUsers,//json["listUsers"],
+        listBlockUsers: tempBlockUsers,//json["listBlockUsers"],
+        date: json["date"]);
+  }
+  factory Group.fromJsonFire( json){
+    List<String> tempUsers = [];
+    List<String> tempBlockUsers = [];
+    for(String user in json["listUsers"]){
+      tempUsers.add(user);
+    }
+    for(String user in json["listBlockUsers"]){
+      tempBlockUsers.add(user);
+    }
+    return Group(
+        idAmin: json["idAmin"],
+        nameAr: json["nameAr"],
+        nameEn: json["nameEn"],
+        chat: Chat(id: "", date: DateTime.now(), messages: []), //Chat.fromJson(json["chat"]),
+        photoUrl: json["photoUrl"],
+        listUsers: tempUsers,//json["listUsers"],
+        listBlockUsers: tempBlockUsers,//json["listBlockUsers"],
+        date: json["date"].toDate());
+  }
+  Map<String,dynamic> toJson(){
+    List tempUsers = [];
+    List tempBlockUsers = [];
+    for(String user in listUsers){
+      tempUsers.add(user);
+    }
+    for(String user in listBlockUsers){
+      tempBlockUsers.add(user);
+    }
+    return {
+    'idAmin':idAmin,
+    'nameAr':nameAr,
+    'nameEn':nameEn,
+    'chat':chat.toJson(),
+    'photoUrl':photoUrl,
+    'listUsers':tempUsers,//listUsers,
+    'listBlockUsers':tempBlockUsers,//listBlockUsers,
+    'date':date,
+  };
+}
+  Map<String,dynamic> toJsonFire(){
+    List tempUsers = [];
+    List tempBlockUsers = [];
+    for(String user in listUsers){
+      tempUsers.add(user);
+    }
+    for(String user in listBlockUsers){
+      tempBlockUsers.add(user);
+    }
+    return {
+      'idAmin':idAmin,
+      'nameAr':nameAr,
+      'nameEn':nameEn,
+      //'chat':chat.toJson(),
+      'photoUrl':photoUrl,
+      'listUsers':tempUsers,//listUsers,
+      'listBlockUsers':tempBlockUsers,//listBlockUsers,
+      'date':date,
+    };
+  }
 }
 
 enum ChatMessageType{text,audio,image,vedio}
