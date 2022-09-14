@@ -136,15 +136,15 @@ class LoginView extends StatelessWidget {
                             ButtonApp(
                                 text: tr(LocaleKeys.login),
                                 onTap: () async {
-                                  Const.LOADIG(context);
                                   if (loginProvider.keyForm.currentState!.validate()) {
+                                    Const.LOADIG(context);
                                     final result =await loginProvider.login(context);
                                     Navigator.of(context).pop();
                                     if(result['status']){
                                       profileProvider.user=User.fromJson(result['body']);
                                       Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
-                                              builder: (ctx) => QuestionsView()));
+                                              builder: (ctx) => QuestionsView(indexTaken: [],)));
                                     }
                                   }
                                 }),
@@ -186,6 +186,8 @@ class LoginView extends StatelessWidget {
               ),
             ),
           ],
-        ));
+        )
+    ),
+    ));
   }
 }

@@ -1,4 +1,14 @@
 {
+  "doctor_name": "اسم الدكتور",
+  "doctor_email": "ايميل الدكتور",
+  "session_link": "رابط الجلسة التفاعلية",
+  "description": "نبذة عن الدكتور",
+  "valid_session": "أدخل رابط جلسة صالح",
+  "doctor_name": "Doctor name",
+  "doctor_email": "Doctor email",
+  "session_link": "Session interactive link",
+  "description": "Description",
+  "valid_session": "Enter valid session interactive",
   "on_boarding1": "تطبيق احتواء يقدم لك\nالرعاية الكاملة لصحتك العقلية",
   "on_boarding2": "احصل على المساعدة \nفي أي وقت وعندما تحتاج",
   "on_boarding3": "الرعاية الذاتية وصحتك النفسية\nتأتي أولا",
@@ -87,6 +97,9 @@
   "toast_successfully_logged":"تم تسجيل الدخول بنجاح",
   "toast_email_invalid":"البريد غير صحيح",
   "toast_password_invalid":"كلمة السر غير صحيحة",
+  "toast_network_error":"حدث خطأ في الاتصال",
+  "toast_account_invalid":"الحساب غير صحيح",
+
 
 
 
@@ -208,6 +221,7 @@
   "another_test" : "إجراء اختبار آخر",
   "add_doctor": "إضافة دكتور",
   "create_session": "إنشاء جلسة تفاعلية"
+
 }
 
 

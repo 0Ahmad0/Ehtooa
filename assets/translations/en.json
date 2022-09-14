@@ -52,7 +52,7 @@
   "anxiety_criterion": "Anxiety criterion",
   "Obsessive_compulsive_disorder_criterion": "Obsessive compulsive disorder criterion",
   "sleep_disturbance_criterion": "Sleep disturbance criterion",
-  "started_after105seconds" : "Get ready The test will start in 10 seconds",
+  "started_after10seconds" : "Get ready The test will start in 10 seconds",
   "ok": "Ok",
   "yes": "Yes",
   "no": "No",
@@ -85,6 +85,11 @@
   "toast_email_already_use": "The email address is already in use",
   "toast_short_password": "short password\nshould be at least 6 characters",
   "toast_successfully_logged":"successfully logged",
+  "toast_email_invalid":"The email is invalid",
+  "toast_password_invalid":"The password is invalid",
+  "toast_network_error":"A network error",
+  "toast_account_invalid":"Account is invalid",
+
 
   "depression_q1": "1. I have lost the desire and pleasure in doing things I used to do before.",
   "depression_q2": "2. I feel sad, upset and unhappy.",
@@ -202,8 +207,6 @@
   "good_mental_health" : "You're in good mental health.",
   "another_test" : "Take another test",
   "add_doctor": "Add Doctor",
-  "create_session": "Create interactive session",
-  "toast_successfully_logged":"successfully logged",
-  "toast_email_invalid":"The email is invalid",
-  "toast_password_invalid":"The password is invalid"
+  "create_session": "Create interactive session"
+
 }

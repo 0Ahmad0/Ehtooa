@@ -127,11 +127,11 @@ class FirebaseFun{
   }
   static Future<Map<String,dynamic>> onValueFetchUser(value) async{
     print(true);
-    print("user : ${model.User.fromJson(value.docs[0]).toJson()}");
+    print("user : ${(value.docs.length>0)?model.User.fromJson(value.docs[0]).toJson():null}");
     return {
       'status':true,
       'message':'Account successfully logged',
-      'body':model.User.fromJson(value.docs[0]).toJson()
+      'body':(value.docs.length>0)?model.User.fromJson(value.docs[0]).toJson():null
     };
   }
 
@@ -156,9 +156,18 @@ class FirebaseFun{
      else if(text.contains("Account successfully logged")){
        return tr(LocaleKeys.toast_successfully_logged);
      }
-     else if(text.contains("Account successfully logged")){
+     else if(text.contains("A network error")){
+       return tr(LocaleKeys.toast_network_error);
+     }
+     else if(text.contains("An internal error has occurred")){
+       return tr(LocaleKeys.toast_network_error);
+     }else if(text.contains("Account successfully logged")){
+       return tr(LocaleKeys.toast);
+     }else if(text.contains("Account successfully logged")){
        return tr(LocaleKeys.toast);
      }
+
+
      return text;
   }
 }
