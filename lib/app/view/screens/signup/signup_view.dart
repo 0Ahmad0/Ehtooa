@@ -220,7 +220,9 @@ class SignupView extends StatelessWidget {
                                 profileProvider.user=User.fromJson(result['body']);
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
-                                        builder: (ctx) => QuestionsView()));
+                                        builder: (ctx) => QuestionsView(
+                                          indexTaken: [],
+                                        )));
                               }
 
                               }

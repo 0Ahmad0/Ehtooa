@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
+import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/app/view/screens/questions_page/questions_page_view.dart';
@@ -15,13 +16,48 @@ import 'package:get/get.dart';
 import '../../resources/color_manager.dart';
 
 class QuestionsView extends StatefulWidget {
+   List<int> indexTaken;
+
+  QuestionsView({
+    super.key, required this.indexTaken
+  });
   @override
   State<QuestionsView> createState() => _QuestionsViewState();
 }
 
 class _QuestionsViewState extends State<QuestionsView> {
+  late List<String> textButtons;
+  late List<String>  descriptionDisease;
+  late List<String> diseaseName;
+  late List<List<Question>> questionsList;
   @override
   void initState() {
+    widget.indexTaken = [0,2,3];
+    descriptionDisease = [
+      LocaleKeys.ocd_description,
+      LocaleKeys.ocd_description,
+      LocaleKeys.sleep_description,
+      LocaleKeys.anixiet_description
+    ];
+    diseaseName = [
+      LocaleKeys.depression_text,
+      LocaleKeys.ocd_text,
+      LocaleKeys.sleep_disturbance_text,
+      LocaleKeys.anxiety_text
+    ];
+    textButtons = [
+      LocaleKeys.depression_criterion,
+      LocaleKeys.Obsessive_compulsive_disorder_criterion,
+      LocaleKeys.sleep_disturbance_criterion,
+      LocaleKeys.anxiety_criterion,
+    ];
+   
+    questionsList = [
+      AppConstants.questionsDepression,
+      AppConstants.questionsOcd,
+      AppConstants.questionsSleepDisorders,
+      AppConstants.questionsAnxiety,
+    ];
     Timer(Duration(milliseconds: 0), () {
       Get.defaultDialog(
           onWillPop: () async => false,
@@ -96,209 +132,35 @@ class _QuestionsViewState extends State<QuestionsView> {
               Text(tr(LocaleKeys.title_intro_questions),
                 style: getRegularStyle(
                     color: Theme.of(context).textTheme.bodyText1!.color,
-                  fontSize: Sizer.getW(context) / 20
+                  fontSize: Sizer.getW(context) / 24
                 ),),
               SizedBox(height: AppSize.s20,),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ButtonApp(
-                      text: tr(LocaleKeys.depression_criterion),
-                      onTap: (){
-                        Navigator.of(context)
-                            .pushReplacement(MaterialPageRoute(
-                            builder: (ctx)=>
-                                QuestionsPageView(
-                                  questions: [
-                                    Question(
-                                        questionText: "هل تعاني من الخوف عندما تكون لوحدك؟",
-                                        answer: [
-                                          Answer(
-                                              answerText: "نعم بشدة",
-                                              proportion: 10),
-                                          Answer(
-                                              answerText: "نعم ليس دائما",
-                                              proportion: 8),
-                                          Answer(
-                                              answerText: "لا ادري",
-                                              proportion: 5),
-                                          Answer(
-                                              answerText: "لا ابدا",
-                                              proportion: 0),
-                                        ]
-
-                                    ),
-                                    Question(
-                                        questionText: "هل تعاني من الخوف عندما تكون لوحدك؟",
-                                        answer: [
-                                          Answer(
-                                              answerText: "نعم بشدة",
-                                              proportion: 10),
-                                          Answer(
-                                              answerText: "نعم ليس دائما",
-                                              proportion: 8),
-                                          Answer(
-                                              answerText: "لا ادري",
-                                              proportion: 5),
-                                          Answer(
-                                              answerText: "لا ابدا",
-                                              proportion: 0),
-                                        ]
-
-                                    ),
-                                  ],
-                                ),),);
-                      },
-                    ),
-                    SizedBox(height: AppSize.s20,),
-                    ButtonApp(
-                      text: tr(LocaleKeys.anxiety_criterion),
-                      onTap: (){
+                  children:
+                  List.generate(4, (index) {
+                    widget.indexTaken.forEach((element) {
+                      print(element == index);
+                    });
+                    return ButtonApp(
+                      bottomMargin: AppSize.s20,
+                      backColor: widget.indexTaken.first == index?
+                      Colors.transparent : Theme.of(context).primaryColor,
+                      text: tr(textButtons[index]),
+                      onTap:  widget.indexTaken.first == index?()=>null:(){
                         Navigator.of(context)
                             .pushReplacement(MaterialPageRoute(
                           builder: (ctx)=>
                               QuestionsPageView(
-                                questions: [
-                                  Question(
-                                      questionText: "هل تعاني من الخوف عندما تكون لوحدك؟",
-                                      answer: [
-                                        Answer(
-                                            answerText: "نعم بشدة",
-                                            proportion: 10),
-                                        Answer(
-                                            answerText: "نعم ليس دائما",
-                                            proportion: 8),
-                                        Answer(
-                                            answerText: "لا ادري",
-                                            proportion: 5),
-                                        Answer(
-                                            answerText: "لا ابدا",
-                                            proportion: 0),
-                                      ]
-
-                                  ),
-                                  Question(
-                                      questionText: "هل تعاني من الخوف عندما تكون لوحدك؟",
-                                      answer: [
-                                        Answer(
-                                            answerText: "نعم بشدة",
-                                            proportion: 10),
-                                        Answer(
-                                            answerText: "نعم ليس دائما",
-                                            proportion: 8),
-                                        Answer(
-                                            answerText: "لا ادري",
-                                            proportion: 5),
-                                        Answer(
-                                            answerText: "لا ابدا",
-                                            proportion: 0),
-                                      ]
-
-                                  ),
-                                ],
+                                questions: questionsList[index],
+                                diseaseName: diseaseName[index],
+                                descriptionDisease: descriptionDisease[index],
+                                index: questionsList.indexOf(questionsList[index]),
                               ),),);
                       },
-                    ),
-                    SizedBox(height: AppSize.s20,),
-                    ButtonApp(
-                      text: tr(LocaleKeys.Obsessive_compulsive_disorder_criterion),
-                      onTap: (){
-                        Navigator.of(context)
-                            .pushReplacement(MaterialPageRoute(
-                          builder: (ctx)=>
-                              QuestionsPageView(
-                                questions: [
-                                  Question(
-                                      questionText: "هل تعاني من الخوف عندما تكون لوحدك؟",
-                                      answer: [
-                                        Answer(
-                                            answerText: "نعم بشدة",
-                                            proportion: 10),
-                                        Answer(
-                                            answerText: "نعم ليس دائما",
-                                            proportion: 8),
-                                        Answer(
-                                            answerText: "لا ادري",
-                                            proportion: 5),
-                                        Answer(
-                                            answerText: "لا ابدا",
-                                            proportion: 0),
-                                      ]
-
-                                  ),
-                                  Question(
-                                      questionText: "هل تعاني من الخوف عندما تكون لوحدك؟",
-                                      answer: [
-                                        Answer(
-                                            answerText: "نعم بشدة",
-                                            proportion: 10),
-                                        Answer(
-                                            answerText: "نعم ليس دائما",
-                                            proportion: 8),
-                                        Answer(
-                                            answerText: "لا ادري",
-                                            proportion: 5),
-                                        Answer(
-                                            answerText: "لا ابدا",
-                                            proportion: 0),
-                                      ]
-
-                                  ),
-                                ],
-                              ),),);
-                      },
-                    ),
-                    SizedBox(height: AppSize.s20,),
-                    ButtonApp(
-                      text: tr(LocaleKeys.sleep_disturbance_criterion),
-                      onTap: (){
-                        Navigator.of(context)
-                            .pushReplacement(MaterialPageRoute(
-                          builder: (ctx)=>
-                              QuestionsPageView(
-                                questions: [
-                                  Question(
-                                      questionText: "هل تعاني من الخوف عندما تكون لوحدك؟",
-                                      answer: [
-                                        Answer(
-                                            answerText: "نعم بشدة",
-                                            proportion: 10),
-                                        Answer(
-                                            answerText: "نعم ليس دائما",
-                                            proportion: 8),
-                                        Answer(
-                                            answerText: "لا ادري",
-                                            proportion: 5),
-                                        Answer(
-                                            answerText: "لا ابدا",
-                                            proportion: 0),
-                                      ]
-
-                                  ),
-                                  Question(
-                                      questionText: "هل تعاني من الخوف عندما تكون لوحدك؟",
-                                      answer: [
-                                        Answer(
-                                            answerText: "نعم بشدة",
-                                            proportion: 10),
-                                        Answer(
-                                            answerText: "نعم ليس دائما",
-                                            proportion: 8),
-                                        Answer(
-                                            answerText: "لا ادري",
-                                            proportion: 5),
-                                        Answer(
-                                            answerText: "لا ابدا",
-                                            proportion: 0),
-                                      ]
-
-                                  ),
-                                ],
-                              ),),);
-                      },
-                    ),
-                  ],
+                    );
+                  })
                 ),
               )
             ],

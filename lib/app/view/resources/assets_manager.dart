@@ -8,6 +8,8 @@ class ImagesAssets{
   static const paymentBack = "$imagePath/payment_back.svg";
   static const paymentDone = "$imagePath/payment_done.svg";
   static const backgroundChat = "$imagePath/background_chat.png";
+  static const backgroundAddDoctor = "$imagePath/add_doctor_back.svg";
+  static const backgroundSessionInteractive = "$imagePath/session_interactive.svg";
   static const List<String> imagesInteractiveSessions = [
     "$imagePath/img1.svg",
     "$imagePath/img2.svg",
