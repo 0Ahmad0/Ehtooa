@@ -1,12 +1,15 @@
 import 'package:ehtooa/app/controller/on_boarding_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/utils/local/change_theme.dart';
+import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/globals.dart';
+import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/app/view/screens/bottom_nav_bar/bottom_nav_bar_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'app/controller/bottom_nav_bar_provider.dart';
 import 'app/controller/groups_provider.dart';
