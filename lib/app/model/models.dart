@@ -34,7 +34,7 @@ class User {
   String password;
   String typeUser;
   String description;
-
+  List listUsedQuizzes;
   User(
       {required this.id,
       required this.uid,
@@ -44,6 +44,7 @@ class User {
       required this.password,
         required this.typeUser,
         required this.photoUrl,
+         this.listUsedQuizzes=const <bool>[false,false,false,false],
         this.description=""});
   factory User.fromJson( json){
     return User(id: json["id"],
@@ -54,6 +55,7 @@ class User {
                 password: json["password"],
                 typeUser: json["typeUser"],
                 photoUrl: json["photoUrl"],
+               listUsedQuizzes:json["listUsedQuizzes"],
                description: (json["description"]!=null)?json["description"]:"");
   }
   Map<String,dynamic> toJson()=>{
@@ -65,6 +67,7 @@ class User {
     'password':password,
     'typeUser':typeUser,
     'photoUrl':photoUrl,
+    'listUsedQuizzes':listUsedQuizzes,
     'description':description,
   };
 }
