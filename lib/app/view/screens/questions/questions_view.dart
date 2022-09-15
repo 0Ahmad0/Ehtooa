@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:ehtooa/app/model/models.dart';
-import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';

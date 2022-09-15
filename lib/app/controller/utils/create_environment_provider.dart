@@ -44,7 +44,7 @@ class CreateEnvironmentProvider with ChangeNotifier{
    final resultGroup =await fetchGroup(context);
    group=models.Group.fromJson(resultGroup['body']);
    var result;
-   if(group.listUsers.contains("Tytxd8ae9TRz1wF70iMC")){group.listUsers.add("Tytxd8ae9TRz1wF70iMC");
+   if(!group.listUsers.contains("Tytxd8ae9TRz1wF70iMC")){group.listUsers.add("Tytxd8ae9TRz1wF70iMC");
     result=await FirebaseFun
        .updateGroup(
      id: "taoId1xj5dSDNEoaYlFd",

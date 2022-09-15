@@ -146,6 +146,8 @@ class LoginView extends StatelessWidget {
                                     Navigator.of(context).pop();
                                     if(result['status']){
                                       profileProvider.user=User.fromJson(result['body']);
+                                      final resultGroups =await groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id);
+
                                       Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
                                               builder: (ctx) => QuestionsView(indexTaken: [],)));
@@ -161,7 +163,7 @@ class LoginView extends StatelessWidget {
                                 text: tr(LocaleKeys.yes),
                                 onTap: () async {
                                     Const.LOADIG(context);
-                                   // final result =await CreateEnvironmentProvider().addUserToGroup(context);
+                                 //   final result =await CreateEnvironmentProvider().addUserToGroup(context);
                                     final result =await groupsProvider.fetchGroupsToUser(context, idUser: "Tytxd8ae9TRz1wF70iMC",);
                                     Navigator.of(context).pop();
                                 }),                            
