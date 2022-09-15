@@ -119,29 +119,50 @@ class Doctor {
 
 //Message
 class Message {
+  String id;
+  int index;
   String textMessage;
   String typeMessage;
   String senderId;
+  String replayId;
   DateTime sendingTime;
-
+  List deleteUserMessage;
   Message(
-      {required this.textMessage,
+      {this.id="",
+      this.index=-1,
+      required this.textMessage,
+        required this.replayId,
       required this.typeMessage,
       required this.senderId,
+      required this.deleteUserMessage,
       required this.sendingTime});
   factory Message.fromJson( json){
+    List<String> tempDeleteUserMessage = [];
+    for(String user in json["deleteUserMessage"]){
+      tempDeleteUserMessage.add(user);
+    }
     return Message(
         textMessage: json["textMessage"],
         typeMessage: json["typeMessage"],
         sendingTime: json["sendingTime"].toDate(),
-        senderId: json["senderId"]);
+        senderId: json["senderId"],
+        deleteUserMessage: tempDeleteUserMessage,
+    replayId: json["replayId"]);
   }
-  Map<String,dynamic> toJson()=>{
-    'textMessage':textMessage,
-    'typeMessage':typeMessage,
-    'sendingTime':sendingTime,
-    'senderId':senderId,
-  };
+  Map<String,dynamic> toJson() {
+    List tempDeleteUserMessage = [];
+    for(String user in deleteUserMessage){
+      tempDeleteUserMessage.add(user);
+    }
+    return {
+      'textMessage': textMessage,
+      'typeMessage': typeMessage,
+      'sendingTime': sendingTime,
+      'deleteUserMessage': tempDeleteUserMessage,
+      'senderId': senderId,
+      'replayId': replayId,
+    };
+  }
 }
 
 //Admin
@@ -156,22 +177,26 @@ class Admin {
 class Chat {
   String id;
   List<Message> messages;
-  DateTime date;
+  //DateTime date;
 
   Chat({
     required this.id,
-    required this.date,
+    //required this.date,
     required this.messages,
   });
   factory Chat.fromJson( json){
     List<Message> tempMessages = [];
-    for(Message message in json["messages"]){
-      tempMessages.add(Message.fromJson(message));
+    for(int i=1;i<json['messages'].length;i++){
+
+      Message tempMessage=Message.fromJson(json['messages'][i]);
+      tempMessage.id=json['messages'][i].id;
+      tempMessages.add(tempMessage);
     }
     return Chat(
-        id: json["id"],
-        messages: tempMessages,//json["messages"],
-        date: json["date"]);
+        id: json['id'],
+        messages: tempMessages//json["messages"],
+      //  date: json["date"]
+          );
   }
   Map<String,dynamic> toJson(){
     List<Map<String,dynamic>> tempMessages = [];
@@ -180,14 +205,16 @@ class Chat {
     }
     return {
     'id':id,
-    'date':date,
+    //'date':date,
     'messages':tempMessages,
   };
   }
 }
 
+
 //Group
 class Group {
+  String id;
   String idAmin;
   String nameAr;
   String nameEn;
@@ -198,7 +225,8 @@ class Group {
   DateTime date;
 
   Group(
-      {required this.idAmin,
+      {this.id="",
+      required this.idAmin,
         required this.nameAr,
         required this.nameEn,
         required this.chat,
@@ -239,7 +267,7 @@ class Group {
         idAmin: json["idAmin"],
         nameAr: json["nameAr"],
         nameEn: json["nameEn"],
-        chat: Chat(id: "", date: DateTime.now(), messages: []), //Chat.fromJson(json["chat"]),
+        chat: Chat(id: "", messages: []), //Chat.fromJson(json["chat"]),
         photoUrl: json["photoUrl"],
         listUsers: tempUsers,//json["listUsers"],
         listBlockUsers: tempBlockUsers,//json["listBlockUsers"],
@@ -287,8 +315,40 @@ class Group {
   }
 }
 
+//Groups
+class Groups {
+  List<Group> groups;
+  //DateTime date;
+
+  Groups({
+    required this.groups
+  });
+  factory Groups.fromJson( json){
+    List<Group> tempGroups = [];
+    for(int i=1;i<json.length;i++){
+
+      Group tempGroup=Group.fromJson(json[i]);
+      tempGroup.id=json[i].id;
+      tempGroups.add(tempGroup);
+    }
+    return Groups(
+        groups: tempGroups
+    );
+  }
+  Map<String,dynamic> toJson(){
+    List<Map<String,dynamic>> tempGroups = [];
+    for(Group group in groups){
+      tempGroups.add(group.toJson());
+    }
+    return {
+      'groups':tempGroups,
+    };
+  }
+}
+
 enum ChatMessageType{text,audio,image,vedio}
 enum MessageStatus{not_sent,not_view,view}
+enum UpdateGroupType{update,change_name,add_user,block_user,delete_user}
 /*
 
 flutter pub run easy_localization:generate -S "assets/translations/" -O "lib/translations"

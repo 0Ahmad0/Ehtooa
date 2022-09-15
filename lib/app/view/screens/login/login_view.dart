@@ -1,4 +1,5 @@
-import 'package:ehtooa/app/controller/create_environment_provider.dart';
+import 'package:ehtooa/app/controller/groups_provider.dart';
+import 'package:ehtooa/app/controller/utils/create_environment_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
@@ -7,6 +8,7 @@ import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/font_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
+import 'package:ehtooa/app/view/screens/groups/group_view.dart';
 import 'package:ehtooa/app/view/screens/questions/questions_view.dart';
 import 'package:ehtooa/app/view/screens/signup/signup_view.dart';
 import 'package:ehtooa/app/view/widgets/custome_button.dart';
@@ -31,6 +33,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final groupsProvider = Provider.of<GroupsProvider>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     return  ChangeNotifierProvider<LoginProvider>(
         create: (_)=> LoginProvider(),
@@ -158,7 +161,8 @@ class LoginView extends StatelessWidget {
                                 text: tr(LocaleKeys.yes),
                                 onTap: () async {
                                     Const.LOADIG(context);
-                                    final result =await CreateEnvironmentProvider().fetchGroup(context);
+                                   // final result =await CreateEnvironmentProvider().addUserToGroup(context);
+                                    final result =await groupsProvider.fetchGroupsToUser(context, idUser: "Tytxd8ae9TRz1wF70iMC",);
                                     Navigator.of(context).pop();
                                 }),                            
 

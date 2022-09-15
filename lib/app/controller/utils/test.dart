@@ -2,7 +2,7 @@ import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/view/resources/consts_manager.dart';
 
 class TestModels{
-  static Chat chat =Chat(id: "", date: DateTime.now(), messages: []);
+  static Chat chat =Chat(id: "", messages: []);
   static List<Group> groups=[
     Group(idAmin: "V59ILq22VmKnzXgKvxSV", nameEn: "name1",nameAr: "اسم1", chat: chat, photoUrl: AppConstants.photoGroup, listUsers: [], listBlockUsers: [], date: DateTime.now()),
     Group(idAmin: "z36yvFsn9zaAXj2uEXzL", nameEn: "name2",nameAr: "اسم2", chat: chat, photoUrl: AppConstants.photoGroup, listUsers: [], listBlockUsers: [], date: DateTime.now()),

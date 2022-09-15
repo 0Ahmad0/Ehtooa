@@ -133,7 +133,13 @@ class FirebaseFun{
         .doc(chat.id)
         .collection(AppConstants.collectionChat)
         .add(
-        model.Message(textMessage: "",typeMessage: model.ChatMessageType.text.name,senderId: "",sendingTime:DateTime.now()).toJson()
+        model.Message(
+            replayId: "",
+            textMessage: "",
+            deleteUserMessage: [],
+            typeMessage: model.ChatMessageType.text.name,
+            senderId: "",
+            sendingTime:DateTime.now()).toJson(),
     ).then(onValueCreateChat)
         .catchError(onError);
     if(result['status']){
@@ -156,12 +162,62 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
-  static updateGroup( {required model.Group group,required String id}) async {
-    final result =await FirebaseFirestore.instance
+  static fetchGroupsToUser( {required String idUser})  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
+        .where('listUser',arrayContains: idUser)
+        .get()
+        .then((onValueFetchGroupToUser))
+        .catchError(onError);
+    return result;
+  }
+  static updateGroup( {required model.Group group,required String id,model.UpdateGroupType updateGroupType=model.UpdateGroupType.update}) async {
+    var result =await FirebaseFirestore.instance
         .collection(AppConstants.collectionGroup)
         .doc(id).update(
         group.toJsonFire()
     ).then(onValueUpdateGroup)
+        .catchError(onError);
+    result['status']?result['message']="group successfully ${updateGroupType.name}":"";
+    return result;
+  }
+  static fetchChat( {required String id})  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
+        .doc(id)
+        .collection(AppConstants.collectionChat)
+        .orderBy("sendingTime")
+        .get()
+        .then((onValueFetchChat))
+        .catchError(onError);
+    return result;
+  }
+  static addMessage( {required model.Message message,required String id}) async {
+    final result =await FirebaseFirestore.instance
+        .collection(AppConstants.collectionGroup)
+        .doc(id)
+        .collection(AppConstants.collectionChat).add(
+        message.toJson()
+    ).then(onValueAddMessage)
+        .catchError(onError);
+    return result;
+  }
+  static updateMessage( {required model.Message message,required String id}) async {
+    final result =await FirebaseFirestore.instance
+        .collection(AppConstants.collectionGroup)
+        .doc(id)
+        .collection(AppConstants.collectionChat)
+        .doc(message.id)
+        .update(
+        message.toJson()
+    ).then(onValueUpdateMessage)
+        .catchError(onError);
+    return result;
+  }
+  static deleteMessage( {required String idGroup,required String idMessage}) async {
+    final result =await FirebaseFirestore.instance
+        .collection(AppConstants.collectionGroup)
+        .doc(idGroup)
+        .collection(AppConstants.collectionChat)
+        .doc(idMessage).delete().then(onValueDeleteMessage)
         .catchError(onError);
     return result;
   }
@@ -244,10 +300,56 @@ class FirebaseFun{
       'body':(value.data()!=null)?model.Group.fromJsonFire(value.data()).toJson():null
     };
   }
+  static Future<Map<String,dynamic>> onValueFetchGroupToUser(value) async{
+    print(true);
+    //print(await value.docs[0]);
+    print("Groups count : ${value.docs.length}");
+
+    return {
+      'status':true,
+      'message':'groups successfully fetch',
+      'body':value.docs
+    };
+  }
   static Future<Map<String,dynamic>> onValueUpdateGroup(value) async{
     return {
       'status':true,
       'message':'group successfully update',
+      //  'body': user.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchChat(value) async{
+    print(true);
+    //print(await value.docs[0]);
+    print("Cont Messages : ${value.docs.length}");
+    model.Chat chat = model.Chat.fromJson({
+      'id':"",
+      'messages':value.docs,
+    });
+    return {
+      'status':true,
+      'message':'Chat successfully fetch',
+      'body':chat.toJson(),
+    };
+  }
+  static Future<Map<String,dynamic>> onValueAddMessage(value) async{
+    return {
+      'status':true,
+      'message':'Message successfully add',
+      //  'body': user.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueUpdateMessage(value) async{
+    return {
+      'status':true,
+      'message':'Message successfully update',
+      //  'body': user.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueDeleteMessage(value) async{
+    return {
+      'status':true,
+      'message':'Message successfully delete',
       //  'body': user.toJson()
     };
   }
