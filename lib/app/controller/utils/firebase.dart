@@ -164,7 +164,7 @@ class FirebaseFun{
   }
   static fetchGroupsToUser( {required String idUser})  async {
     final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
-        .where('listUser',arrayContains: idUser)
+        .where('listUsers',arrayContains: idUser)
         .get()
         .then((onValueFetchGroupToUser))
         .catchError(onError);

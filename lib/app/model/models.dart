@@ -328,9 +328,8 @@ class Groups {
   });
   factory Groups.fromJson( json){
     List<Group> tempGroups = [];
-    for(int i=1;i<json.length;i++){
-
-      Group tempGroup=Group.fromJson(json[i]);
+    for(int i=0;i<json.length;i++){
+      Group tempGroup=Group.fromJsonFire(json[i]);
       tempGroup.id=json[i].id;
       tempGroups.add(tempGroup);
     }
@@ -341,7 +340,7 @@ class Groups {
   Map<String,dynamic> toJson(){
     List<Map<String,dynamic>> tempGroups = [];
     for(Group group in groups){
-      tempGroups.add(group.toJson());
+      tempGroups.add(group.toJsonFire());
     }
     return {
       'groups':tempGroups,

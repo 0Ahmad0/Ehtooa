@@ -24,6 +24,8 @@ import '../../../controller/profile_provider.dart';
 import '../../resources/values_manager.dart';
 import 'package:provider/provider.dart';
 
+import '../get_data/get_data_view.dart';
+
 class LoginView extends StatelessWidget {
   /*
   final email = TextEditingController();
@@ -146,12 +148,10 @@ class LoginView extends StatelessWidget {
                                     Navigator.of(context).pop();
                                     if(result['status']){
                                       profileProvider.user=User.fromJson(result['body']);
-                                      final resultGroups =await groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id);
-
-                                      Navigator.of(context).pushReplacement(
+                                        Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
-                                              builder: (ctx) => QuestionsView(indexTaken: [],)));
-                                    }
+                                              builder: (ctx) => GetDataView()/*QuestionsView(indexTaken: [],)*/));
+                                      }
                                   }
                                 }),
                             ///create group
