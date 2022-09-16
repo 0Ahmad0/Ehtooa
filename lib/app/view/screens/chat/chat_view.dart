@@ -133,6 +133,7 @@ class _ChatViewState extends State<ChatView> {
                                 ],
                               )),
                         ));
+
                       }else
                         list.add(SwipeTo(
                           onRightSwipe: (){
@@ -171,9 +172,14 @@ class _ChatViewState extends State<ChatView> {
                     setState(() {
                       list.add(Container(
                         margin: EdgeInsets.only(
-                            left: Sizer.getW(context) / 2 - 20.0
+                            left: Sizer.getW(context) / 2 - 20.0,
+                          top: AppMargin.m8,
+                          bottom: AppMargin.m8,
                         ),
                         child: VoiceMessage(
+                          contactBgColor: Theme.of(context).primaryColor.withOpacity(.2),
+                          contactFgColor: Colors.black,
+                          contactPlayIconColor: Colors.white,
                           audioSrc: path!,
                           me: false,
                         ),
