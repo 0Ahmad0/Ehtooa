@@ -7,10 +7,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import '../../../controller/profile_provider.dart';
+import '../../../model/utils/const.dart';
 
 class ProfileView extends StatelessWidget {
-  final name = TextEditingController(text: "أحمد الحريري");
-  final email = TextEditingController(text: "Ahmad2001@gmail.com");
+ // final name = TextEditingController(text: "أحمد الحريري");
+  //final email = TextEditingController(text: "Ahmad2001@gmail.com");
   bool nameIgnor = true;
   bool emailIgnor = true;
   //ProfileProvider profileProvider = ProfileProvider();
@@ -42,7 +43,7 @@ class ProfileView extends StatelessWidget {
                                         setState1(() {});
                                       },
                                       readOnly: nameIgnor,
-                                      controller: name,
+                                      controller:  profileProvider.name,
                                       validator: (String? val) {
                                         if (val!.isEmpty) {
                                           return tr(LocaleKeys.field_required);
@@ -56,7 +57,7 @@ class ProfileView extends StatelessWidget {
                                       suffixIcon: IconButton(
                                         onPressed: () {
                                           nameIgnor = false;
-                                          profileProvider.user.name="f";
+                                          //profileProvider.user.name="f";
                                           setState1(() {});
                                         },
                                         icon: Icon(Icons.edit),
@@ -71,7 +72,7 @@ class ProfileView extends StatelessWidget {
                                         setState2(() {});
                                       },
                                       readOnly: emailIgnor,
-                                      controller: email,
+                                      controller:  profileProvider.email,
                                       validator: (String? val) {
                                         if (val!.isEmpty) {
                                           return tr(LocaleKeys.field_required);
@@ -106,10 +107,13 @@ class ProfileView extends StatelessWidget {
                                 StatefulBuilder(
                                   builder: (_, setState2) {
                                     return ButtonApp(
-                                        text: tr(LocaleKeys.edit), onTap: () {
-                                      emailIgnor = true;
-                                      nameIgnor = true;
-                                      setState2((){
+                                        text: tr(LocaleKeys.edit), onTap: () async {
+                                          Const.LOADIG(context);
+                                          await profileProvider.editUser(context);
+                                          Navigator.of(context).pop();
+                                          emailIgnor = true;
+                                          nameIgnor = true;
+                                          setState2((){
                                       });
                                     });
                                   },

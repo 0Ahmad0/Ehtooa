@@ -217,7 +217,7 @@ class SignupView extends StatelessWidget {
                               final result =await signupProvider.signup(context);
                               Navigator.of(context).pop();
                               if(result['status']){
-                                profileProvider.user=User.fromJson(result['body']);
+                                profileProvider.updateUser(user:User.fromJson(result['body']));
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (ctx) => QuestionsView(

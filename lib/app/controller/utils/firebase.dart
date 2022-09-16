@@ -65,7 +65,7 @@ class FirebaseFun{
         print("id : ${user.id}");
         return {
           'status':true,
-          'message':'ok',
+          'message':'User successfully update',
           'body': user.toJson()
         };
       }
@@ -148,7 +148,7 @@ class FirebaseFun{
       print("id : ${chat.id}");
       return {
         'status':true,
-        'message':'ok',
+        'message':'Chat successfully created',
         'body': chat.toJson()
       };
     }

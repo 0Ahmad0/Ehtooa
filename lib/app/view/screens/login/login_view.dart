@@ -147,11 +147,11 @@ class LoginView extends StatelessWidget {
                                     final result =await loginProvider.login(context);
                                     Navigator.of(context).pop();
                                     if(result['status']){
-                                      profileProvider.user=User.fromJson(result['body']);
-                                        Navigator.of(context).pushReplacement(
+                                      profileProvider.updateUser(user:User.fromJson(result['body']));
+                                      Navigator.of(context).pushReplacement(
                                           MaterialPageRoute(
                                               builder: (ctx) => GetDataView()/*QuestionsView(indexTaken: [],)*/));
-                                      }
+                                    }
                                   }
                                 }),
                             ///create group
