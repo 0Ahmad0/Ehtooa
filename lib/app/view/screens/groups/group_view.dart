@@ -1,4 +1,3 @@
-import 'package:ehtooa/app/cjat.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
@@ -28,7 +27,7 @@ class GroupsView extends StatelessWidget {
       ),
             child: ListTile(
               onTap: (){
-                Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatView()));
               },
               onLongPress: (){
                 Const.LOADIG(context);
