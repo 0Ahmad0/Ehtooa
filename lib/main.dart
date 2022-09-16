@@ -1,11 +1,15 @@
+import 'package:camera/camera.dart';
+import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:ehtooa/app/controller/on_boarding_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/utils/local/change_theme.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
+import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/globals.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/app/view/screens/bottom_nav_bar/bottom_nav_bar_view.dart';
+import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
@@ -27,8 +31,9 @@ import 'package:get/get.dart';
 o(error){
   print(error);
 }
-void main() async{
+Future<void> main() async{
   await WidgetsFlutterBinding.ensureInitialized();
+  await CustomGalleryPermissions.requestPermissionExtend();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   await GetStorage.init();
@@ -72,6 +77,7 @@ class MyApp extends StatelessWidget {
           builder: (c, value, child) {
             print(appProvider.darkTheme);
             return GetMaterialApp(
+              title: tr(LocaleKeys.app_name),
               supportedLocales: context.supportedLocales,
               localizationsDelegates: context.localizationDelegates,
               locale: context.locale,

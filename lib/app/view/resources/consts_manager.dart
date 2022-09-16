@@ -1,5 +1,5 @@
 import 'package:ehtooa/translations/locale_keys.g.dart';
-
+import 'package:camera/camera.dart';
 import '../../model/models.dart';
 
 class AppConstants {
@@ -314,4 +314,5 @@ class AppConstants {
           Answer(answerText: LocaleKeys.a8_a4, proportion: 1.5),
         ]),
   ];
+
 }

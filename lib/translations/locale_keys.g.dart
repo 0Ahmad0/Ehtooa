@@ -212,5 +212,11 @@ abstract class  LocaleKeys {
   static const another_test = 'another_test';
   static const add_doctor = 'add_doctor';
   static const create_session = 'create_session';
+  static const gallery = 'gallery';
+  static const camera = 'camera';
+  static const documents = 'documents';
+  static const contacts = 'contacts';
+  static const location = 'location';
+  static const audio = 'audio';
 
 }

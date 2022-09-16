@@ -116,7 +116,8 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                     text: tr(LocaleKeys.add_doctor),
                     icon: Icons.add_box_outlined,
                     onTap: (){
-                      Navigator.pushReplacement(
+                      Navigator.pop(context);
+                      Navigator.push(
                           context,
                           MaterialPageRoute(builder: (ctx)=>AddDoctorView()));
                     },
@@ -129,7 +130,8 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                     text: tr(LocaleKeys.create_session),
                     icon: Icons.cast_connected_sharp,
                     onTap: (){
-                      Navigator.pushReplacement(
+                      Navigator.pop(context);
+                      Navigator.push(
                           context, MaterialPageRoute(builder: (ctx)=>CreateSessionsView()));
                     },
                   ),
