@@ -17,7 +17,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
 import 'package:easy_localization/easy_localization.dart';
 import '../../../controller/bottom_nav_bar_provider.dart';
+import '../../../controller/profile_provider.dart';
 import '../groups/group_view.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class BottomNavBarView extends StatefulWidget {
   @override
@@ -40,6 +42,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
 
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
     return ChangeNotifierProvider<BottomNavBarProvider>(
       create: (_) => BottomNavBarProvider(),
       child: Consumer<BottomNavBarProvider>(
@@ -49,24 +52,54 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
             drawer: Drawer(
               child: Column(
                 children: [
-                  UserAccountsDrawerHeader(
-                    margin: EdgeInsets.zero,
-                    accountName: Text(
-                      tr(LocaleKeys.name),
-                      style: getRegularStyle(
-                          color: ColorManager.white,
-                          fontSize: Sizer.getW(context) / 24),
-                    ),
-                    accountEmail: Text(
-                      tr(LocaleKeys.email),
-                      style: getLightStyle(
-                          color: ColorManager.white,
-                          fontSize: Sizer.getW(context) / 28),
-                    ),
-                    currentAccountPicture: CircleAvatar(
-                      child: FlutterLogo(),
-                    ),
-                  ),
+                  ChangeNotifierProvider<ProfileProvider>.value(
+                      value: profileProvider,
+                      child: Consumer<ProfileProvider>(
+                        builder: (context, value, child) =>
+                            UserAccountsDrawerHeader(
+                              margin: EdgeInsets.zero,
+                              accountName: Text(
+                               // tr(LocaleKeys.name),
+                                value.user.name,
+                                style: getRegularStyle(
+                                    color: ColorManager.white,
+                                    fontSize: Sizer.getW(context) / 24),
+                              ),
+                              accountEmail: Text(
+                               // tr(LocaleKeys.email),
+                                value.user.email,
+                                style: getLightStyle(
+                                    color: ColorManager.white,
+                                    fontSize: Sizer.getW(context) / 28),
+                              ),
+                              currentAccountPicture: CircleAvatar(
+                                child: //FlutterLogo(),
+                                CachedNetworkImage(
+                                  fit: BoxFit.fill,
+                                  width: double.infinity,
+                                  height: Sizer.getW(context) * 0.7,
+                                  imageUrl:
+                                 // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                                  "${value.user.photoUrl}",
+                                  imageBuilder: (context, imageProvider) =>
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover,
+                                            //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                                          ),
+                                        ),
+                                      ),
+                                  placeholder: (context, url) =>
+                                      CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                ),
+                              ),
+                            ),
+                      )),
+
                   _buildListTile(
                     text: tr(LocaleKeys.setting),
                     icon: Icons.settings,

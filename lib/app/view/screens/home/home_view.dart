@@ -170,7 +170,7 @@ class HomeView extends StatelessWidget {
                               child: Consumer<ProfileProvider>(
                                 builder: (context, value, child) =>
                                     Text(
-                                      profileProvider.user.name,
+                                      value.user.name,
                                   //"أحمد",
                                   style: getBoldStyle(
                                     color: ColorManager.white,
