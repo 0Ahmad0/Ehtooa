@@ -228,5 +228,6 @@ abstract class  LocaleKeys {
   static const are_you_sure = 'are_you_sure';
   static const confirm_delete = 'confirm_delete';
   static const price = 'price';
+  static const video = 'video';
 
 }

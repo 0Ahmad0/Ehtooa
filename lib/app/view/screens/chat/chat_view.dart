@@ -1,8 +1,10 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:chat_composer/chat_composer.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
+import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
@@ -17,6 +19,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:custom_gallery_display/custom_gallery_display.dart';
 import '../../resources/color_manager.dart';
 import 'dart:ui' as ui;
+
 class ChatView extends StatefulWidget {
   const ChatView({super.key});
 
@@ -29,36 +32,47 @@ class _ChatViewState extends State<ChatView> {
   TextEditingController con = TextEditingController();
   final foucsNode = FocusNode();
   String? replayMessage;
+
   @override
   Widget build(BuildContext context) {
-    bool isReplay = replayMessage !=null;
+    bool isReplay = replayMessage != null;
     return Directionality(
       textDirection: ui.TextDirection.ltr,
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('Chat Composer'),
+          title: Text(tr(LocaleKeys.groups)),
         ),
         body: Column(
           children: [
             Expanded(
-              child: ListView.builder(
-                  padding: EdgeInsets.all(
-                    AppPadding.p10,
-                  ),
-                  itemCount: list.length,
-                  itemBuilder: (_, pos) {
-                    return list[pos];
-                    // return ListTile(title: Text(list[pos]));
-                  }),
+              child: Container(
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                            Colors.black.withOpacity(.2), BlendMode.darken),
+                        image: AssetImage(ImagesAssets.backgroundChat))),
+                child: ListView.builder(
+                    padding: EdgeInsets.all(
+                      AppPadding.p10,
+                    ),
+                    itemCount: list.length,
+                    itemBuilder: (_, pos) {
+                      return list[pos];
+                      // return ListTile(title: Text(list[pos]));
+                    }),
+              ),
             ),
             Column(
               children: [
-                if(isReplay) buildReplay(),
+                if (isReplay) buildReplay(),
                 ChatComposer(
+                  backgroundColor: Colors.green,
                   borderRadius: isReplay
-                      ? BorderRadius.vertical(bottom: Radius.circular(AppSize.s8))
-                      :BorderRadius.circular(AppSize.s8),
+                      ? BorderRadius.vertical(
+                          bottom: Radius.circular(AppSize.s8))
+                      : BorderRadius.circular(AppSize.s8),
                   padding: EdgeInsets.only(
                     top: 0.0,
                     bottom: AppPadding.p10,
@@ -67,44 +81,26 @@ class _ChatViewState extends State<ChatView> {
                   ),
                   focusNode: foucsNode,
                   textFieldDecoration: InputDecoration(
-
                     border: InputBorder.none,
                     enabledBorder: InputBorder.none,
                     focusedBorder: InputBorder.none,
                   ),
-                  textStyle: getRegularStyle(color: Theme.of(context).textTheme.bodyText1!.color,fontSize: Sizer.getW(context)/30),
+                  textStyle: getRegularStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: Sizer.getW(context) / 30),
                   controller: con,
                   onReceiveText: (str) {
                     setState(() {
-                      if(isReplay)
-                      {
+                      if (isReplay) {
                         list.add(SwipeTo(
-                          onRightSwipe: (){
-                            print(str);
-                            replayMessage = str;
-                            foucsNode.requestFocus();
-                            setState(() {
-
-                            });
-                          },
-                          child: Container(
-                              margin: EdgeInsets.only(
-                                top: AppMargin.m4,
-                                bottom: AppMargin.m4,
-                                // right: Sizer.getW(context) /2 -20.0,
-                                left: Sizer.getW(context) /2 -20.0,
-                              ),
-                              padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor.withOpacity(.2),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(AppSize.s12),
-                                    topRight: Radius.circular(AppSize.s12),
-                                    //ToDo check is ursender
-                                    bottomLeft: Radius.circular(AppSize.s12),
-                                    // bottomRight: Radius.circular(AppSize.s50),
-                                  )
-                              ),
+                            onRightSwipe: () {
+                              print(str);
+                              replayMessage = str;
+                              foucsNode.requestFocus();
+                              setState(() {});
+                            },
+                            child: BuildMessageShape(
+                              isMe: true,
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -112,17 +108,25 @@ class _ChatViewState extends State<ChatView> {
                                     height: Sizer.getW(context) * 0.15,
                                     padding: EdgeInsets.all(AppPadding.p8),
                                     decoration: BoxDecoration(
-                                      color: ColorManager.lightGray.withOpacity(.5),
-                                      borderRadius: BorderRadius.circular( AppSize.s8),
+                                      color: ColorManager.lightGray
+                                          .withOpacity(.5),
+                                      borderRadius:
+                                          BorderRadius.circular(AppSize.s8),
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         VerticalDivider(
                                           thickness: AppSize.s4,
-                                          color: Theme.of(context).primaryColor.withOpacity(.5),
+                                          color: Theme.of(context)
+                                              .primaryColor
+                                              .withOpacity(.5),
                                         ),
-                                        Text(replayMessage!)
+                                        Flexible(
+                                            child: Text(
+                                          replayMessage!,
+                                        ))
                                       ],
                                     ),
                                   ),
@@ -131,40 +135,26 @@ class _ChatViewState extends State<ChatView> {
                                     child: Text(con.text),
                                   )
                                 ],
-                              )),
-                        ));
-
-                      }else
+                              ),
+                            )));
+                        replayMessage = null;
+                        setState(() {});
+                      } else
                         list.add(SwipeTo(
-                          onRightSwipe: (){
-                            print(str);
-                            replayMessage = str;
-                            foucsNode.requestFocus();
-                            setState(() {
-
-                            });
-                          },
-                          child: Container(
-                              margin: EdgeInsets.only(
-                                top: AppMargin.m4,
-                                bottom: AppMargin.m4,
-                                // right: Sizer.getW(context) /2 -20.0,
-                                left: Sizer.getW(context) /2 -20.0,
+                            onRightSwipe: () {
+                              print(str);
+                              replayMessage = str;
+                              foucsNode.requestFocus();
+                              setState(() {});
+                            },
+                            child: BuildMessageShape(
+                              isMe: false,
+                              child: Row(
+                                children: [
+                                  Text(str.toString()),
+                                ],
                               ),
-                              padding: EdgeInsets.all(12.0),
-                              decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor.withOpacity(.2),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(AppSize.s50),
-                                    topRight: Radius.circular(AppSize.s50),
-                                    //ToDo check is ursender
-                                    bottomLeft: Radius.circular(50),
-                                    // bottomRight: Radius.circular(AppSize.s50),
-                                  )
-                              ),
-                              child: Text("${str}")),
-                        ));
-                      // list.add('TEXT : ${str!}');
+                            )));
                       con.text = '';
                     });
                   },
@@ -172,16 +162,14 @@ class _ChatViewState extends State<ChatView> {
                     setState(() {
                       list.add(Container(
                         margin: EdgeInsets.only(
-                            left: Sizer.getW(context) / 2 - 20.0,
-                          top: AppMargin.m8,
-                          bottom: AppMargin.m8,
-                        ),
+                            top: AppMargin.m4,
+                            bottom: AppMargin.m4,
+                            //TODO check audio List Sender
+                            left: Sizer.getW(context) / 2 - AppSize.s20),
                         child: VoiceMessage(
-                          contactBgColor: Theme.of(context).primaryColor.withOpacity(.2),
-                          contactFgColor: Colors.black,
-                          contactPlayIconColor: Colors.white,
-                          audioSrc: path!,
-                          me: false,
+                          key: Key(path!),
+                          audioSrc: path,
+                          me: true,
                         ),
                       ));
                     });
@@ -224,8 +212,14 @@ class _ChatViewState extends State<ChatView> {
                           source: ImageSource.both,
                           multiSelection: false,
                           galleryDisplaySettings: GalleryDisplaySettings(
-                            appTheme:
-                            AppTheme(focusColor: Colors.white, primaryColor: Colors.black),
+                            tabsTexts: TabsTexts(
+                                videoText: tr(LocaleKeys.video),
+                                galleryText: tr(LocaleKeys.gallery),
+                                photoText: tr(LocaleKeys.camera),
+                                deletingText: tr(LocaleKeys.delete)),
+                            appTheme: AppTheme(
+                                focusColor: Colors.white,
+                                primaryColor: Colors.black),
                             showImagePreview: true,
                             cropImage: true,
                           ),
@@ -242,54 +236,76 @@ class _ChatViewState extends State<ChatView> {
       ),
     );
   }
+
   Future<void> displayDetails(SelectedImagesDetails details) async {
     if (details.isThatImage) {
-      list.add(Container(
-          margin: EdgeInsets.only(
-            top: AppMargin.m4,
-            bottom: AppMargin.m4,
-            // right: Sizer.getW(context) /2 -20.0,
-            left: Sizer.getW(context) /2 -20.0,
+      list.add(InkWell(
+        onTap: (){
+          showDialog(
+              context: context, builder: (ctx)=>Material(
+            color: Colors.black,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.file(
+            File(details.selectedFile.path),
+                      fit: BoxFit.cover,
           ),
-          padding: EdgeInsets.all(12.0),
-          decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor.withOpacity(.2),
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(AppSize.s50),
-                topRight: Radius.circular(AppSize.s50),
-                //ToDo check is ursender
-                bottomLeft: Radius.circular(50),
-                // bottomRight: Radius.circular(AppSize.s50),
-              )
-          ),
-          child: DisplayImages(
-              selectedFiles: details.selectedFiles != null
-                  ? details.selectedFiles!
-                  : [details.selectedFile],
-              details: details,
-              aspectRatio: details.aspectRatio)));
-      setState(() {
+                    Positioned(
+                      top: AppSize.s10,
+                      right: AppSize.s10,
+                      child: IconButton(onPressed: (){
+                        Navigator.pop(context);
+                      }, icon: Icon(Icons.close,color: ColorManager.white,)),
+                    )
+                  ],
+                ),
+              ));
+        },
+        child: BuildMessageShape(
+            isMe: true, child: DisplayImages(
+                selectedFiles: details.selectedFiles != null
+                    ? details.selectedFiles!
+                    : [details.selectedFile],
+                details: details,
+                aspectRatio: details.aspectRatio)),
+      ));
+      setState(() {});
+    } else {
+      // final video = await VideoThumbnail.thumbnailData(
+      //   video: details.selectedFile.path,
+      //   imageFormat: ImageFormat.JPEG,
+      //   maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+      //   quality: 25,
+      // );
+      // print("hhhhhh");
+      // print(video);
 
-      });
-    }
-    else{
-      Navigator.push(context, CupertinoDialogRoute(builder: (_){
-        return DisplayVideo(
-            video: details.selectedFile, aspectRatio: details.aspectRatio);
-      }, context: context));
+      // list.add(BuildMessageShape(
+      //     isMe: true, child: DisplayImages(
+      //     selectedFiles: details.selectedFiles != null
+      //         ? details.selectedFiles!
+      //         : [details.selectedFile],
+      //     details: details,
+      //     aspectRatio: details.aspectRatio)));
+      // Navigator.push(
+      //     context,
+      //     CupertinoDialogRoute(
+      //         builder: (_) {
+      //           return DisplayVideo(
+      //               video: details.selectedFile,
+      //               aspectRatio: details.aspectRatio);
+      //         },
+      //         context: context));
       // list.add(DisplayVideo(
       //     video: details.selectedFile, aspectRatio: details.aspectRatio));
-      setState(() {
-
-      });
+      setState(() {});
     }
   }
 
-  Widget buildReplay(){
+  Widget buildReplay() {
     return Container(
-      margin: EdgeInsets.symmetric(
-          horizontal: AppMargin.m10
-      ),
+      margin: EdgeInsets.symmetric(horizontal: AppMargin.m10),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -298,10 +314,11 @@ class _ChatViewState extends State<ChatView> {
               Container(
                 width: Sizer.getW(context) - 79,
                 padding: EdgeInsets.all(AppPadding.p8),
-                height: Sizer.getW(context)*0.2,
+                height: Sizer.getW(context) * 0.2,
                 decoration: BoxDecoration(
                   color: ColorManager.lightGray.withOpacity(.2),
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(AppSize.s8)),
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(AppSize.s8)),
                 ),
                 child: Container(
                   padding: EdgeInsets.all(AppPadding.p4),
@@ -315,7 +332,10 @@ class _ChatViewState extends State<ChatView> {
                         thickness: AppSize.s4,
                         color: Theme.of(context).primaryColor.withOpacity(.5),
                       ),
-                      Text(replayMessage!)
+                      Flexible(
+                          child: Text(
+                        replayMessage!,
+                      ))
                     ],
                   ),
                 ),
@@ -323,12 +343,12 @@ class _ChatViewState extends State<ChatView> {
               Positioned(
                 top: 0,
                 right: 0,
-                child: IconButton(onPressed: (){
-                  replayMessage = null;
-                  setState(() {
-
-                  });
-                }, icon: Icon(Icons.close)),
+                child: IconButton(
+                    onPressed: () {
+                      replayMessage = null;
+                      setState(() {});
+                    },
+                    icon: Icon(Icons.close)),
               ),
             ],
           )
@@ -336,6 +356,7 @@ class _ChatViewState extends State<ChatView> {
       ),
     );
   }
+
   Widget bottomSheet() {
     return Container(
       height: Sizer.getW(context) * 0.55,
@@ -343,79 +364,96 @@ class _ChatViewState extends State<ChatView> {
       margin: const EdgeInsets.all(AppMargin.m12),
       child: Card(
           child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildItemBottomsheet(icon: FontAwesomeIcons.file,
-                      text: tr(LocaleKeys.documents), onTap: ()async {
-                        Navigator.pop(context);
-                        FilePickerResult? result = await FilePicker.platform.pickFiles(
-                            allowMultiple: false
-                        );
-                        if(result != null) {
-                          list.add(
-                              Container(
-                                margin: EdgeInsets.only(
-                                  top: AppMargin.m4,
-                                  bottom: AppMargin.m4,
-                                  // right: Sizer.getW(context) /2 -20.0,
-                                  left: Sizer.getW(context) /2 -20.0,
-                                ),
-                                color: Theme.of(context).primaryColor.withOpacity(.2),
-
-                                padding: EdgeInsets.all(AppPadding.p8),
-                                child: Container(
-                                  padding: EdgeInsets.all(AppPadding.p4),
-                                  decoration: BoxDecoration(
-                                      color: ColorManager.blackGray.withOpacity(.5),
-                                      borderRadius: BorderRadius.circular(AppSize.s8)
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      CircleAvatar(child: IconButton(onPressed: (){}, icon: Icon(Icons.download))),
-                                      const SizedBox(width: AppSize.s8,),
-                                      Flexible(
-                                          child: Text(
-                                              result.files[0].name)),
-
-                                    ],
-                                  ),
-                                ),
-                              )
-                          );
-                          // Not sure if I should only get file path or complete data (this was in package documentation)
-                          List<File> files = result.paths.map((path) => File(path!)).toList();
-                          setState(() {
-
-                          });
-                        } else {
-                          // User canceled the picker
-                        }}, color: Colors.blueAccent),
-                  buildItemBottomsheet(icon: FontAwesomeIcons.camera, text: tr(LocaleKeys.camera), onTap: () {
-                  }, color: Colors.pinkAccent),
-                  buildItemBottomsheet(icon: Icons.photo, text: tr(LocaleKeys.gallery), onTap: () {}, color: Colors.purpleAccent),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildItemBottomsheet(icon: Icons.audiotrack_sharp, text: tr(LocaleKeys.audio), onTap: () {
-                    Const.TOAST(context,textToast: tr(LocaleKeys.no));
-                  }, color: Colors.orange),
-                  buildItemBottomsheet(icon: FontAwesomeIcons.locationDot, text: tr(LocaleKeys.location), onTap: () {
-
-                    Const.TOAST(context,textToast: tr(LocaleKeys.no));
-
-                  }, color: Colors.green),
-                  buildItemBottomsheet(icon: Icons.person, text: tr(LocaleKeys.contacts), onTap: () {
-                    Const.TOAST(context,textToast: tr(LocaleKeys.no));
-                  }, color: Colors.blue),
-                ],
-              ),
+              buildItemBottomsheet(
+                  icon: FontAwesomeIcons.file,
+                  text: tr(LocaleKeys.documents),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    FilePickerResult? result = await FilePicker.platform
+                        .pickFiles(allowMultiple: false);
+                    if (result != null) {
+                      list.add(Container(
+                        margin: EdgeInsets.only(
+                          top: AppMargin.m4,
+                          bottom: AppMargin.m4,
+                          // right: Sizer.getW(context) /2 -20.0,
+                          left: Sizer.getW(context) / 2 - 20.0,
+                        ),
+                        color: Theme.of(context).primaryColor.withOpacity(.2),
+                        padding: EdgeInsets.all(AppPadding.p8),
+                        child: Container(
+                          padding: EdgeInsets.all(AppPadding.p4),
+                          decoration: BoxDecoration(
+                              color: ColorManager.blackGray.withOpacity(.5),
+                              borderRadius: BorderRadius.circular(AppSize.s8)),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.download))),
+                              const SizedBox(
+                                width: AppSize.s8,
+                              ),
+                              Flexible(child: Text(result.files[0].name)),
+                            ],
+                          ),
+                        ),
+                      ));
+                      // Not sure if I should only get file path or complete data (this was in package documentation)
+                      List<File> files =
+                          result.paths.map((path) => File(path!)).toList();
+                      setState(() {});
+                    } else {
+                      // User canceled the picker
+                    }
+                  },
+                  color: Colors.blueAccent),
+              buildItemBottomsheet(
+                  icon: FontAwesomeIcons.camera,
+                  text: tr(LocaleKeys.camera),
+                  onTap: () {},
+                  color: Colors.pinkAccent),
+              buildItemBottomsheet(
+                  icon: Icons.photo,
+                  text: tr(LocaleKeys.gallery),
+                  onTap: () {},
+                  color: Colors.purpleAccent),
             ],
-          )),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildItemBottomsheet(
+                  icon: Icons.audiotrack_sharp,
+                  text: tr(LocaleKeys.audio),
+                  onTap: () {
+                    Const.TOAST(context, textToast: tr(LocaleKeys.no));
+                  },
+                  color: Colors.orange),
+              buildItemBottomsheet(
+                  icon: FontAwesomeIcons.locationDot,
+                  text: tr(LocaleKeys.location),
+                  onTap: () {
+                    Const.TOAST(context, textToast: tr(LocaleKeys.no));
+                  },
+                  color: Colors.green),
+              buildItemBottomsheet(
+                  icon: Icons.person,
+                  text: tr(LocaleKeys.contacts),
+                  onTap: () {
+                    Const.TOAST(context, textToast: tr(LocaleKeys.no));
+                  },
+                  color: Colors.blue),
+            ],
+          ),
+        ],
+      )),
     );
   }
 
@@ -444,10 +482,12 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 }
+
 class DisplayImages extends StatelessWidget {
   final List<File> selectedFiles;
   final double aspectRatio;
   final SelectedImagesDetails details;
+
   const DisplayImages({
     Key? key,
     required this.details,
@@ -457,14 +497,16 @@ class DisplayImages extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  Image.file(selectedFiles.first)
-    ;
+    return Image.file(
+      selectedFiles.first,
+    );
   }
 }
 
 class DisplayVideo extends StatefulWidget {
   final File video;
   final double aspectRatio;
+
   const DisplayVideo({
     Key? key,
     required this.video,
@@ -525,6 +567,56 @@ class _DisplayVideoState extends State<DisplayVideo> {
         child: Icon(
           _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
         ),
+      ),
+    );
+  }
+}
+
+class BuildMessageShape extends StatelessWidget {
+  final bool isMe;
+  final Widget child;
+
+  const BuildMessageShape({super.key, required this.isMe, required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(
+        top: AppPadding.p12,
+        left: AppPadding.p8,
+        right: AppPadding.p8,
+        bottom: AppPadding.p4,
+      ),
+      margin: EdgeInsets.only(
+        top: AppMargin.m4,
+        bottom: AppMargin.m4,
+        right: isMe ? 0 : Sizer.getW(context) / 2 - AppSize.s20,
+        left: isMe ? Sizer.getW(context) / 2 - AppSize.s20 : 0,
+      ),
+      decoration: BoxDecoration(
+          // color: Theme.of(context).primaryColor.withOpacity(isMe ? 0.2 : 0.8),
+          color: isMe ? Color(0xffdffec5) : Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(AppSize.s10),
+            topRight: Radius.circular(AppSize.s10),
+            bottomLeft: isMe ? Radius.circular(AppSize.s10) : Radius.zero,
+            bottomRight: isMe ? Radius.zero : Radius.circular(AppSize.s10),
+          )),
+      child: Column(
+        children: [
+          child,const SizedBox(height: AppSize.s8,),
+          Row(
+            children: [
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: AppSize.s4),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(4.0),
+                      color: Colors.green[100]),
+                  child:
+                      Text("${DateFormat().add_jm().format(DateTime.now())}")),
+            ],
+          )
+        ],
       ),
     );
   }

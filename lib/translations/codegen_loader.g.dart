@@ -241,7 +241,8 @@ class CodegenLoader extends AssetLoader{
   "all_sessions": "كل الجلسات",
   "are_you_sure": "هل أنت متأكد؟",
   "confirm_delete": "هل تريد حقا القيام بحذف الجلسة؟",
-  "price": "سعر الجلسة"
+  "price": "سعر الجلسة",
+  "video": "الفيديو"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Doctor name",
@@ -469,7 +470,8 @@ static const Map<String,dynamic> en = {
   "all_sessions": "All sessions",
   "are_you_sure": "Are you sure?",
   "confirm_delete": "Do you want to delete the session?",
-  "price": "Session price"
+  "price": "Session price",
+  "video": "Video"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

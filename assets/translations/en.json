@@ -229,6 +229,7 @@
   "all_sessions": "All sessions",
   "are_you_sure": "Are you sure?",
   "confirm_delete": "Do you want to delete the session?",
-  "price": "Session price"
+  "price": "Session price",
+  "video" : "Video"
 
 }
