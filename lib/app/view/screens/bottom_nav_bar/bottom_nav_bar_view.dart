@@ -12,6 +12,7 @@ import 'package:ehtooa/app/view/screens/profile/profile_view.dart';
 import 'package:ehtooa/app/view/screens/setting/setting_view.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
