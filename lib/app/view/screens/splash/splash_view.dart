@@ -6,18 +6,26 @@ import 'package:ehtooa/app/view/screens/on_boarding/on_boarding_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../../controller/login_provider.dart';
+import '../../../controller/profile_provider.dart';
 import '../../../model/models.dart';
+import '../../../model/utils/const.dart';
 import '../../../model/utils/local/storage.dart';
 import '../../resources/consts_manager.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
+import '../get_data/get_data_view.dart';
+import '../login/login_view.dart';
 class SplashView extends StatefulWidget {
   @override
   State<SplashView> createState() => _SplashViewState();
 }
 
 class _SplashViewState extends State<SplashView> {
+  final profileProvider = Provider.of<ProfileProvider>;
+  final loginProvider = Provider.of<LoginProvider>;
   Timer? _timer;
 
   startDelay() async {
@@ -27,13 +35,14 @@ class _SplashViewState extends State<SplashView> {
   }
 
   _goNext() async {
-     Navigator.pushReplacement(
+    /** Navigator.pushReplacement(
          context,
          CupertinoPageRoute(builder: (context) => OnBoardingView()
              //HomeView()
              // LoginView()
 
-             ));
+             ));**/
+    init(loginProvider, profileProvider);
     //print("Advance==> ${Advance.isLogined}" );
     // Navigator.pushReplacementNamed(context, Routes.registerRoot);
     // bool isLoginedKEY =
@@ -55,7 +64,41 @@ class _SplashViewState extends State<SplashView> {
     // }
     // // Get.changeTheme(getApplicationTheme(isDark:Advance.theme ));
   }
+  init(loginProvider,profileProvider) async {
+    await AppStorage.init();
+    print("f ${Advance.token}");
+    if(Advance.isLogined&&Advance.token!=""&&false){
+      Const.LOADIG(context);
+      final result =await loginProvider.loginUid();
+      Navigator.of(context).pop();
+      if(result['status']){
+        profileProvider.updateUser(user:User.fromJson(result['body']));
+        Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(builder: (context) => GetDataView()
+              //HomeView()
+              // LoginView()
 
+            ));
+      }else{
+        Navigator.pushReplacement(
+            context,
+            CupertinoPageRoute(builder: (context) => LoginView()
+              //HomeView()
+              // LoginView()
+
+            ));
+      }
+    }else{
+      Navigator.pushReplacement(
+          context,
+          CupertinoPageRoute(builder: (context) => OnBoardingView()
+            //HomeView()
+            // LoginView()
+
+          ));
+    }
+  }
   @override
   void initState() {
     super.initState();

@@ -15,6 +15,11 @@ class AppStorage {
     } else {
       Advance.isLogined = await storageRead(key: AppConstants.isLoginedKEY);
     }
+    if (!_storage.hasData(AppConstants.idKEY)) {
+      storageWrite(key: AppConstants.idKEY, value: "");
+    } else {
+      Advance.token = await storageRead(key: AppConstants.idKEY);
+    }
     if (!_storage.hasData(AppConstants.languageKEY)) {
       storageWrite(key: AppConstants.languageKEY, value: true);
     } else {
@@ -38,7 +43,7 @@ class AppStorage {
   static Future<void> storageDelete({key}) async => await _storage.remove(key).then((value) => print("delete key successful"));
 static depose() async {
   await _storage.remove(AppConstants.idKEY);
-  await _storage.remove(AppConstants.phoneNumberKEY);
+  //await _storage.remove(AppConstants.phoneNumberKEY);
   await _storage.write(AppConstants.isLoginedKEY, false);
 }
 

@@ -11,6 +11,7 @@ import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'app/controller/add_doctor_provider.dart';
 import 'app/controller/bottom_nav_bar_provider.dart';
 import 'app/controller/groups_provider.dart';
 import 'app/controller/utils/create_environment_provider.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
         Provider<SignupProvider>(create: (_)=>SignupProvider()),
         Provider<LoginProvider>(create: (_)=>LoginProvider()),
         Provider<GroupsProvider>(create: (_)=>GroupsProvider()),
+        Provider<AddDoctorProvider>(create: (_)=>AddDoctorProvider()),
    //     Provider<CreateEnvironmentProvider>(create: (_)=>CreateEnvironmentProvider()),
       ],
       child: ChangeNotifierProvider<AppProvider>.value(

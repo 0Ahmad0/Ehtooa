@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -25,18 +26,25 @@ temp(groupsProvider,profileProvider) async {
   var data;
   ///ToDo hariri
   ///وضع تايمر بدل الحلقة
-  data = await groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id);
-  if(data!=null)
-    groupsProvider.groups=Groups.fromJson(data['body']);
-  if(groupsProvider.groups.groups.length>0){
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-            builder: (ctx) => BottomNavBarView()));
+  if(!profileProvider.user.typeUser.contains(AppConstants.collectionPatient)){
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+              builder: (ctx) => BottomNavBarView()));
   }else{
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-            builder: (ctx) => QuestionsView(indexTaken: [],)));
+    data = await groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id);
+    if(data!=null)
+      groupsProvider.groups=Groups.fromJson(data['body']);
+    if(groupsProvider.groups.groups.length>0){
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+              builder: (ctx) => BottomNavBarView()));
+    }else{
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+              builder: (ctx) => QuestionsView(indexTaken: [],)));
+    }
   }
+
 
 }
 
@@ -44,6 +52,7 @@ temp(groupsProvider,profileProvider) async {
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final groupsProvider = Provider.of<GroupsProvider>(context);
+
     temp(groupsProvider,profileProvider);
     return
         Scaffold(

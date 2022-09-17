@@ -275,7 +275,7 @@ class FirebaseFun{
   }
   static Future<Map<String,dynamic>> onValueFetchUser(value) async{
     print(true);
-    print(await value.docs[0]['uid']);
+    print(await (value.docs.length>0)?value.docs[0]['uid']:null);
     print("user : ${(value.docs.length>0)?model.User.fromJson(value.docs[0]).toJson():null}");
     return {
       'status':true,

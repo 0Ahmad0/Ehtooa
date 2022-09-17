@@ -20,25 +20,13 @@ class LoginProvider with ChangeNotifier{
    var resultUser =await FirebaseFun.login(email: email.text, password: password.text);
    var result;
    if(resultUser['status']){
-      result = await FirebaseFun.fetchUser(uid: resultUser['body']['uid'], typeUser: AppConstants.collectionPatient);
-     // print(result);
-      if(result['status']&&result['body']==null){
-       result = await FirebaseFun.fetchUser(uid: resultUser['body']['uid'], typeUser: AppConstants.collectionDoctor);
-       if(result['status']&&result['body']==null){
-
-         result = await FirebaseFun.fetchUser(uid: resultUser['body']['uid'], typeUser: AppConstants.collectionAdmin);
-         if(result['status']&&result['body']==null){
-           result={
-             'status':false,
-             'message':LocaleKeys.toast_account_invalid,
-           };
-         }
-       }
-     }
+      result = await fetchUser(uid: resultUser['body']['uid']);
      if(result['status']){
        await AppStorage.storageWrite(key: AppConstants.isLoginedKEY, value: true);
        Advance.isLogined = true;
        user= models.User.fromJson(result['body']);
+       await AppStorage.storageWrite(key: AppConstants.idKEY, value: user.uid);
+       Advance.token = user.uid;
         email.clear();
         password.clear();
      }
@@ -54,6 +42,44 @@ class LoginProvider with ChangeNotifier{
     }else{
     }*/
    // user.uid=result['body']['uid'];
+  }
+  loginUid(String uid) async{
+      var result = await fetchUser(uid: uid);
+      if(result['status']){
+        await AppStorage.storageWrite(key: AppConstants.isLoginedKEY, value: true);
+        Advance.isLogined = true;
+        user= models.User.fromJson(result['body']);
+        await AppStorage.storageWrite(key: AppConstants.idKEY, value: user.uid);
+        Advance.token = user.uid;
+        email.clear();
+        password.clear();
+      // print(result);
+    }
+    print(result);
+    //Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+    return result;
+    /*if(result['status']){
+    }else{
+    }*/
+    // user.uid=result['body']['uid'];
+  }
+  fetchUser({required String uid}) async {
+    var result= await FirebaseFun.fetchUser(uid: uid, typeUser: AppConstants.collectionPatient);
+    // print(result);
+    if(result['status']&&result['body']==null){
+      result = await FirebaseFun.fetchUser(uid: uid, typeUser: AppConstants.collectionDoctor);
+      if(result['status']&&result['body']==null){
+
+        result = await FirebaseFun.fetchUser(uid: uid, typeUser: AppConstants.collectionAdmin);
+        if(result['status']&&result['body']==null){
+          result={
+            'status':false,
+            'message':LocaleKeys.toast_account_invalid,
+          };
+        }
+      }
+    }
+    return result;
   }
   onError(error){
     print(false);

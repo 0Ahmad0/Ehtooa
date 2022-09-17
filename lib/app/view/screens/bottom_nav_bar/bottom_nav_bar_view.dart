@@ -116,7 +116,8 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                     text: tr(LocaleKeys.add_doctor),
                     icon: Icons.add_box_outlined,
                     onTap: (){
-                      Navigator.pushReplacement(
+                    ///  Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(builder: (ctx)=>AddDoctorView()));
                     },
