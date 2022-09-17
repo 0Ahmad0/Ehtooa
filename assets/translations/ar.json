@@ -4,11 +4,7 @@
   "session_link": "رابط الجلسة التفاعلية",
   "description": "نبذة عن الدكتور",
   "valid_session": "أدخل رابط جلسة صالح",
-  "doctor_name": "Doctor name",
-  "doctor_email": "Doctor email",
-  "session_link": "Session interactive link",
-  "description": "Description",
-  "valid_session": "Enter valid session interactive",
+
   "on_boarding1": "تطبيق احتواء يقدم لك\nالرعاية الكاملة لصحتك العقلية",
   "on_boarding2": "احصل على المساعدة \nفي أي وقت وعندما تحتاج",
   "on_boarding3": "الرعاية الذاتية وصحتك النفسية\nتأتي أولا",
@@ -38,7 +34,7 @@
   "depressed_patients": "مرضى الاكتئاب",
   "anxiety_patients": "مرضى القلق",
   "obsessive_compulsive_disorder_patients": "مرضى الوسواس القهري",
-  "eating_disorder_patients": "مرضى اضطراب الطعام",
+  "eating_disorder_patients": "مرضى اضطراب النوم",
   "contact": "تواصل معنا",
   "logout": "تسجيل الخروج",
   "name": "اسم المستخدم",
@@ -221,8 +217,24 @@
   "good_mental_health" : "أنت تتمتع بصحة عقلية جيدة \uD83D\uDE0D",
   "another_test" : "إجراء اختبار آخر",
   "add_doctor": "إضافة دكتور",
-  "create_session": "إنشاء جلسة تفاعلية"
-
+  "create_session": "إنشاء جلسة تفاعلية",
+  "gallery": "المعرض",
+  "camera": "الكاميرا",
+  "documents": "المستندات",
+  "contacts": "جهات الاتصال",
+  "location": "الموقع",
+  "audio": "ملقات الصوت",
+  "session_name": "اسم الجلسة ",
+  "session_group": "الغروب",
+  "session_date": "تاريخ الجلسة",
+  "session_time":"وقت الجلسة",
+  "session_doctor_name" : "الدكتور المسؤول عن الجلسة",
+  "delete": "حذف الجلسة",
+  "all_sessions": "كل الجلسات",
+  "are_you_sure": "هل أنت متأكد؟",
+  "confirm_delete": "هل تريد حقا القيام بحذف الجلسة؟",
+  "price": "سعر الجلسة",
+  "video" : "الفيديو"
 }
 
 

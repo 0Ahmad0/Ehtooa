@@ -1,4 +1,9 @@
 {
+  "doctor_name": "Doctor name",
+  "doctor_email": "Doctor email",
+  "session_link": "Session interactive link",
+  "description": "Description",
+  "valid_session": "Enter valid session interactive",
   "on_boarding1": "containment application offers you\nComplete care of your mental health",
   "on_boarding2": "Get help\nWhenever and when you need",
   "on_boarding3": "Self-care and your mental health\ncome first",
@@ -41,7 +46,7 @@
   "next": "Next",
   "result": "Result",
   "field_required": "This field is required",
-  "enter_valid_email": "Hello",
+  "enter_valid_email": "Enter valid email",
   "enter_password": "Enter password length more than 6",
   "enter_phoneNumber": "Enter valid Phone Number",
   "confirm_password_match": "Password don't match ",
@@ -208,6 +213,23 @@
   "good_mental_health" : "You're in good mental health.",
   "another_test" : "Take another test",
   "add_doctor": "Add Doctor",
-  "create_session": "Create interactive session"
+  "create_session": "Create interactive session",
+  "gallery": "Gallery",
+  "camera": "Camera",
+  "documents": "Documents",
+  "contacts": "Contacts",
+  "location": "Location",
+  "audio": "Audio",
+  "session_name": "Session name",
+  "session_group": "Session group",
+  "session_date": "Session Date",
+  "session_time":"Session time",
+  "session_doctor_name" : "Session Doctor Admin",
+  "delete": "Delete",
+  "all_sessions": "All sessions",
+  "are_you_sure": "Are you sure?",
+  "confirm_delete": "Do you want to delete the session?",
+  "price": "Session price",
+  "video" : "Video"
 
 }

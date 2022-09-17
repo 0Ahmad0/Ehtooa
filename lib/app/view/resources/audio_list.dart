@@ -6,14 +6,14 @@ import '../widgets/audio_bubble.dart';
 import 'audio_state.dart';
 import 'globals.dart';
 
-class AudioList extends StatefulWidget {
-  const AudioList({Key? key}) : super(key: key);
+class ChatList extends StatefulWidget {
+  const ChatList({Key? key}) : super(key: key);
 
   @override
-  State<AudioList> createState() => _AudioListState();
+  State<ChatList> createState() => _ChatListState();
 }
 
-class _AudioListState extends State<AudioList> {
+class _ChatListState extends State<ChatList> {
   List<FileSystemEntity> data = [];
 
   @override

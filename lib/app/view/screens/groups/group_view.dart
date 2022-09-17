@@ -33,99 +33,49 @@ class GroupsView extends StatelessWidget {
           if (snapshot.hasError) {
             return const Text('Error');
           } else if (snapshot.hasData) {
-            return Container(
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: ColorManager.lightGray.withOpacity(.2),
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Theme.of(context).textTheme.bodyText1!.color!,
-                                    ),
-                                  )
-                              ),
-                              child: ListTile(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatView()));
-                                },
-                                onLongPress: (){
-                                  Const.LOADIG(context);
-                                },
-                                leading: Transform.scale(
-                                  scale: 1.5,
-                                  child: CircleAvatar(
-                                    child: FlutterLogo(),
-                                  ),
-                                ),
-                                title: Text(
-                                   "${groupsProvider.groups.groups.length}",
-                                  //tr(LocaleKeys.anxiety_patients),
-                                  style: getRegularStyle(
-                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                      fontSize: Sizer.getW(context)/26
-                                  ),),
-                                subtitle: Text("السلام عليكم ورحمة الله",
-                                  style: getLightStyle(
-                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                      fontSize: Sizer.getW(context)/32
-                                  ),),
-                              ),
-                            )
-                          ],
+            return ListView.builder(
+              itemCount: 2,
+              itemBuilder: (_, index) {
+                return                                Container(
+                  decoration: BoxDecoration(
+                      color: ColorManager.lightGray.withOpacity(.2),
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Theme.of(context).textTheme.bodyText1!.color!,
                         ),
-                      );
-            ///ToDo hariri
-            ///اضافة ليست فيو
-              /*ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 2,
-                    itemBuilder: (_, index) {
-                      return  Container(
-
-                        child: Column(
-                          children: [
-                            Container(
-                              decoration: BoxDecoration(
-                                  color: ColorManager.lightGray.withOpacity(.2),
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Theme.of(context).textTheme.bodyText1!.color!,
-                                    ),
-                                  )
-                              ),
-                              child: ListTile(
-                                onTap: (){
-                                  Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatView()));
-                                },
-                                onLongPress: (){
-                                  Const.LOADIG(context);
-                                },
-                                leading: Transform.scale(
-                                  scale: 1.5,
-                                  child: CircleAvatar(
-                                    child: FlutterLogo(),
-                                  ),
-                                ),
-                                title: Text(
-                                  // "${value.groups.groups.length}",
-                                  tr(LocaleKeys.anxiety_patients),
-                                  style: getRegularStyle(
-                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                      fontSize: Sizer.getW(context)/26
-                                  ),),
-                                subtitle: Text("السلام عليكم ورحمة الله",
-                                  style: getLightStyle(
-                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                      fontSize: Sizer.getW(context)/32
-                                  ),),
-                              ),
-                            )
-                          ],
-                        ),
-                      );
+                      )
+                  ),
+                  child: ListTile(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatView()));
                     },
-                  );*/
+                    onLongPress: (){
+                      Const.LOADIG(context);
+                    },
+                    leading: Transform.scale(
+                      scale: 1.5,
+                      child: CircleAvatar(
+                        child: FlutterLogo(),
+                      ),
+                    ),
+                    title: Text(
+                      // "${value.groups.groups.length}",
+                      tr(LocaleKeys.anxiety_patients),
+                      style: getRegularStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: Sizer.getW(context)/26
+                      ),),
+                    subtitle: Text("السلام عليكم ورحمة الله",
+                      style: getLightStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: Sizer.getW(context)/32
+                      ),),
+                  ),
+                )
+                ;
+              },
+            );
+
           } else {
             return const Text('Empty data');
           }

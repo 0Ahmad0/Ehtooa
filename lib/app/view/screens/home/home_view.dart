@@ -11,7 +11,6 @@ import 'package:ehtooa/app/view/screens/payment/payment_view.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:stream_chat_flutter/stream_chat_flutter.dart';
 import '../../../model/models.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:carousel_slider/carousel_options.dart';

@@ -212,5 +212,22 @@ abstract class  LocaleKeys {
   static const another_test = 'another_test';
   static const add_doctor = 'add_doctor';
   static const create_session = 'create_session';
+  static const gallery = 'gallery';
+  static const camera = 'camera';
+  static const documents = 'documents';
+  static const contacts = 'contacts';
+  static const location = 'location';
+  static const audio = 'audio';
+  static const session_name = 'session_name';
+  static const session_group = 'session_group';
+  static const session_date = 'session_date';
+  static const session_time = 'session_time';
+  static const session_doctor_name = 'session_doctor_name';
+  static const delete = 'delete';
+  static const all_sessions = 'all_sessions';
+  static const are_you_sure = 'are_you_sure';
+  static const confirm_delete = 'confirm_delete';
+  static const price = 'price';
+  static const video = 'video';
 
 }
