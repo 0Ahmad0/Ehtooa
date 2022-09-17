@@ -32,6 +32,7 @@ class AppConstants {
   static String collectionPatient = "Patient";
   static String collectionGroup = "Group";
   static String collectionChat = "Chat";
+  static String collectionSession = "Session";
 
   static List<Question> questionsDepression = [
     Question(questionText: LocaleKeys.depression_q1, answer: [

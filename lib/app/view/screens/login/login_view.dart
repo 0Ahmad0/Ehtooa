@@ -164,10 +164,11 @@ class LoginView extends StatelessWidget {
                             ButtonApp(
                                 text: tr(LocaleKeys.yes),
                                 onTap: () async {
+                                 // print("la :${Localizations.localeOf(context)}");
                                     Const.LOADIG(context);
                                  //   final result =await CreateEnvironmentProvider().addUserToGroup(context);
                                   //  final result =await groupsProvider.fetchGroupsToUser(context, idUser: "Tytxd8ae9TRz1wF70iMC",);
-                                    final result =await homeProvider.fetchDoctors(context);
+                                    final result =await homeProvider.fetchSessions(context);
                                     Navigator.of(context).pop();
                                 }),                            
 

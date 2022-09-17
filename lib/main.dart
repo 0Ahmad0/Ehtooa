@@ -1,5 +1,5 @@
 import 'package:camera/camera.dart';
-///import 'package:custom_gallery_display/custom_gallery_display.dart';
+import 'package:custom_gallery_display/custom_gallery_display.dart';
 import 'package:ehtooa/app/controller/on_boarding_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/utils/local/change_theme.dart';
@@ -17,8 +17,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'app/controller/add_doctor_provider.dart';
 import 'app/controller/bottom_nav_bar_provider.dart';
+import 'app/controller/create_sessions_provider.dart';
 import 'app/controller/groups_provider.dart';
 import 'app/controller/home_provider.dart';
+import 'app/controller/list_sessions_provider.dart';
 import 'app/controller/utils/create_environment_provider.dart';
 import 'app/controller/login_provider.dart';
 import 'app/controller/profile_provider.dart';
@@ -35,7 +37,7 @@ o(error){
 }
 Future<void> main() async{
   await WidgetsFlutterBinding.ensureInitialized();
- /// await CustomGalleryPermissions.requestPermissionExtend();
+  await CustomGalleryPermissions.requestPermissionExtend();
   await Firebase.initializeApp();
   await EasyLocalization.ensureInitialized();
   await GetStorage.init();
@@ -60,6 +62,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return  MultiProvider(
       providers: [
 
@@ -73,6 +76,8 @@ class MyApp extends StatelessWidget {
         Provider<GroupsProvider>(create: (_)=>GroupsProvider()),
         Provider<AddDoctorProvider>(create: (_)=>AddDoctorProvider()),
         Provider<HomeProvider>(create: (_)=>HomeProvider()),
+        Provider<CreateSessionsProvider>(create: (_)=>CreateSessionsProvider()),
+        Provider<ListSessionsProvider>(create: (_)=>ListSessionsProvider()),
    //     Provider<CreateEnvironmentProvider>(create: (_)=>CreateEnvironmentProvider()),
       ],
       child: ChangeNotifierProvider<AppProvider>.value(

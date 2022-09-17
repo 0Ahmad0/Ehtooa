@@ -379,6 +379,218 @@ class Groups {
   }
 }
 
+//Session
+class Session {
+  String id;
+  String idAmin;
+  String sessionUrl;
+  String idGroup;
+  String name;
+  int price;
+  List<String> listDoctor;
+  List<String> listUserPay;
+  List<String> listNotifications;
+  List<String> listNotificationsView;
+  String photoUrl;
+  DateTime date;
+
+  Session(
+      {this.id="",
+        required this.idAmin,
+        required this.name,
+        required this.sessionUrl,
+        required this.idGroup,
+         this.photoUrl="",
+        required this.price,
+        required this.listDoctor,
+        required this.listUserPay,
+         this.listNotifications=const [],
+         this.listNotificationsView=const [],
+        required this.date});
+  factory Session.fromJson( json){
+    List<String> tempDoctor = [];
+    List<String> tempUserPay = [];
+    List<String> tempNotifications = [];
+    List<String> tempNotificationsView = [];
+    for(String user in json["listDoctor"]){
+      tempDoctor.add(user);
+    }
+    for(String user in json["listUserPay"]){
+      tempUserPay.add(user);
+    }
+    for(String user in json["listNotifications"]){
+      tempNotifications.add(user);
+    }
+    for(String user in json["listNotificationsView"]){
+      tempNotificationsView.add(user);
+    }
+    return Session(
+        id: json["id"],
+        idAmin: json["idAmin"],
+        name: json["name"],
+        photoUrl: json["photoUrl"],
+        sessionUrl: json["sessionUrl"],
+        idGroup: json["idGroup"],
+        price: json["price"],
+        listDoctor: tempDoctor,//json["listUsers"],
+        listUserPay: tempUserPay,//json["listBlockUsers"],
+        listNotifications: tempNotifications,//json["listBlockUsers"],
+        listNotificationsView: tempNotificationsView,//json["listBlockUsers"],
+        date: json["date"].toDate()
+    );
+  }
+  factory Session.fromJsonFire( json){
+    List<String> tempDoctor = [];
+    List<String> tempUserPay = [];
+    List<String> tempNotifications = [];
+    List<String> tempNotificationsView = [];
+    for(String user in json["listDoctor"]){
+      tempDoctor.add(user);
+    }
+    for(String user in json["listUserPay"]){
+      tempUserPay.add(user);
+    }
+    for(String user in json["listNotifications"]){
+      tempNotifications.add(user);
+    }
+    for(String user in json["listNotificationsView"]){
+      tempNotificationsView.add(user);
+    }
+    return Session(
+        idAmin: json["idAmin"],
+        name: json["name"],
+        photoUrl: json["photoUrl"],
+        sessionUrl: json["sessionUrl"],
+        idGroup: json["idGroup"],
+        price: json["price"],
+        listDoctor: tempDoctor,//json["listUsers"],
+        listUserPay: tempUserPay,//json["listBlockUsers"],
+        listNotifications: tempNotifications,//json["listBlockUsers"],
+        listNotificationsView: tempNotificationsView,//json["listBlockUsers"],
+        date: json["date"]
+    );
+  }
+  Map<String,dynamic> toJson(){
+    List tempDoctor = [];
+    List tempUserPay = [];
+    List<String> tempNotifications = [];
+    List<String> tempNotificationsView = [];
+    for(String user in listDoctor){
+      tempDoctor.add(user);
+    }
+    for(String user in listUserPay){
+      tempUserPay.add(user);
+    }
+    for(String user in listNotifications){
+      tempNotifications.add(user);
+    }
+    for(String user in listNotificationsView){
+      tempNotificationsView.add(user);
+    }
+    return {
+      'id':id,
+      'idAmin':idAmin,
+      'name':name,
+      'photoUrl':photoUrl,
+      'sessionUrl':sessionUrl,
+      'idGroup':idGroup,
+      'price':price,
+      'listDoctor':tempDoctor,//listUsers,
+      'listUserPay':tempUserPay,//listBlockUsers,
+      'listNotifications':tempNotifications,//listBlockUsers,
+      'listNotificationsView':tempNotificationsView,//listBlockUsers,
+      'date':date,
+    };
+  }
+  Map<String,dynamic> toJsonFire(){
+    List tempDoctor = [];
+    List tempUserPay = [];
+    List<String> tempNotifications = [];
+    List<String> tempNotificationsView = [];
+    for(String user in listDoctor){
+      tempDoctor.add(user);
+    }
+    for(String user in listUserPay){
+      tempUserPay.add(user);
+    }
+    for(String user in listNotifications){
+      tempNotifications.add(user);
+    }
+    for(String user in listNotificationsView){
+      tempNotificationsView.add(user);
+    }
+    return {
+      'id':id,
+      'idAmin':idAmin,
+      'name':name,
+      'photoUrl':photoUrl,
+      'sessionUrl':sessionUrl,
+      'idGroup':idGroup,
+      'price':price,
+      'listDoctor':tempDoctor,//listUsers,
+      'listUserPay':tempUserPay,//listBlockUsers,
+      'listNotifications':tempNotifications,//listBlockUsers,
+      'listNotificationsView':tempNotificationsView,//listBlockUsers,
+      'date':date,
+    };
+  }
+}
+
+//Sessions
+class Sessions {
+  List<Session> sessions;
+
+  Sessions({
+    required this.sessions
+  });
+  factory Sessions.fromJson( json){
+    List<Session> tempSessions = [];
+    for(int i=0;i<json.length;i++){
+      Session tempSession=Session.fromJson(json[i]);
+     // tempSession.id=json[i].id;
+      tempSessions.add(tempSession);
+    }
+    return Sessions(
+        sessions: tempSessions
+    );
+  }
+  Map<String,dynamic> toJson(){
+    List<Map<String,dynamic>> tempSessions = [];
+    for(Session session in sessions){
+      tempSessions.add(session.toJsonFire());
+    }
+    return {
+      'sessions':tempSessions,
+    };
+  }
+}
+
+
+//Notification
+class Notification {
+  String id;
+  int range;
+  //DateTime date;
+
+  Notification({
+    required this.id,
+    required this.range,
+  });
+  factory Notification.fromJson( json){
+    return Notification(
+        id: json['id'],
+  range: json["range"]
+    );
+  }
+  Map<String,dynamic> toJson(){
+    return {
+      'id':id,
+      'range':range,
+    };
+  }
+}
+
+
 enum ChatMessageType{text,audio,image,vedio}
 enum MessageStatus{not_sent,not_view,view}
 enum UpdateGroupType{update,change_name,add_user,block_user,delete_user}

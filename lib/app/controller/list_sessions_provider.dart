@@ -15,33 +15,29 @@ import '../model/utils/const.dart';
 import '../view/resources/consts_manager.dart';
 import '../view/screens/questions/questions_view.dart';
 
-class HomeProvider with ChangeNotifier{
-  models.Users doctors=models.Users(users: []);
-  models.Groups groups=models.Groups(groups: []);
+class ListSessionsProvider with ChangeNotifier{
   models.Sessions sessions=models.Sessions(sessions: []);
+  models.Groups groups=models.Groups(groups: []);
   String idUser="";
-  fetchDoctors(context) async {
-    var result =await FirebaseFun.fetchDoctors();
-    print(result);
-    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
-    return result;
-  }
-  fetchGroups(context) async {
-    var result =await FirebaseFun.fetchGroups();
-    print(result);
-    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
-    return result;
-  }
   fetchSessions(context) async {
     var result =await FirebaseFun.fetchSessions();
     print(result);
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
-
-
-
-
+  deleteSession(context,{required String idSession}) async {
+    var result =await FirebaseFun.deleteSession(idSession: idSession);
+    print(result);
+    Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+    return result;
+  }
+  fetchGroupsToUser(context,{required String idUser}) async {
+    this.idUser=idUser;
+    var result =await FirebaseFun.fetchGroupsToUser(idUser: idUser);
+    print(result);
+    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
+    return result;
+  }
   onError(error){
     print(false);
     print(error);

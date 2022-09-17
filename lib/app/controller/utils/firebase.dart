@@ -235,6 +235,62 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+  static createSession( {required model.Session session}) async {
+    final result= await FirebaseFirestore.instance.collection(AppConstants.collectionSession).add(
+        session.toJson()
+    ).then((value){
+      session.id=value.id;
+      return {
+        'status':true,
+        'message':'Session successfully created',
+        'body': {
+          'id':value.id
+        }
+      };
+    }).catchError(onError);
+    if(result['status'] == true){
+      final result2=await updateSession(session: session);
+      if(result2['status'] == true){
+        return{
+          'status':true,
+          'message':'Session successfully created',
+          'body': session.toJson()
+        };
+      }else{
+        return{
+          'status':false,
+          'message':"Session Unsuccessfully created"
+        };
+      }
+    }else{
+      return result;
+    }
+  }
+  static updateSession( {required model.Session session,model.UpdateGroupType updateGroupType=model.UpdateGroupType.update}) async {
+    var result =await FirebaseFirestore.instance
+        .collection(AppConstants.collectionSession)
+        .doc(session.id).update(
+        session.toJson()
+    ).then(onValueUpdateSession)
+        .catchError(onError);
+    result['status']?result['message']="Session successfully ${updateGroupType.name}":"";
+    return result;
+  }
+  static fetchSessions()  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionSession)
+        .get()
+        .then((onValueFetchSessions))
+        .catchError(onError);
+    return result;
+  }
+  static deleteSession( {required String idSession}) async {
+    final result =await FirebaseFirestore.instance
+        .collection(AppConstants.collectionSession)
+        .doc(idSession)
+        .delete().then(onValueDeleteSession)
+        .catchError(onError);
+    return result;
+  }
 
    static Future<Map<String,dynamic>>  onError(error) async {
     print(false);
@@ -386,6 +442,31 @@ class FirebaseFun{
       'body':value.docs
     };
   }
+  static Future<Map<String,dynamic>> onValueUpdateSession(value) async{
+    return {
+      'status':true,
+      'message':'Session successfully update',
+      //  'body': user.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchSessions(value) async{
+    print(true);
+    print("Sessions count : ${value.docs.length}");
+
+    return {
+      'status':true,
+      'message':'Sessions successfully fetch',
+      'body':value.docs
+    };
+  }
+  static Future<Map<String,dynamic>> onValueDeleteSession(value) async{
+    return {
+      'status':true,
+      'message':'Session successfully delete',
+      //  'body': user.toJson()
+    };
+  }
+
 
   static String findTextToast(String text){
      if(text.contains("Password should be at least 6 characters")){

@@ -14,9 +14,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:swipe_to/swipe_to.dart';
 import 'package:video_player/video_player.dart';
-///import 'package:voice_message_package/voice_message_package.dart';
+import 'package:voice_message_package/voice_message_package.dart';
 import 'package:easy_localization/easy_localization.dart';
-///import 'package:custom_gallery_display/custom_gallery_display.dart';
+import 'package:custom_gallery_display/custom_gallery_display.dart';
 import '../../../model/models.dart';
 import '../../resources/color_manager.dart';
 import 'dart:ui' as ui;
@@ -90,9 +90,7 @@ class _ChatViewState extends State<ChatView> {
           children: [
             Expanded(
               child:
-                SizedBox()
-              /**
-              Container(
+               Container(
                 decoration: BoxDecoration(
                     image: DecorationImage(
                         fit: BoxFit.cover,
@@ -109,9 +107,8 @@ class _ChatViewState extends State<ChatView> {
                       // return ListTile(title: Text(list[pos]));
                     }),
               ),
-               **/
             ),
-            /**
+
             Column(
               children: [
                 if (isReplay) buildReplay(),
@@ -263,7 +260,6 @@ class _ChatViewState extends State<ChatView> {
                         color: Colors.grey,
                       ),
                       onPressed: () async {
-                        /**
                         ImagePickerPlus picker = ImagePickerPlus(context);
                         SelectedImagesDetails? details = await picker.pickBoth(
                           source: ImageSource.both,
@@ -283,20 +279,17 @@ class _ChatViewState extends State<ChatView> {
 
                         );
                         if (details != null) await displayDetails(details);
-                         **/
                       },
                     ),
                   ],
                 ),
               ],
             ),
-      **/
           ],
         ),
       ),
     );
   }
-/**
   Future<void> displayDetails(SelectedImagesDetails details) async {
     if (details.isThatImage) {
       list.add(InkWell(
@@ -323,8 +316,8 @@ class _ChatViewState extends State<ChatView> {
                 ),
               ));
         },
-        child: SizedBox()
-        /**
+        child:
+
         BuildMessageShape(
             isMe: true, child: DisplayImages(
             selectedFiles: details.selectedFiles != null
@@ -332,7 +325,6 @@ class _ChatViewState extends State<ChatView> {
                 : [details.selectedFile],
             details: details,
             aspectRatio: details.aspectRatio)),
-            **/
       ));
       setState(() {});
     } else {
@@ -556,14 +548,11 @@ class _ChatViewState extends State<ChatView> {
       ),
     );
   }
- **/
 }
 
-/**
 class DisplayImages extends StatelessWidget {
   final List<File> selectedFiles;
   final double aspectRatio;
-  /**
   final SelectedImagesDetails details;
 
   const DisplayImages({
@@ -572,7 +561,6 @@ class DisplayImages extends StatelessWidget {
     required this.selectedFiles,
     required this.aspectRatio,
   }) : super(key: key);
-**/
   @override
   Widget build(BuildContext context) {
     return Image.file(
@@ -699,5 +687,3 @@ class BuildMessageShape extends StatelessWidget {
     );
   }
 }
-
-**/

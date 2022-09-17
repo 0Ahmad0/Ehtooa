@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import '../../../../controller/create_sessions_provider.dart';
 import '../../../../controller/home_provider.dart';
 import '../../../../controller/profile_provider.dart';
 import '../../../../model/utils/const.dart';
@@ -20,6 +21,8 @@ import '../list_sessions/list_sessions_view.dart';
 import 'package:provider/provider.dart';
 
 class CreateSessionsView extends StatelessWidget {
+  var createSessionsProvider;
+  /*
   final formKey = GlobalKey<FormState>();
   final link = TextEditingController();
   final sessionName = TextEditingController();
@@ -28,10 +31,12 @@ class CreateSessionsView extends StatelessWidget {
   final sessionGroup = TextEditingController();
   final sessionDoctor = TextEditingController();
   final price = TextEditingController();
+  */
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
+     createSessionsProvider = Provider.of<CreateSessionsProvider>(context);
     return  Scaffold(
       appBar: AppBar(
         title: Text(tr(LocaleKeys.create_session)),
@@ -58,7 +63,7 @@ class CreateSessionsView extends StatelessWidget {
             vertical: AppPadding.p10,
           ),
           child: Form(
-            key: formKey,
+            key: createSessionsProvider.formKey,
             child: Column(
               children: [
                 SvgPicture.asset(
@@ -67,7 +72,7 @@ class CreateSessionsView extends StatelessWidget {
                 ),
                 SizedBox(height: AppSize.s10,),
                 CustomTextFiled(
-                    controller: sessionName,
+                    controller: createSessionsProvider.sessionName,
                     validator: (String? val){
                       if(val!.isEmpty){
                         return tr(LocaleKeys.field_required);
@@ -83,7 +88,7 @@ class CreateSessionsView extends StatelessWidget {
                 ),
                 SizedBox(height: AppSize.s10,),
                 CustomTextFiled(
-                    controller: link,
+                    controller: createSessionsProvider.link,
                     validator: (String? val){
                       if(val!.isEmpty){
                         return tr(LocaleKeys.field_required);
@@ -122,7 +127,7 @@ class CreateSessionsView extends StatelessWidget {
                             value: index,
                           )),
                           onChanged: (val){
-                            sessionGroup.text = val.toString();
+                            createSessionsProvider.sessionGroup.text = val.toString();
                           }
                       );
                       //Const.CIRCLE(context);
@@ -144,11 +149,11 @@ class CreateSessionsView extends StatelessWidget {
                                   prefixIcon: Icon(Icons.groups)
                               ),
                               items: List.generate(homeProvider.groups.groups.length, (index) => DropdownMenuItem(
-                                child: Text((Advance.language)?homeProvider.groups.groups[index].nameAr:homeProvider.groups.groups[index].nameEn),
+                                child: Text(!(context.locale == 'en')?homeProvider.groups.groups[index].nameAr:homeProvider.groups.groups[index].nameEn),
                                 value: index,
                               )),
                               onChanged: (val){
-                                sessionGroup.text = val.toString();
+                                createSessionsProvider.sessionGroup.text = val.toString();
                               }
                           );
                       } else {
@@ -181,7 +186,7 @@ class CreateSessionsView extends StatelessWidget {
                             value: index,
                           )),
                           onChanged: (val){
-                            sessionDoctor.text = val.toString();
+                            createSessionsProvider.sessionDoctor.text = val.toString();
                           }
                       );
                       //Const.CIRCLE(context);
@@ -209,7 +214,7 @@ class CreateSessionsView extends StatelessWidget {
                                     value: index,
                                   )),
                                   onChanged: (val){
-                                    sessionDoctor.text = val.toString();
+                                    createSessionsProvider.sessionDoctor.text = val.toString();
                                   }
                               );
                       } else {
@@ -229,7 +234,7 @@ class CreateSessionsView extends StatelessWidget {
                         onTap: ()async{
                           await _selectDate(context);
                         },
-                        controller: sessionDate,
+                        controller: createSessionsProvider.sessionDate,
                         validator: (String? val){
                           if(val!.isEmpty){
                             return tr(LocaleKeys.field_required);
@@ -259,7 +264,7 @@ class CreateSessionsView extends StatelessWidget {
                             ),
                           );
                         },
-                        controller: sessionTime,
+                        controller: createSessionsProvider.sessionTime,
                         validator: (String? val){
                           if(val!.isEmpty){
                             return tr(LocaleKeys.field_required);
@@ -278,7 +283,7 @@ class CreateSessionsView extends StatelessWidget {
                 ),
                 SizedBox(height: AppSize.s10,),
                 CustomTextFiled(
-                    controller: price,
+                    controller: createSessionsProvider.price,
                     validator: (String? val){
                       if(val!.isEmpty){
                         return tr(LocaleKeys.field_required);
@@ -293,9 +298,17 @@ class CreateSessionsView extends StatelessWidget {
                     textInputType: TextInputType.number,
                     hintText: tr(LocaleKeys.price)),
                 SizedBox(height: AppSize.s10,),
-                ButtonApp(text: tr(LocaleKeys.create_session), onTap: (){
-                  if(formKey.currentState!.validate()){
-
+                ButtonApp(text: tr(LocaleKeys.create_session), onTap: () async {
+                  if(createSessionsProvider.formKey.currentState!.validate()){
+                    Const.LOADIG(context);
+                    final result =await createSessionsProvider.createSession(context, idAmin: profileProvider.user.id,
+                        idDoctor: homeProvider.doctors.users[int.parse(createSessionsProvider.sessionGroup.text)].id,
+                        idGroup: homeProvider.groups.groups[int.parse(createSessionsProvider.sessionDoctor.text)].id);
+                    Navigator.of(context).pop();
+                    if(result['status']){
+                      createSessionsProvider.clean();
+                      Navigator.of(context).pop();
+                    }
                   }
                 })
               ],
@@ -320,18 +333,18 @@ class CreateSessionsView extends StatelessWidget {
 
     if (newSelectedDate != null) {
       _selectedDate = newSelectedDate;
-      sessionDate
+      createSessionsProvider.date= newSelectedDate;
+      createSessionsProvider.sessionDate
         ..text = DateFormat.yMd().format(_selectedDate)
         ..selection = TextSelection.fromPosition(TextPosition(
-            offset: sessionDate.text.length,
+            offset: createSessionsProvider.sessionDate.text.length,
             affinity: TextAffinity.upstream));
     }
   }
   _selectTime(TimeOfDay time,BuildContext context) async {
     _selectedTime = time;
-    sessionTime.text =  _selectedTime.format(
-      context,
-    );
+    createSessionsProvider.time= time;
+    createSessionsProvider.sessionTime.text=  _selectedTime.format(context);
     }
 
 
