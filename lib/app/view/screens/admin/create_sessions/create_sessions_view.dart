@@ -299,11 +299,13 @@ class CreateSessionsView extends StatelessWidget {
                     hintText: tr(LocaleKeys.price)),
                 SizedBox(height: AppSize.s10,),
                 ButtonApp(text: tr(LocaleKeys.create_session), onTap: () async {
+                  //print(int.parse(createSessionsProvider.sessionGroup.text));
+                 // print(homeProvider.groups.groups[int.parse(createSessionsProvider.sessionGroup.text)].id);
                   if(createSessionsProvider.formKey.currentState!.validate()){
                     Const.LOADIG(context);
                     final result =await createSessionsProvider.createSession(context, idAmin: profileProvider.user.id,
-                        idDoctor: homeProvider.doctors.users[int.parse(createSessionsProvider.sessionGroup.text)].id,
-                        idGroup: homeProvider.groups.groups[int.parse(createSessionsProvider.sessionDoctor.text)].id);
+                        idDoctor: homeProvider.doctors.users[int.parse(createSessionsProvider.sessionDoctor.text)].id,
+                        idGroup: homeProvider.groups.groups[int.parse(createSessionsProvider.sessionGroup.text)].id);
                     Navigator.of(context).pop();
                     if(result['status']){
                       createSessionsProvider.clean();

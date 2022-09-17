@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:animate_do/animate_do.dart';
+import 'package:ehtooa/app/controller/groups_provider.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/controller/profile_provider.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
@@ -27,6 +28,7 @@ class HomeView extends StatelessWidget {
   dynamic _selectedIndex = {};
 
   final CarouselController _carouselController = CarouselController();
+  /**
   List<InteractiveSessions> sessions = [
     InteractiveSessions(
         name: "الجلسة العلاجية رقم",
@@ -68,6 +70,7 @@ class HomeView extends StatelessWidget {
       price: "25.5",
     ),
   ];
+  **/
   List<Doctor> doctors = [
     Doctor(
         id: "id",
@@ -138,6 +141,7 @@ class HomeView extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
+    final groupsProvider = Provider.of<GroupsProvider>(context);
 
     return Container(
             child: Column(
@@ -242,7 +246,7 @@ class HomeView extends StatelessWidget {
                   ),
                 ),
                 FutureBuilder(
-                  future: homeProvider.fetchSessionsToUser(context,idUser: profileProvider.user.id),
+                  future: homeProvider.fetchSessionsToUser(context,groups: groupsProvider.groups.groups,paySession: profileProvider.paySession),
                   builder: (
                       context, snapshot,) {
                     //  print(snapshot.error);
@@ -271,14 +275,14 @@ class HomeView extends StatelessWidget {
                                         //print(index);
                                       });
                                     }),
-                                items: sessions.map((e) {
+                                items: homeProvider.sessionsToUser.map((e) {
                                   return Padding(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: AppPadding.p12
                                       ),
                                       child: GestureDetector(
                                         onTap: () {
-                                          if (!sessions[sessions.indexOf(e)].isSold) {
+                                          if (!homeProvider.sessionsToUser[homeProvider.sessionsToUser.indexOf(e)].isSold) {
                                             setState1(() {
                                               if (_selectedIndex == e) {
                                                 _selectedIndex = {};
@@ -384,11 +388,11 @@ class HomeView extends StatelessWidget {
                                                 ),
                                                 child: SvgPicture.asset(
                                                     ImagesAssets.imagesInteractiveSessions[
-                                                    sessions.indexOf(e)],
+                                                    homeProvider.sessionsToUser.indexOf(e)],
                                                     fit: BoxFit.fill),
                                               ),
                                             ),
-                                            if(!sessions[sessions.indexOf(e)].isSold)
+                                            if(!homeProvider.sessionsToUser[homeProvider.sessionsToUser.indexOf(e)].isSold)
                                               Text(e.name,
                                                   style: getRegularStyle(
                                                       color: Theme.of(context)
@@ -435,7 +439,7 @@ class HomeView extends StatelessWidget {
                                           ],
                                         ),
                                       ),
-                                      if (sessions[sessions.indexOf(e)].isSold)
+                                      if (homeProvider.sessionsToUser[homeProvider.sessionsToUser.indexOf(e)].isSold)
                                   Container(
                                   width: double.infinity,
                                   height: double.infinity,
@@ -550,8 +554,12 @@ class HomeView extends StatelessWidget {
                                     itemCount: homeProvider.doctors.users.length,
                                     itemBuilder: (_, index) {
                                       return InkWell(
-                                        onTap: () {
+                                        onTap: () async {
+                                         // print(groupsProvider.groups.groups.length);
                                         //  print(profileProvider.paySession.toJson());
+                                         // print("ame :${await homeProvider.fetchNameUser(context, idUser: profileProvider.user.id)}");
+                                         print(homeProvider.sessionsToUser.length);
+                                         // print(homeProvider.sessions.sessions.length);
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(

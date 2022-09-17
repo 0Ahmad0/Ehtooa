@@ -93,6 +93,14 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+  static fetchUserId( {required String id,required String typeUser})  async {
+    final result=await FirebaseFirestore.instance.collection(typeUser)
+        .where('id',isEqualTo: id)
+        .get()
+        .then((onValueFetchUserId))
+        .catchError(onError);
+    return result;
+  }
   static createGroup( {required model.Group group}) async {
     final result= await FirebaseFirestore.instance.collection(AppConstants.collectionGroup).add(
         group.toJsonFire()
@@ -291,9 +299,10 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
-  static fetchSessionsToUser( {required String idUser})  async {
+  static fetchSessionsToUser( {required List idGroups})  async {
+
     final result=await FirebaseFirestore.instance.collection(AppConstants.collectionSession)
-        .where('idGroup',isEqualTo: idUser)
+        .where('idGroup',whereIn: idGroups)
         .get()
         .then((onValuefetchSessionsToUser))
         .catchError(onError);
@@ -360,6 +369,16 @@ class FirebaseFun{
     print(true);
     print(await (value.docs.length>0)?value.docs[0]['uid']:null);
     print("user : ${(value.docs.length>0)?model.User.fromJson(value.docs[0]).toJson():null}");
+    return {
+      'status':true,
+      'message':'Account successfully logged',
+      'body':(value.docs.length>0)?model.User.fromJson(value.docs[0]).toJson():null
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchUserId(value) async{
+    //print(true);
+    //print(await (value.docs.length>0)?value.docs[0]['uid']:null);
+   // print("user : ${(value.docs.length>0)?model.User.fromJson(value.docs[0]).toJson():null}");
     return {
       'status':true,
       'message':'Account successfully logged',
@@ -537,5 +556,13 @@ class FirebaseFun{
 
 
      return text;
+  }
+  static int compareDateWithDateNowToDay({required DateTime dateTime}){
+     int year=dateTime.year-DateTime.now().year;
+     int month=dateTime.year-DateTime.now().month;
+     int day=dateTime.year-DateTime.now().day;
+     return (year*365+
+            month*30+
+            day);
   }
 }
