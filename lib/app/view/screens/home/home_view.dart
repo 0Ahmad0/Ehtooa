@@ -241,247 +241,269 @@ class HomeView extends StatelessWidget {
                     ],
                   ),
                 ),
-                StatefulBuilder(
-                  builder: (_, setState1) {
-                    return CarouselSlider(
-                        carouselController: _carouselController,
-                        options: CarouselOptions(
-                            height: Sizer.getH(context) / 2.35,
-                            aspectRatio: 16 / 9,
-                            viewportFraction: 0.7,
-                            enlargeCenterPage: true,
-                            pageSnapping: true,
-                            onPageChanged: (index, reason) {
-                              setState1(() {
-                                _current = index;
-                                //print(index);
-                              });
-                            }),
-                        items: sessions.map((e) {
-                          return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: AppPadding.p12
-                              ),
-                              child: GestureDetector(
-                                onTap: () {
-                                  if (!sessions[sessions.indexOf(e)].isSold) {
-                                    setState1(() {
-                                      if (_selectedIndex == e) {
-                                        _selectedIndex = {};
-                                      } else {
-                                        _selectedIndex = e;
-                                      }
-                                    });
-                                  } else {
-                                    Get.defaultDialog(
-                                      confirm: Row(
-                                        children: [
-                                          TextButton(
-                                              style: TextButton.styleFrom(
-                                                  backgroundColor:
-                                                  Theme.of(context).primaryColor),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                                Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                        builder: (ctx) => PaymentView()));
-                                              },
-                                              child: Text(
-                                                tr(LocaleKeys.yes),
-                                                style: getLightStyle(
-                                                    color: ColorManager.white,
-                                                    fontSize: Sizer.getW(context) / 26),
-                                              )),
-                                          const SizedBox(
-                                            width: AppSize.s8,
-                                          ),
-                                          TextButton(
-                                              style: TextButton.styleFrom(
-                                                  primary: ColorManager.error,
-                                                  backgroundColor: ColorManager.error),
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text(
-                                                tr(LocaleKeys.no),
-                                                style: getLightStyle(
-                                                    color: ColorManager.white,
-                                                    fontSize: Sizer.getW(context) / 26),
-                                              )),
-                                        ],
+                FutureBuilder(
+                  future: homeProvider.fetchSessionsToUser(context,idUser: profileProvider.user.id),
+                  builder: (
+                      context, snapshot,) {
+                    //  print(snapshot.error);
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return  SizedBox(height: Sizer.getH(context) / 2.35,child: Const.SHOWLOADINGINDECATOR());
+                      //Const.CIRCLE(context);
+                    } else if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return const Text('Error');
+                      } else if (snapshot.hasData) {
+                        Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
+                        homeProvider.sessions=Sessions.fromJson(data['body']);
+                        return StatefulBuilder(
+                          builder: (_, setState1) {
+                            return CarouselSlider(
+                                carouselController: _carouselController,
+                                options: CarouselOptions(
+                                    height: Sizer.getH(context) / 2.35,
+                                    aspectRatio: 16 / 9,
+                                    viewportFraction: 0.7,
+                                    enlargeCenterPage: true,
+                                    pageSnapping: true,
+                                    onPageChanged: (index, reason) {
+                                      setState1(() {
+                                        _current = index;
+                                        //print(index);
+                                      });
+                                    }),
+                                items: sessions.map((e) {
+                                  return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: AppPadding.p12
                                       ),
-                                      titleStyle: getBoldStyle(
-                                          color: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .color,
-                                          fontSize: Sizer.getW(context) / 22),
-                                      title: tr(LocaleKeys.this_session_is_paid),
-                                      content: Text(
-                                        tr(LocaleKeys.pay_and_join),
-                                        style: getRegularStyle(
-                                            color: Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color,
-                                            fontSize: Sizer.getW(context) / 24),
-                                      ),
-                                      radius: AppSize.s14,
-                                    );
-                                  }
-                                },
-                                child: Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      AnimatedContainer(
-                                          duration: const Duration(milliseconds: 300),
-                                          width: MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius: BorderRadius.circular(AppSize.s8),
-                                              border: _selectedIndex == e
-                                                  ? Border.all(
-                                                  color: Theme.of(context).primaryColor,
-                                                  width: 2)
-                                                  : null,
-                                              boxShadow: _selectedIndex == e
-                                              ? [
-                                              BoxShadow(
-                                                  color: Theme.of(context).iconTheme.color!.withOpacity(.5),
-                                                  blurRadius: 12,
-                                                  offset: Offset(0, 10))
-                                              ]
-                                                  : [
-                                          BoxShadow(
-                                          color: Colors.grey.withOpacity(0.2),
-                                          blurRadius: 8,
-                                          offset: Offset(0, 5))
-                                    ]),
-                                child: Column(
-                                  children: [
-                                    Expanded(
-                                      flex: 2,
-                                      child: Container(
-                                        margin: const EdgeInsets.all(10),
-                                        clipBehavior: Clip.hardEdge,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(AppSize.s20),
-                                        ),
-                                        child: SvgPicture.asset(
-                                            ImagesAssets.imagesInteractiveSessions[
-                                            sessions.indexOf(e)],
-                                            fit: BoxFit.fill),
-                                      ),
-                                    ),
-                                    if(!sessions[sessions.indexOf(e)].isSold)
-                                      Text(e.name,
-                                          style: getRegularStyle(
-                                              color: Theme.of(context)
-                                                  .textTheme
-                                                  .bodyText1!
-                                                  .color,
-                                              fontSize: Sizer.getW(context) / 24)),
-                                    _selectedIndex == e
-                                        ? ZoomIn(
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: AppPadding.p10),
-                                        child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                              "الدكتور: ${e.doctorName}",
-                                              style: getBoldStyle(
+                                      child: GestureDetector(
+                                        onTap: () {
+                                          if (!sessions[sessions.indexOf(e)].isSold) {
+                                            setState1(() {
+                                              if (_selectedIndex == e) {
+                                                _selectedIndex = {};
+                                              } else {
+                                                _selectedIndex = e;
+                                              }
+                                            });
+                                          } else {
+                                            Get.defaultDialog(
+                                              confirm: Row(
+                                                children: [
+                                                  TextButton(
+                                                      style: TextButton.styleFrom(
+                                                          backgroundColor:
+                                                          Theme.of(context).primaryColor),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (ctx) => PaymentView()));
+                                                      },
+                                                      child: Text(
+                                                        tr(LocaleKeys.yes),
+                                                        style: getLightStyle(
+                                                            color: ColorManager.white,
+                                                            fontSize: Sizer.getW(context) / 26),
+                                                      )),
+                                                  const SizedBox(
+                                                    width: AppSize.s8,
+                                                  ),
+                                                  TextButton(
+                                                      style: TextButton.styleFrom(
+                                                          primary: ColorManager.error,
+                                                          backgroundColor: ColorManager.error),
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        tr(LocaleKeys.no),
+                                                        style: getLightStyle(
+                                                            color: ColorManager.white,
+                                                            fontSize: Sizer.getW(context) / 26),
+                                                      )),
+                                                ],
+                                              ),
+                                              titleStyle: getBoldStyle(
                                                   color: Theme.of(context)
                                                       .textTheme
                                                       .bodyText1!
                                                       .color,
-                                                  fontSize:
-                                                  Sizer.getW(context) /
-                                                      22),
-                                            ),
-                                            TextButton(
-                                                style: TextButton.styleFrom(
-                                                  backgroundColor: Theme.of(context).primaryColor,
-
+                                                  fontSize: Sizer.getW(context) / 22),
+                                              title: tr(LocaleKeys.this_session_is_paid),
+                                              content: Text(
+                                                tr(LocaleKeys.pay_and_join),
+                                                style: getRegularStyle(
+                                                    color: Theme.of(context)
+                                                        .textTheme
+                                                        .bodyText1!
+                                                        .color,
+                                                    fontSize: Sizer.getW(context) / 24),
+                                              ),
+                                              radius: AppSize.s14,
+                                            );
+                                          }
+                                        },
+                                        child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              AnimatedContainer(
+                                                  duration: const Duration(milliseconds: 300),
+                                                  width: MediaQuery.of(context).size.width,
+                                                  decoration: BoxDecoration(
+                                                      color: Colors.white,
+                                                      borderRadius: BorderRadius.circular(AppSize.s8),
+                                                      border: _selectedIndex == e
+                                                          ? Border.all(
+                                                          color: Theme.of(context).primaryColor,
+                                                          width: 2)
+                                                          : null,
+                                                      boxShadow: _selectedIndex == e
+                                                      ? [
+                                                      BoxShadow(
+                                                          color: Theme.of(context).iconTheme.color!.withOpacity(.5),
+                                                          blurRadius: 12,
+                                                          offset: Offset(0, 10))
+                                                      ]
+                                                          : [
+                                                  BoxShadow(
+                                                  color: Colors.grey.withOpacity(0.2),
+                                                  blurRadius: 8,
+                                                  offset: Offset(0, 5))
+                                            ]),
+                                        child: Column(
+                                          children: [
+                                            Expanded(
+                                              flex: 2,
+                                              child: Container(
+                                                margin: const EdgeInsets.all(10),
+                                                clipBehavior: Clip.hardEdge,
+                                                decoration: BoxDecoration(
+                                                  borderRadius: BorderRadius.circular(AppSize.s20),
                                                 ),
-                                                onPressed: (){},
-                                                child: Text(tr(LocaleKeys.go),
+                                                child: SvgPicture.asset(
+                                                    ImagesAssets.imagesInteractiveSessions[
+                                                    sessions.indexOf(e)],
+                                                    fit: BoxFit.fill),
+                                              ),
+                                            ),
+                                            if(!sessions[sessions.indexOf(e)].isSold)
+                                              Text(e.name,
                                                   style: getRegularStyle(
-                                                      color: ColorManager.white,
-                                                      fontSize: Sizer.getW(context) / 30
-                                                  ),
-                                                ))
+                                                      color: Theme.of(context)
+                                                          .textTheme
+                                                          .bodyText1!
+                                                          .color,
+                                                      fontSize: Sizer.getW(context) / 24)),
+                                            _selectedIndex == e
+                                                ? ZoomIn(
+                                              child: Padding(
+                                                padding: const EdgeInsets.symmetric(
+                                                    horizontal: AppPadding.p10),
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                  children: [
+                                                    Text(
+                                                      "الدكتور: ${e.doctorName}",
+                                                      style: getBoldStyle(
+                                                          color: Theme.of(context)
+                                                              .textTheme
+                                                              .bodyText1!
+                                                              .color,
+                                                          fontSize:
+                                                          Sizer.getW(context) /
+                                                              22),
+                                                    ),
+                                                    TextButton(
+                                                        style: TextButton.styleFrom(
+                                                          backgroundColor: Theme.of(context).primaryColor,
+
+                                                        ),
+                                                        onPressed: (){},
+                                                        child: Text(tr(LocaleKeys.go),
+                                                          style: getRegularStyle(
+                                                              color: ColorManager.white,
+                                                              fontSize: Sizer.getW(context) / 30
+                                                          ),
+                                                        ))
+                                                  ],
+                                                ),
+                                              ),
+                                            )
+                                                : SizedBox()
                                           ],
                                         ),
                                       ),
-                                    )
-                                        : SizedBox()
+                                      if (sessions[sessions.indexOf(e)].isSold)
+                                  Container(
+                                  width: double.infinity,
+                                  height: double.infinity,
+                                  decoration: BoxDecoration(
+                                  color: ColorManager.blackGray.withOpacity(.6),
+                                  borderRadius:
+                                  BorderRadius.circular(AppSize.s14)),
+                                  child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                  Icon(
+                                  Icons.lock,
+                                  size: Sizer.getH(context) * 0.15,
+                                  ),
+                                  Container(
+                                  margin: const EdgeInsets.all(AppMargin.m8),
+                                  padding: const EdgeInsets.all(AppPadding.p4),
+                                  width: double.infinity,
+                                  height: Sizer.getW(context) * 0.2,
+                                  decoration: BoxDecoration(
+                                  color: ColorManager.white,
+                                  borderRadius: BorderRadius.circular(AppSize.s14)
+                                  ),
+                                  child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                  Text(
+                                  " السعر: ${e.price} \$",
+                                  style: getLightStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize:
+                                  Sizer.getW(context) /
+                                  26),
+                                  ),
+                                  const Text("|"),
+                                  Text(
+                                  "${e.doctorName}",
+                                  style: getLightStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize:
+                                  Sizer.getW(context) /
+                                  24),
+                                  ),
                                   ],
-                                ),
-                              ),
-                              if (sessions[sessions.indexOf(e)].isSold)
-                          Container(
-                          width: double.infinity,
-                          height: double.infinity,
-                          decoration: BoxDecoration(
-                          color: ColorManager.blackGray.withOpacity(.6),
-                          borderRadius:
-                          BorderRadius.circular(AppSize.s14)),
-                          child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                          Icon(
-                          Icons.lock,
-                          size: Sizer.getH(context) * 0.15,
-                          ),
-                          Container(
-                          margin: const EdgeInsets.all(AppMargin.m8),
-                          padding: const EdgeInsets.all(AppPadding.p4),
-                          width: double.infinity,
-                          height: Sizer.getW(context) * 0.2,
-                          decoration: BoxDecoration(
-                          color: ColorManager.white,
-                          borderRadius: BorderRadius.circular(AppSize.s14)
-                          ),
-                          child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                          Text(
-                          " السعر: ${e.price} \$",
-                          style: getLightStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .color,
-                          fontSize:
-                          Sizer.getW(context) /
-                          26),
-                          ),
-                          const Text("|"),
-                          Text(
-                          "${e.doctorName}",
-                          style: getLightStyle(
-                          color: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .color,
-                          fontSize:
-                          Sizer.getW(context) /
-                          24),
-                          ),
-                          ],
-                          ),
-                          )
-                          ],
-                          ),
-                          )
-                          ],
-                          ),
-                          ),
-                          );
-                        }).toList());
+                                  ),
+                                  )
+                                  ],
+                                  ),
+                                  )
+                                  ],
+                                  ),
+                                  ),
+                                  );
+                                }).toList());
+                          },
+                        );
+                      } else {
+                        return const Text('Empty data');
+                      }
+                    } else {
+                      return Text('State: ${snapshot.connectionState}');
+                    }
                   },
                 ),
                 Padding(
@@ -529,6 +551,7 @@ class HomeView extends StatelessWidget {
                                     itemBuilder: (_, index) {
                                       return InkWell(
                                         onTap: () {
+                                        //  print(profileProvider.paySession.toJson());
                                           Navigator.push(
                                               context,
                                               MaterialPageRoute(

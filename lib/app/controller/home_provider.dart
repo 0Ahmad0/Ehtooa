@@ -19,6 +19,7 @@ class HomeProvider with ChangeNotifier{
   models.Users doctors=models.Users(users: []);
   models.Groups groups=models.Groups(groups: []);
   models.Sessions sessions=models.Sessions(sessions: []);
+  List<InteractiveSessions> sessionsToUser=[];
   String idUser="";
   fetchDoctors(context) async {
     var result =await FirebaseFun.fetchDoctors();
@@ -32,11 +33,17 @@ class HomeProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
-  fetchSessions(context) async {
-    var result =await FirebaseFun.fetchSessions();
+  fetchSessionsToUser(context,{required String idUser}) async {
+    this.idUser=idUser;
+    var result =await FirebaseFun.fetchSessionsToUser(idUser: idUser);
     print(result);
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
+  }
+  processessionsToUser(context){
+    for(models.Session session in sessions.sessions){
+
+    }
   }
 
 

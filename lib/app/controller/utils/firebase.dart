@@ -291,6 +291,22 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+  static fetchSessionsToUser( {required String idUser})  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionSession)
+        .where('idGroup',isEqualTo: idUser)
+        .get()
+        .then((onValuefetchSessionsToUser))
+        .catchError(onError);
+    return result;
+  }
+  static fetchPaySession( {required String idUser})  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionPaySession)
+        .where('idUser',isEqualTo: idUser)
+        .get()
+        .then((onValuefetchPaySession))
+        .catchError(onError);
+    return result;
+  }
 
    static Future<Map<String,dynamic>>  onError(error) async {
     print(false);
@@ -466,7 +482,26 @@ class FirebaseFun{
       //  'body': user.toJson()
     };
   }
+  static Future<Map<String,dynamic>> onValuefetchSessionsToUser(value) async{
+    print(true);
+    print("Sessions count : ${value.docs.length}");
 
+    return {
+      'status':true,
+      'message':'Sessions successfully fetch',
+      'body':value.docs
+    };
+  }
+  static Future<Map<String,dynamic>> onValuefetchPaySession(value) async{
+    print(true);
+    print("PaySession count : ${value.docs.length}");
+    var body=model.PaySession(idUser: "",checkWrite: false, listSessionPay: [DateTime.now(),DateTime.now(),DateTime.now(),DateTime.now()]).toJson();
+    return {
+      'status':true,
+      'message':'PaySession successfully fetch',
+      'body':(value.docs.length>0)?value.docs:body
+    };
+  }
 
   static String findTextToast(String text){
      if(text.contains("Password should be at least 6 characters")){

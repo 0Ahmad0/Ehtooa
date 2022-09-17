@@ -31,13 +31,7 @@ class ListSessionsProvider with ChangeNotifier{
     Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
     return result;
   }
-  fetchGroupsToUser(context,{required String idUser}) async {
-    this.idUser=idUser;
-    var result =await FirebaseFun.fetchGroupsToUser(idUser: idUser);
-    print(result);
-    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
-    return result;
-  }
+
   onError(error){
     print(false);
     print(error);

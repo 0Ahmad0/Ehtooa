@@ -32,6 +32,10 @@ temp(groupsProvider,profileProvider) async {
           MaterialPageRoute(
               builder: (ctx) => BottomNavBarView()));
   }else{
+    final resultPaySession=await profileProvider.fetchPaySession(context);
+    if(resultPaySession['status']){
+      profileProvider.paySession=PaySession.fromJson(resultPaySession['body']);
+    }
     data = await groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id);
     if(data!=null)
       groupsProvider.groups=Groups.fromJson(data['body']);

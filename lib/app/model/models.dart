@@ -565,6 +565,52 @@ class Sessions {
   }
 }
 
+//Session
+class PaySession {
+  String idUser;
+  bool checkWrite;
+  List<DateTime> listSessionPay=[DateTime.now(),DateTime.now(),DateTime.now(),DateTime.now()];
+  List<bool> listCheckSessionPay;
+  PaySession(
+      {required this.idUser,
+      this.checkWrite=true,
+        required this.listSessionPay,
+         this.listCheckSessionPay=const [false,false,false,false],
+        });
+  factory PaySession.fromJson( json){
+    List<DateTime> tempSessionPay = [];
+    List<bool> tempCheckSessionPay = [];
+    for(Timestamp date in json["listSessionPay"]){
+      tempSessionPay.add(date.toDate());
+    }
+    for(bool checkSessionPay in json["listCheckSessionPay"]){
+      tempCheckSessionPay.add(checkSessionPay);
+    }
+    return PaySession(
+        idUser: json["idUser"],
+      checkWrite: json["checkWrite"],
+      listSessionPay: tempSessionPay,
+      listCheckSessionPay: tempCheckSessionPay,
+
+    );
+  }
+  Map<String,dynamic> toJson(){
+    List<Timestamp> tempSessionPay = [];
+    List<bool> tempCheckSessionPay = [];
+    for(DateTime date in listSessionPay){
+      tempSessionPay.add(Timestamp.fromDate(date));
+    }
+    for(bool checkSessionPay in listCheckSessionPay){
+      tempCheckSessionPay.add(checkSessionPay);
+    }
+    return {
+      'idUser':idUser,
+      'checkWrite':checkWrite,
+      'listSessionPay':tempSessionPay,
+      'listCheckSessionPay':tempCheckSessionPay,
+    };
+  }
+}
 
 //Notification
 class Notification {
