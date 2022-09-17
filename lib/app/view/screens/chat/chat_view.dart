@@ -17,8 +17,11 @@ import 'package:video_player/video_player.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:custom_gallery_display/custom_gallery_display.dart';
+import '../../../model/models.dart';
 import '../../resources/color_manager.dart';
 import 'dart:ui' as ui;
+
+import '../list_of_member/list_of_member_view.dart';
 
 class ChatView extends StatefulWidget {
   const ChatView({super.key});
@@ -40,8 +43,48 @@ class _ChatViewState extends State<ChatView> {
       textDirection: ui.TextDirection.ltr,
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          title: Text(tr(LocaleKeys.groups)),
+          titleSpacing: 1,
+          title: ListTile(
+            onTap: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (ctx) => ListOfMemberView(
+                    users: [
+                      User(
+                          id: "id",
+                          uid: "uid",
+                          name: "Kholod",
+                          email: "Kholod@gmail.com",
+                          phoneNumber: "0522325465",
+                          password: "password",
+                          typeUser: "typeUser",
+                          photoUrl: "photoUrl"
+                      )
+                    ],
+                  )));
+            },
+            leading: CircleAvatar(
+              radius: AppSize.s24,
+            ),
+            title: Text(tr(LocaleKeys.anxiety_patients)),
+            subtitle: Text("35 Member"),
+            trailing: IconButton(onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (ctx) => ListOfMemberView(
+                    users: [
+                      User(
+                          id: "id",
+                          uid: "uid",
+                          name: "Kholod",
+                          email: "Kholod@gmail.com",
+                          phoneNumber: "0522325465",
+                          password: "password",
+                          typeUser: "typeUser",
+                          photoUrl: "photoUrl"
+                      )
+                    ],
+                  )));
+            }, icon: Icon(Icons.more_vert)),
+          ),
         ),
         body: Column(
           children: [
@@ -71,7 +114,7 @@ class _ChatViewState extends State<ChatView> {
                   backgroundColor: Colors.green,
                   borderRadius: isReplay
                       ? BorderRadius.vertical(
-                          bottom: Radius.circular(AppSize.s8))
+                      bottom: Radius.circular(AppSize.s8))
                       : BorderRadius.circular(AppSize.s8),
                   padding: EdgeInsets.only(
                     top: 0.0,
@@ -86,7 +129,11 @@ class _ChatViewState extends State<ChatView> {
                     focusedBorder: InputBorder.none,
                   ),
                   textStyle: getRegularStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      color: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyText1!
+                          .color,
                       fontSize: Sizer.getW(context) / 30),
                   controller: con,
                   onReceiveText: (str) {
@@ -111,22 +158,23 @@ class _ChatViewState extends State<ChatView> {
                                       color: ColorManager.lightGray
                                           .withOpacity(.5),
                                       borderRadius:
-                                          BorderRadius.circular(AppSize.s8),
+                                      BorderRadius.circular(AppSize.s8),
                                     ),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                      MainAxisAlignment.start,
                                       children: [
                                         VerticalDivider(
                                           thickness: AppSize.s4,
-                                          color: Theme.of(context)
+                                          color: Theme
+                                              .of(context)
                                               .primaryColor
                                               .withOpacity(.5),
                                         ),
                                         Flexible(
                                             child: Text(
-                                          replayMessage!,
-                                        ))
+                                              replayMessage!,
+                                            ))
                                       ],
                                     ),
                                   ),
@@ -240,23 +288,24 @@ class _ChatViewState extends State<ChatView> {
   Future<void> displayDetails(SelectedImagesDetails details) async {
     if (details.isThatImage) {
       list.add(InkWell(
-        onTap: (){
+        onTap: () {
           showDialog(
-              context: context, builder: (ctx)=>Material(
-            color: Colors.black,
+              context: context, builder: (ctx) =>
+              Material(
+                color: Colors.black,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     Image.file(
-            File(details.selectedFile.path),
+                      File(details.selectedFile.path),
                       fit: BoxFit.cover,
-          ),
+                    ),
                     Positioned(
                       top: AppSize.s10,
                       right: AppSize.s10,
-                      child: IconButton(onPressed: (){
+                      child: IconButton(onPressed: () {
                         Navigator.pop(context);
-                      }, icon: Icon(Icons.close,color: ColorManager.white,)),
+                      }, icon: Icon(Icons.close, color: ColorManager.white,)),
                     )
                   ],
                 ),
@@ -264,11 +313,11 @@ class _ChatViewState extends State<ChatView> {
         },
         child: BuildMessageShape(
             isMe: true, child: DisplayImages(
-                selectedFiles: details.selectedFiles != null
-                    ? details.selectedFiles!
-                    : [details.selectedFile],
-                details: details,
-                aspectRatio: details.aspectRatio)),
+            selectedFiles: details.selectedFiles != null
+                ? details.selectedFiles!
+                : [details.selectedFile],
+            details: details,
+            aspectRatio: details.aspectRatio)),
       ));
       setState(() {});
     } else {
@@ -318,7 +367,7 @@ class _ChatViewState extends State<ChatView> {
                 decoration: BoxDecoration(
                   color: ColorManager.lightGray.withOpacity(.2),
                   borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(AppSize.s8)),
+                  BorderRadius.vertical(top: Radius.circular(AppSize.s8)),
                 ),
                 child: Container(
                   padding: EdgeInsets.all(AppPadding.p4),
@@ -330,12 +379,15 @@ class _ChatViewState extends State<ChatView> {
                     children: [
                       VerticalDivider(
                         thickness: AppSize.s4,
-                        color: Theme.of(context).primaryColor.withOpacity(.5),
+                        color: Theme
+                            .of(context)
+                            .primaryColor
+                            .withOpacity(.5),
                       ),
                       Flexible(
                           child: Text(
-                        replayMessage!,
-                      ))
+                            replayMessage!,
+                          ))
                     ],
                   ),
                 ),
@@ -364,96 +416,100 @@ class _ChatViewState extends State<ChatView> {
       margin: const EdgeInsets.all(AppMargin.m12),
       child: Card(
           child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              buildItemBottomsheet(
-                  icon: FontAwesomeIcons.file,
-                  text: tr(LocaleKeys.documents),
-                  onTap: () async {
-                    Navigator.pop(context);
-                    FilePickerResult? result = await FilePicker.platform
-                        .pickFiles(allowMultiple: false);
-                    if (result != null) {
-                      list.add(Container(
-                        margin: EdgeInsets.only(
-                          top: AppMargin.m4,
-                          bottom: AppMargin.m4,
-                          // right: Sizer.getW(context) /2 -20.0,
-                          left: Sizer.getW(context) / 2 - 20.0,
-                        ),
-                        color: Theme.of(context).primaryColor.withOpacity(.2),
-                        padding: EdgeInsets.all(AppPadding.p8),
-                        child: Container(
-                          padding: EdgeInsets.all(AppPadding.p4),
-                          decoration: BoxDecoration(
-                              color: ColorManager.blackGray.withOpacity(.5),
-                              borderRadius: BorderRadius.circular(AppSize.s8)),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                  child: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.download))),
-                              const SizedBox(
-                                width: AppSize.s8,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  buildItemBottomsheet(
+                      icon: FontAwesomeIcons.file,
+                      text: tr(LocaleKeys.documents),
+                      onTap: () async {
+                        Navigator.pop(context);
+                        FilePickerResult? result = await FilePicker.platform
+                            .pickFiles(allowMultiple: false);
+                        if (result != null) {
+                          list.add(Container(
+                            margin: EdgeInsets.only(
+                              top: AppMargin.m4,
+                              bottom: AppMargin.m4,
+                              // right: Sizer.getW(context) /2 -20.0,
+                              left: Sizer.getW(context) / 2 - 20.0,
+                            ),
+                            color: Theme
+                                .of(context)
+                                .primaryColor
+                                .withOpacity(.2),
+                            padding: EdgeInsets.all(AppPadding.p8),
+                            child: Container(
+                              padding: EdgeInsets.all(AppPadding.p4),
+                              decoration: BoxDecoration(
+                                  color: ColorManager.blackGray.withOpacity(.5),
+                                  borderRadius: BorderRadius.circular(
+                                      AppSize.s8)),
+                              child: Row(
+                                children: [
+                                  CircleAvatar(
+                                      child: IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(Icons.download))),
+                                  const SizedBox(
+                                    width: AppSize.s8,
+                                  ),
+                                  Flexible(child: Text(result.files[0].name)),
+                                ],
                               ),
-                              Flexible(child: Text(result.files[0].name)),
-                            ],
-                          ),
-                        ),
-                      ));
-                      // Not sure if I should only get file path or complete data (this was in package documentation)
-                      List<File> files =
+                            ),
+                          ));
+                          // Not sure if I should only get file path or complete data (this was in package documentation)
+                          List<File> files =
                           result.paths.map((path) => File(path!)).toList();
-                      setState(() {});
-                    } else {
-                      // User canceled the picker
-                    }
-                  },
-                  color: Colors.blueAccent),
-              buildItemBottomsheet(
-                  icon: FontAwesomeIcons.camera,
-                  text: tr(LocaleKeys.camera),
-                  onTap: () {},
-                  color: Colors.pinkAccent),
-              buildItemBottomsheet(
-                  icon: Icons.photo,
-                  text: tr(LocaleKeys.gallery),
-                  onTap: () {},
-                  color: Colors.purpleAccent),
+                          setState(() {});
+                        } else {
+                          // User canceled the picker
+                        }
+                      },
+                      color: Colors.blueAccent),
+                  buildItemBottomsheet(
+                      icon: FontAwesomeIcons.camera,
+                      text: tr(LocaleKeys.camera),
+                      onTap: () {},
+                      color: Colors.pinkAccent),
+                  buildItemBottomsheet(
+                      icon: Icons.photo,
+                      text: tr(LocaleKeys.gallery),
+                      onTap: () {},
+                      color: Colors.purpleAccent),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  buildItemBottomsheet(
+                      icon: Icons.audiotrack_sharp,
+                      text: tr(LocaleKeys.audio),
+                      onTap: () {
+                        Const.TOAST(context, textToast: tr(LocaleKeys.no));
+                      },
+                      color: Colors.orange),
+                  buildItemBottomsheet(
+                      icon: FontAwesomeIcons.locationDot,
+                      text: tr(LocaleKeys.location),
+                      onTap: () {
+                        Const.TOAST(context, textToast: tr(LocaleKeys.no));
+                      },
+                      color: Colors.green),
+                  buildItemBottomsheet(
+                      icon: Icons.person,
+                      text: tr(LocaleKeys.contacts),
+                      onTap: () {
+                        Const.TOAST(context, textToast: tr(LocaleKeys.no));
+                      },
+                      color: Colors.blue),
+                ],
+              ),
             ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              buildItemBottomsheet(
-                  icon: Icons.audiotrack_sharp,
-                  text: tr(LocaleKeys.audio),
-                  onTap: () {
-                    Const.TOAST(context, textToast: tr(LocaleKeys.no));
-                  },
-                  color: Colors.orange),
-              buildItemBottomsheet(
-                  icon: FontAwesomeIcons.locationDot,
-                  text: tr(LocaleKeys.location),
-                  onTap: () {
-                    Const.TOAST(context, textToast: tr(LocaleKeys.no));
-                  },
-                  color: Colors.green),
-              buildItemBottomsheet(
-                  icon: Icons.person,
-                  text: tr(LocaleKeys.contacts),
-                  onTap: () {
-                    Const.TOAST(context, textToast: tr(LocaleKeys.no));
-                  },
-                  color: Colors.blue),
-            ],
-          ),
-        ],
-      )),
+          )),
     );
   }
 
@@ -475,7 +531,11 @@ class _ChatViewState extends State<ChatView> {
           Text(
             text,
             style: getRegularStyle(
-                color: Theme.of(context).textTheme.bodyText1!.color),
+                color: Theme
+                    .of(context)
+                    .textTheme
+                    .bodyText1!
+                    .color),
           )
         ],
       ),
@@ -594,7 +654,7 @@ class BuildMessageShape extends StatelessWidget {
         left: isMe ? Sizer.getW(context) / 2 - AppSize.s20 : 0,
       ),
       decoration: BoxDecoration(
-          // color: Theme.of(context).primaryColor.withOpacity(isMe ? 0.2 : 0.8),
+        // color: Theme.of(context).primaryColor.withOpacity(isMe ? 0.2 : 0.8),
           color: isMe ? Color(0xffdffec5) : Colors.white,
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(AppSize.s10),
@@ -604,7 +664,7 @@ class BuildMessageShape extends StatelessWidget {
           )),
       child: Column(
         children: [
-          child,const SizedBox(height: AppSize.s8,),
+          child, const SizedBox(height: AppSize.s8,),
           Row(
             children: [
               Container(
@@ -613,7 +673,7 @@ class BuildMessageShape extends StatelessWidget {
                       borderRadius: BorderRadius.circular(4.0),
                       color: Colors.green[100]),
                   child:
-                      Text("${DateFormat().add_jm().format(DateTime.now())}")),
+                  Text("${DateFormat().add_jm().format(DateTime.now())}")),
             ],
           )
         ],
