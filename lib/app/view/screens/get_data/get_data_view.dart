@@ -26,6 +26,7 @@ temp(groupsProvider,profileProvider) async {
   var data;
   ///ToDo hariri
   ///وضع تايمر بدل الحلقة
+
   if(!profileProvider.user.typeUser.contains(AppConstants.collectionPatient)){
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(

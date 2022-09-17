@@ -132,6 +132,7 @@ class _ProfileViewState extends State<ProfileView> {
                                               Expanded(
                                                 child: InkWell(
                                                   onTap: () {
+
                                                     pickFromGallery();
                                                     Navigator.pop(context);
                                                   },
@@ -236,7 +237,7 @@ class _ProfileViewState extends State<ProfileView> {
                         CustomTextFiled(
                             readOnly: true,
                             controller: TextEditingController(
-                                text: value.user.phoneNumber /*"055 895 658"*/),
+                                text: profileProvider.user.phoneNumber /*"055 895 658"*/),
                             validator: (String? val) {},
                             onChange: (val) {},
                             prefixIcon: Icons.phone_android,

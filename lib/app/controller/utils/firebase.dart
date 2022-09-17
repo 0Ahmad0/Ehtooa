@@ -221,9 +221,20 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
-
-
-
+  static fetchDoctors()  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionDoctor)
+        .get()
+        .then((onValueFetchDoctors))
+        .catchError(onError);
+    return result;
+  }
+  static fetchGroups()  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
+        .get()
+        .then((onValueFetchGroups))
+        .catchError(onError);
+    return result;
+  }
 
    static Future<Map<String,dynamic>>  onError(error) async {
     print(false);
@@ -351,6 +362,28 @@ class FirebaseFun{
       'status':true,
       'message':'Message successfully delete',
       //  'body': user.toJson()
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchDoctors(value) async{
+    print(true);
+    //print(await value.docs[0]);
+    print("Doctors count : ${value.docs.length}");
+
+    return {
+      'status':true,
+      'message':'Doctors successfully fetch',
+      'body':value.docs
+    };
+  }
+  static Future<Map<String,dynamic>> onValueFetchGroups(value) async{
+    print(true);
+    //print(await value.docs[0]);
+    print("Groups count : ${value.docs.length}");
+
+    return {
+      'status':true,
+      'message':'Groups successfully fetch',
+      'body':value.docs
     };
   }
 

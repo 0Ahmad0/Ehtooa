@@ -71,7 +71,35 @@ class User {
     'description':description,
   };
 }
+//Users
+class Users {
+  List<User> users;
+  //DateTime date;
 
+  Users({
+    required this.users
+  });
+  factory Users.fromJson( json){
+    List<User> tempUsers = [];
+    for(int i=0;i<json.length;i++){
+      User tempUser=User.fromJson(json[i]);
+      tempUser.id=json[i].id;
+      tempUsers.add(tempUser);
+    }
+    return Users(
+        users: tempUsers
+    );
+  }
+  Map<String,dynamic> toJson(){
+    List<Map<String,dynamic>> tempUsers = [];
+    for(User user in users){
+      tempUsers.add(user.toJson());
+    }
+    return {
+      'users':tempUsers,
+    };
+  }
+}
 
 //Question
 class Question {
@@ -118,6 +146,9 @@ class Doctor {
       required this.name,
       required this.carer,
       required this.description});
+  factory Doctor.fromUser(User user){
+    return Doctor(id: user.id, name: user.name, carer: user.photoUrl, description: user.description);
+  }
 }
 
 //Message

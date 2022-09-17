@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:animate_do/animate_do.dart';
+import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/controller/profile_provider.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
@@ -136,6 +137,7 @@ class HomeView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final homeProvider = Provider.of<HomeProvider>(context);
 
     return Container(
             child: Column(
@@ -505,53 +507,76 @@ class HomeView extends StatelessWidget {
                     ],
                   ),
                 ),
-                Expanded(
-                    child: ListView.builder(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: doctors.length,
-                      itemBuilder: (_, index) {
-                        return InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (ctx) =>
-                                        DoctorProfile(doctor: doctors[index])));
-                          },
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: AppPadding.p10),
-                            margin: EdgeInsets.all(AppMargin.m4),
-                            width: Sizer.getW(context) / 2,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).primaryColor.withOpacity(.5),
-                              borderRadius: BorderRadius.circular(AppSize.s14),
-                              boxShadow: [
-                                BoxShadow(
-                                    color: ColorManager.blackGray.withOpacity(.3),
-                                    blurRadius: 4),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                CircleAvatar(
-                                  radius: Sizer.getW(context) * 0.08,
-                                  child: FlutterLogo(),
-                                ),
-                                SizedBox(
-                                  width: AppSize.s4,
-                                ),
-                                Text(
-                                  doctors[index].name,
-                                  style: getRegularStyle(
-                                      color: Theme.of(context).textTheme.bodyText1!.color,
-                                      fontSize: Sizer.getW(context) / 26),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
+                FutureBuilder(
+                      future: homeProvider.fetchDoctors(context),
+                      builder: (
+                          context, snapshot,) {
+                        //  print(snapshot.error);
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return Expanded(child: Const.SHOWLOADINGINDECATOR());
+                          //Const.CIRCLE(context);
+                        } else if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasError) {
+                            return const Text('Error');
+                          } else if (snapshot.hasData) {
+                            Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
+                            homeProvider.doctors=Users.fromJson(data['body']);
+                            return
+                              Expanded(
+                                  child: ListView.builder(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: homeProvider.doctors.users.length,
+                                    itemBuilder: (_, index) {
+                                      return InkWell(
+                                        onTap: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (ctx) =>
+                                                      DoctorProfile(doctor: homeProvider.doctors.users[index])));
+                                        },
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(horizontal: AppPadding.p10),
+                                          margin: EdgeInsets.all(AppMargin.m4),
+                                          width: Sizer.getW(context) / 2,
+                                          decoration: BoxDecoration(
+                                            color: Theme.of(context).primaryColor.withOpacity(.5),
+                                            borderRadius: BorderRadius.circular(AppSize.s14),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: ColorManager.blackGray.withOpacity(.3),
+                                                  blurRadius: 4),
+                                            ],
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              CircleAvatar(
+                                                radius: Sizer.getW(context) * 0.08,
+                                                child: FlutterLogo(),
+                                              ),
+                                              SizedBox(
+                                                width: AppSize.s4,
+                                              ),
+                                              Text(
+                                                homeProvider.doctors.users[index].name,
+                                                style: getRegularStyle(
+                                                    color: Theme.of(context).textTheme.bodyText1!.color,
+                                                    fontSize: Sizer.getW(context) / 26),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ));
+                          } else {
+                            return const Text('Empty data');
+                          }
+                        } else {
+                          return Text('State: ${snapshot.connectionState}');
+                        }
                       },
-                    ))
+                    ),
               ],
             ),
           );

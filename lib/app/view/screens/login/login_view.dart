@@ -1,4 +1,5 @@
 import 'package:ehtooa/app/controller/groups_provider.dart';
+import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/controller/utils/create_environment_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
@@ -35,6 +36,7 @@ class LoginView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final homeProvider = Provider.of<HomeProvider>(context);
     final groupsProvider = Provider.of<GroupsProvider>(context);
     final loginProvider = Provider.of<LoginProvider>(context);
     return  ChangeNotifierProvider<LoginProvider>(
@@ -164,7 +166,8 @@ class LoginView extends StatelessWidget {
                                 onTap: () async {
                                     Const.LOADIG(context);
                                  //   final result =await CreateEnvironmentProvider().addUserToGroup(context);
-                                    final result =await groupsProvider.fetchGroupsToUser(context, idUser: "Tytxd8ae9TRz1wF70iMC",);
+                                  //  final result =await groupsProvider.fetchGroupsToUser(context, idUser: "Tytxd8ae9TRz1wF70iMC",);
+                                    final result =await homeProvider.fetchDoctors(context);
                                     Navigator.of(context).pop();
                                 }),                            
 

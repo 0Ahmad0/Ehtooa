@@ -11,9 +11,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import '../../../../controller/home_provider.dart';
+import '../../../../controller/profile_provider.dart';
+import '../../../../model/utils/const.dart';
 import '../../../../model/utils/sizer.dart';
 import '../list_sessions/list_sessions_view.dart';
 
+import 'package:provider/provider.dart';
 
 class CreateSessionsView extends StatelessWidget {
   final formKey = GlobalKey<FormState>();
@@ -26,6 +30,8 @@ class CreateSessionsView extends StatelessWidget {
   final price = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final homeProvider = Provider.of<HomeProvider>(context);
     return  Scaffold(
       appBar: AppBar(
         title: Text(tr(LocaleKeys.create_session)),
@@ -94,43 +100,127 @@ class CreateSessionsView extends StatelessWidget {
                     maxLength: null,
                     hintText: tr(LocaleKeys.session_link)),
                 SizedBox(height: AppSize.s10,),
-                DropdownButtonFormField(
-                  validator: (val){
-                    if(val == null){
-                      return tr(LocaleKeys.field_required);
+
+                FutureBuilder(
+                  future: homeProvider.fetchGroups(context),
+                  builder: (
+                      context, snapshot,) {
+                    //  print(snapshot.error);
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return  DropdownButtonFormField(
+                          validator: (val){
+                            if(val == null){
+                              return tr(LocaleKeys.field_required);
+                            }
+                          },
+                          decoration: InputDecoration(
+                              hintText: tr(LocaleKeys.session_group),
+                              prefixIcon: Icon(Icons.groups)
+                          ),
+                          items: List.generate(0, (index) => DropdownMenuItem(
+                            child: Text(""),
+                            value: index,
+                          )),
+                          onChanged: (val){
+                            sessionGroup.text = val.toString();
+                          }
+                      );
+                      //Const.CIRCLE(context);
+                    } else if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return const Text('Error');
+                      } else if (snapshot.hasData) {
+                        Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
+                        homeProvider.groups=Groups.fromJson(data['body']);
+                        return
+                          DropdownButtonFormField(
+                              validator: (val){
+                                if(val == null){
+                                  return tr(LocaleKeys.field_required);
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  hintText: tr(LocaleKeys.session_group),
+                                  prefixIcon: Icon(Icons.groups)
+                              ),
+                              items: List.generate(homeProvider.groups.groups.length, (index) => DropdownMenuItem(
+                                child: Text((Advance.language)?homeProvider.groups.groups[index].nameAr:homeProvider.groups.groups[index].nameEn),
+                                value: index,
+                              )),
+                              onChanged: (val){
+                                sessionGroup.text = val.toString();
+                              }
+                          );
+                      } else {
+                        return const Text('Empty data');
+                      }
+                    } else {
+                      return Text('State: ${snapshot.connectionState}');
                     }
                   },
-                  decoration: InputDecoration(
-                    hintText: tr(LocaleKeys.session_group),
-                      prefixIcon: Icon(Icons.groups)
-                  ),
-                    items: List.generate(4, (index) => DropdownMenuItem(
-                      child: Text("Groups" + index.toString()),
-                      value: index,
-                    )),
-                    onChanged: (val){
-                      sessionGroup.text = val.toString();
-                    }
                 ),
                 SizedBox(height: AppSize.s10,),
-                DropdownButtonFormField(
-                    validator: (val){
-                      if(val == null){
-                        return tr(LocaleKeys.field_required);
+               FutureBuilder(
+                  future: homeProvider.fetchDoctors(context),
+                  builder: (
+                      context, snapshot,) {
+                    //  print(snapshot.error);
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return  DropdownButtonFormField(
+                          validator: (val){
+                            if(val == null){
+                              return tr(LocaleKeys.field_required);
+                            }
+                          },
+                          decoration: InputDecoration(
+                              hintText: tr(LocaleKeys.session_doctor_name),
+                              prefixIcon: Icon(FontAwesomeIcons.userDoctor)
+                          ),
+                          items: List.generate(0, (index) => DropdownMenuItem(
+                            child: Text(""),
+                            value: index,
+                          )),
+                          onChanged: (val){
+                            sessionDoctor.text = val.toString();
+                          }
+                      );
+                      //Const.CIRCLE(context);
+                    } else if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasError) {
+                        return const Text('Error');
+                      } else if (snapshot.hasData) {
+                        Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
+                        homeProvider.doctors=Users.fromJson(data['body']);
+                        return
+                           DropdownButtonFormField(
+                                  validator: (val){
+                                    if(val == null){
+                                      return tr(LocaleKeys.field_required);
+                                    }
+                                  },
+                                  decoration: InputDecoration(
+                                      hintText: tr(LocaleKeys.session_doctor_name),
+                                      prefixIcon: Icon(FontAwesomeIcons.userDoctor)
+                                  ),
+                                  items: List.generate(homeProvider.doctors.users.length, (index) => DropdownMenuItem(
+                                    child: Text(
+                                        homeProvider.doctors.users[index].name,
+                                      /**"Doctor" + index.toString()**/),
+                                    value: index,
+                                  )),
+                                  onChanged: (val){
+                                    sessionDoctor.text = val.toString();
+                                  }
+                              );
+                      } else {
+                        return const Text('Empty data');
                       }
-                    },
-                    decoration: InputDecoration(
-                        hintText: tr(LocaleKeys.session_doctor_name),
-                      prefixIcon: Icon(FontAwesomeIcons.userDoctor)
-                    ),
-                    items: List.generate(100, (index) => DropdownMenuItem(
-                      child: Text("Doctor" + index.toString()),
-                      value: index,
-                    )),
-                    onChanged: (val){
-                      sessionDoctor.text = val.toString();
+                    } else {
+                      return Text('State: ${snapshot.connectionState}');
                     }
+                  },
                 ),
+
                 SizedBox(height: AppSize.s10,),
                 Row(
                   children: [

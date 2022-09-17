@@ -9,7 +9,8 @@ import '../../../resources/color_manager.dart';
 import '../../../resources/style_manager.dart';
 
 class DoctorProfile extends StatelessWidget {
-  final Doctor doctor;
+  //final Doctor doctor;
+  final User doctor;
 
   const DoctorProfile({super.key, required this.doctor});
 
@@ -53,15 +54,15 @@ class DoctorProfile extends StatelessWidget {
                       ),
                       _buildListTile(context,
                           icon: Icons.credit_card,
-                          title: tr(LocaleKeys.name),
-                          subTitle: doctor.carer
+                          title: tr(LocaleKeys.card_number),
+                          subTitle: "طبيب اخصائي"//doctor.carer
                       ),
                       const Divider(
                         thickness: AppSize.s1_5,
                       ),
                       _buildListTile(context,
                           icon: Icons.description,
-                          title: tr(LocaleKeys.name),
+                          title: tr(LocaleKeys.description),
                           subTitle: doctor.description
                       ),
                       const Divider(

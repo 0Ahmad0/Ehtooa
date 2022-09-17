@@ -65,7 +65,7 @@ class _SplashViewState extends State<SplashView> {
     // // Get.changeTheme(getApplicationTheme(isDark:Advance.theme ));
   }
   init(loginProvider,profileProvider) async {
-    await AppStorage.init();
+  //  await AppStorage.init();
     print("f ${Advance.token}");
     if(Advance.isLogined&&Advance.token!=""&&false){
       Const.LOADIG(context);

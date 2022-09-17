@@ -11,6 +11,7 @@ class ProfileProvider with ChangeNotifier{
   bool emailIgnor = true;
   User user= User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser");
   updateUser({ required User user}){
+
     this.user=user;
      name = TextEditingController(text: user.name);
      email = TextEditingController(text: user.email);

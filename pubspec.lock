@@ -43,13 +43,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.10"
-  audioplayers:
-    dependency: transitive
-    description:
-      name: audioplayers
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.20.1"
   bloc:
     dependency: transitive
     description:
@@ -225,13 +218,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.5"
-  custom_gallery_display:
-    dependency: "direct main"
-    description:
-      name: custom_gallery_display
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.0"
   day_night_time_picker:
     dependency: "direct main"
     description:
@@ -574,20 +560,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.0.1"
-  image:
-    dependency: transitive
-    description:
-      name: image
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.2.0"
-  image_crop:
-    dependency: transitive
-    description:
-      name: image_crop
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
   image_picker:
     dependency: "direct main"
     description:
@@ -833,13 +805,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "5.0.0"
-  photo_manager:
-    dependency: transitive
-    description:
-      name: photo_manager
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.2.1"
   photo_view:
     dependency: transitive
     description:
@@ -1015,13 +980,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.1"
-  shimmer:
-    dependency: transitive
-    description:
-      name: shimmer
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -1097,20 +1055,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.2"
-  syncfusion_flutter_core:
-    dependency: transitive
-    description:
-      name: syncfusion_flutter_core
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "20.2.49"
-  syncfusion_flutter_sliders:
-    dependency: transitive
-    description:
-      name: syncfusion_flutter_sliders
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "20.2.49"
   synchronized:
     dependency: transitive
     description:
@@ -1265,13 +1209,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.5.3"
-  voice_message_package:
-    dependency: "direct main"
-    description:
-      name: voice_message_package
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.0.74"
   win32:
     dependency: transitive
     description:
