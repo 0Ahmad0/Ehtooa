@@ -223,8 +223,17 @@
   "documents": "المستندات",
   "contacts": "جهات الاتصال",
   "location": "الموقع",
-  "audio": "ملقات الصوت"
-
+  "audio": "ملقات الصوت",
+  "session_name": "اسم الجلسة ",
+  "session_group": "الغروب",
+  "session_date": "تاريخ الجلسة",
+  "session_time":"وقت الجلسة",
+  "session_doctor_name" : "الدكتور المسؤول عن الجلسة",
+  "delete": "حذف الجلسة",
+  "all_sessions": "كل الجلسات",
+  "are_you_sure": "هل أنت متأكد؟",
+  "confirm_delete": "هل تريد حقا القيام بحذف الجلسة؟",
+  "price": "سعر الجلسة"
 }
 
 

@@ -231,7 +231,17 @@ class CodegenLoader extends AssetLoader{
   "documents": "المستندات",
   "contacts": "جهات الاتصال",
   "location": "الموقع",
-  "audio": "ملقات الصوت"
+  "audio": "ملقات الصوت",
+  "session_name": "اسم الجلسة ",
+  "session_group": "الغروب",
+  "session_date": "تاريخ الجلسة",
+  "session_time": "وقت الجلسة",
+  "session_doctor_name": "الدكتور المسؤول عن الجلسة",
+  "delete": "حذف الجلسة",
+  "all_sessions": "كل الجلسات",
+  "are_you_sure": "هل أنت متأكد؟",
+  "confirm_delete": "هل تريد حقا القيام بحذف الجلسة؟",
+  "price": "سعر الجلسة"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Doctor name",
@@ -449,7 +459,17 @@ static const Map<String,dynamic> en = {
   "documents": "Documents",
   "contacts": "Contacts",
   "location": "Location",
-  "audio": "Audio"
+  "audio": "Audio",
+  "session_name": "Session name",
+  "session_group": "Session group",
+  "session_date": "Session Date",
+  "session_time": "Session time",
+  "session_doctor_name": "Session Doctor Admin",
+  "delete": "Delete",
+  "all_sessions": "All sessions",
+  "are_you_sure": "Are you sure?",
+  "confirm_delete": "Do you want to delete the session?",
+  "price": "Session price"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

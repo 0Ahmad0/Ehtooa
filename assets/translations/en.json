@@ -219,5 +219,16 @@
   "documents": "Documents",
   "contacts": "Contacts",
   "location": "Location",
-  "audio": "Audio"
+  "audio": "Audio",
+  "session_name": "Session name",
+  "session_group": "Session group",
+  "session_date": "Session Date",
+  "session_time":"Session time",
+  "session_doctor_name" : "Session Doctor Admin",
+  "delete": "Delete",
+  "all_sessions": "All sessions",
+  "are_you_sure": "Are you sure?",
+  "confirm_delete": "Do you want to delete the session?",
+  "price": "Session price"
+
 }

@@ -12,6 +12,7 @@ import 'package:ehtooa/app/view/screens/profile/profile_view.dart';
 import 'package:ehtooa/app/view/screens/setting/setting_view.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:provider/provider.dart';
@@ -72,14 +73,19 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                                     color: ColorManager.white,
                                     fontSize: Sizer.getW(context) / 28),
                               ),
-                              currentAccountPicture: CircleAvatar(
+                              currentAccountPicture: value.user.photoUrl == null?ProfilePicture(
+                                name: value.user.name,
+                                radius: AppSize.s30,
+                                fontsize: Sizer.getW(context) / 22,
+
+                              ):CircleAvatar(
                                 child: //FlutterLogo(),
                                 CachedNetworkImage(
                                   fit: BoxFit.fill,
                                   width: double.infinity,
                                   height: Sizer.getW(context) * 0.7,
                                   imageUrl:
-                                 // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                                  // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
                                   "${value.user.photoUrl}",
                                   imageBuilder: (context, imageProvider) =>
                                       Container(
