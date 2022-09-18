@@ -9,7 +9,7 @@ import '../../model/utils/const.dart';
 import '../../view/resources/consts_manager.dart';
 
 class ChatProvider with ChangeNotifier{
- late models.Group group;
+ late models.Group group=models.Group(idAmin: "", nameAr: "", nameEn: "", chat: models.Chat(id: "", messages: []), photoUrl: "", listUsers: [], listBlockUsers: [], date: DateTime.now());
 
  fetchChat(context) async{
    var result =await FirebaseFun.fetchChat(id: "taoId1xj5dSDNEoaYlFd");

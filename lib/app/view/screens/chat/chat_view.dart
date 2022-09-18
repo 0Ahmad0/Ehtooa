@@ -27,7 +27,7 @@ import 'dart:ui' as ui;
 import 'package:provider/provider.dart';
 import '../../resources/consts_manager.dart';
 import '../list_of_member/list_of_member_view.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 class ChatView extends StatefulWidget {
   const ChatView({super.key});
 
@@ -40,12 +40,14 @@ class _ChatViewState extends State<ChatView> {
   TextEditingController con = TextEditingController();
   final foucsNode = FocusNode();
   String? replayMessage;
+  late ChatProvider  chatProvider;
 
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final groupsProvider = Provider.of<GroupsProvider>(context);
-    final chatProvider = Provider.of<ChatProvider>(context);
+     chatProvider = Provider.of<ChatProvider>(context);
+    ///print(chatProvider.group.nameAr);
     bool isReplay = replayMessage != null;
     return Directionality(
       textDirection: ui.TextDirection.ltr,
@@ -72,9 +74,34 @@ class _ChatViewState extends State<ChatView> {
             },
             leading: CircleAvatar(
               radius: AppSize.s24,
+              child:  CachedNetworkImage(
+                fit: BoxFit.fill,
+                width: Sizer.getW(context) * 0.1,
+                height: Sizer.getW(context) * 0.1,
+                imageUrl:
+                // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                "${chatProvider.group.photoUrl}",
+                imageBuilder: (context, imageProvider) =>
+                    Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                        ),
+                      ),
+                    ),
+                placeholder: (context, url) =>
+                    CircularProgressIndicator(),
+                errorWidget: (context, url, error) =>
+                    //FlutterLogo(),
+                SizedBox(),
+              ),
             ),
-            title: Text(tr(LocaleKeys.anxiety_patients)),
-            subtitle: Text("35 Member"),
+            title: Text(
+                "${!(context.locale == 'en')?chatProvider.group.nameAr:chatProvider.group.nameEn}",
+              /*tr(LocaleKeys.anxiety_patients)*/),
+            subtitle: Text("${chatProvider.group.listUsers.length} Member"/*"35 Member"*/),
             trailing: IconButton(onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (ctx) => ListOfMemberView(
@@ -339,15 +366,56 @@ class _ChatViewState extends State<ChatView> {
                         colorFilter: ColorFilter.mode(
                             Colors.black.withOpacity(.2), BlendMode.darken),
                         image: AssetImage(ImagesAssets.backgroundChat))),
-                child: ListView.builder(
-                    padding: EdgeInsets.all(
-                      AppPadding.p10,
-                    ),
-                    itemCount: list.length,
-                    itemBuilder: (_, pos) {
-                      return list[pos];
-                      // return ListTile(title: Text(list[pos]));
+                child:
+                StreamBuilder<QuerySnapshot>( //prints the messages to the screen0
+                    stream: FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
+                       // .doc("taoId1xj5dSDNEoaYlFd")
+                        .doc(chatProvider.group.id)
+                        .collection(AppConstants.collectionChat)
+                        .orderBy("sendingTime")
+                        .snapshots(),
+                    builder: (context,snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return  Const.SHOWLOADINGINDECATOR();
+                        //Const.CIRCLE(context);
+                      }
+                      else if (snapshot.connectionState == ConnectionState.active) {
+                        if (snapshot.hasError) {
+                          return const Text('Error');
+                        }
+                        else if (snapshot.hasData) {
+                          print("streame ${snapshot.data!.docs.length}");
+                          chatProvider.group.chat=Chat.fromJson({
+                          'id':chatProvider.group.id,
+                          'messages':snapshot.data!.docs
+                          });
+                          return ListView.builder(
+                              padding: EdgeInsets.all(
+                              AppPadding.p10,
+                              ),
+                              itemCount:list.length, ///chatProvider.group.chat.messages.length,//,
+                              itemBuilder: (_, pos) {
+                              return list[pos];
+                          // return ListTile(title: Text(list[pos]));
+                          });
+                        } else {
+                          return const Text('Empty data');
+                        }
+                      } else {
+                        return Text('State: ${snapshot.connectionState}');
+                      }
                     }),
+                    /**
+                     ListView.builder(
+                        padding: EdgeInsets.all(
+                        AppPadding.p10,
+                        ),
+                        itemCount: list.length,
+                        itemBuilder: (_, pos) {
+                        return list[pos];
+                        // return ListTile(title: Text(list[pos]));
+                        });
+                    **/
               ),
             ),
 

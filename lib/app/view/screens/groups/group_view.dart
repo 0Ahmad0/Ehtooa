@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/controller/groups_provider.dart';
+import 'package:ehtooa/app/controller/utils/chat_provider.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
@@ -21,6 +22,7 @@ class GroupsView extends StatelessWidget {
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final groupsProvider = Provider.of<GroupsProvider>(context);
+    final chatProvider = Provider.of<ChatProvider>(context);
 
     return   FutureBuilder(
       future: groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id),
@@ -50,6 +52,8 @@ class GroupsView extends StatelessWidget {
                   ),
                   child: ListTile(
                     onTap: (){
+                    //  print("${groupsProvider.groups.groups[index].nameAr} ${groupsProvider.groups.groups[index].chat.messages.length}");
+                      chatProvider.group=groupsProvider.groups.groups[index];
                       Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatView()));
                     },
                     onLongPress: (){
@@ -94,7 +98,9 @@ class GroupsView extends StatelessWidget {
                       ((groupsProvider.groups.groups[index].chat.id=="")
                           ?"جاري التحميل .."
                       ///ToDo mriwed
-                          :"${groupsProvider.groups.groups[index].chat.messages.last.typeMessage}"),
+                          :"${(groupsProvider.groups.groups[index].chat.messages.length>0)?
+                      groupsProvider.groups.groups[index].chat.messages.last.typeMessage:""
+                      }"),
                      // "السلام عليكم ورحمة الله",
                       style: getLightStyle(
                           color: Theme.of(context).textTheme.bodyText1!.color,
