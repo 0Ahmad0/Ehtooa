@@ -25,6 +25,7 @@ class GroupsProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
+
   onError(error){
     print(false);
     print(error);

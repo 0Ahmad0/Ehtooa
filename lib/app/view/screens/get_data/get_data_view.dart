@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -22,11 +23,13 @@ class GetDataView extends StatefulWidget {
 }
 
 class _GetDataViewState extends State<GetDataView> {
-temp(groupsProvider,profileProvider) async {
+temp(groupsProvider,profileProvider,homeProvider) async {
   var data;
   ///ToDo hariri
   ///وضع تايمر بدل الحلقة
-
+  homeProvider.groups=Groups(groups: []);
+  groupsProvider.groups=Groups(groups: []);
+ // groupsProvider.groups.groups=[];
   if(!profileProvider.user.typeUser.contains(AppConstants.collectionPatient)){
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -35,6 +38,10 @@ temp(groupsProvider,profileProvider) async {
     final resultPaySession=await profileProvider.fetchPaySession(context);
     if(resultPaySession['status']){
       profileProvider.paySession=PaySession.fromJson(resultPaySession['body']);
+    }
+    var resultGroup= await homeProvider.fetchGroups(context);
+    if(resultGroup['status']){
+      homeProvider.groups=Groups.fromJson(resultGroup['body']);
     }
     data = await groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id);
     if(data!=null)
@@ -57,8 +64,9 @@ temp(groupsProvider,profileProvider) async {
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final groupsProvider = Provider.of<GroupsProvider>(context);
+    final homeProvider = Provider.of<HomeProvider>(context);
 
-    temp(groupsProvider,profileProvider);
+    temp(groupsProvider,profileProvider,homeProvider);
     return
         Scaffold(
         body: Center(

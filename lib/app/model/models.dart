@@ -47,7 +47,7 @@ class User {
          this.listUsedQuizzes=const <bool>[false,false,false,false],
         this.description=""});
   factory User.fromJson( json){
-    return User(id: json["id"],
+    return User(id: json['id'],
                 uid: json["uid"],
                 name: json["name"],
                 email: json["email"],
@@ -250,6 +250,7 @@ class Chat {
 class Group {
   String id;
   String idAmin;
+  int sort;
   String nameAr;
   String nameEn;
   Chat chat;
@@ -260,6 +261,7 @@ class Group {
 
   Group(
       {this.id="",
+        this.sort=0,
       required this.idAmin,
         required this.nameAr,
         required this.nameEn,
@@ -280,6 +282,7 @@ class Group {
     }
     return Group(
         idAmin: json["idAmin"],
+        sort: json["sort"],
         nameAr: json["nameAr"],
         nameEn: json["nameEn"],
         chat: Chat.fromJson(json["chat"]),
@@ -299,6 +302,7 @@ class Group {
     }
     return Group(
         idAmin: json["idAmin"],
+        sort: json["sort"],
         nameAr: json["nameAr"],
         nameEn: json["nameEn"],
         chat: Chat(id: "", messages: []), //Chat.fromJson(json["chat"]),
@@ -318,6 +322,7 @@ class Group {
     }
     return {
     'idAmin':idAmin,
+    'sort':sort,
     'nameAr':nameAr,
     'nameEn':nameEn,
     'chat':chat.toJson(),
@@ -338,6 +343,7 @@ class Group {
     }
     return {
       'idAmin':idAmin,
+      'sort':sort,
       'nameAr':nameAr,
       'nameEn':nameEn,
       //'chat':chat.toJson(),

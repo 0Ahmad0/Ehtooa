@@ -21,6 +21,8 @@ import 'app/controller/create_sessions_provider.dart';
 import 'app/controller/groups_provider.dart';
 import 'app/controller/home_provider.dart';
 import 'app/controller/list_sessions_provider.dart';
+import 'app/controller/notification_provider.dart';
+import 'app/controller/utils/chat_provider.dart';
 import 'app/controller/utils/create_environment_provider.dart';
 import 'app/controller/login_provider.dart';
 import 'app/controller/profile_provider.dart';
@@ -78,6 +80,8 @@ class MyApp extends StatelessWidget {
         Provider<HomeProvider>(create: (_)=>HomeProvider()),
         Provider<CreateSessionsProvider>(create: (_)=>CreateSessionsProvider()),
         Provider<ListSessionsProvider>(create: (_)=>ListSessionsProvider()),
+        Provider<ChatProvider>(create: (_)=>ChatProvider()),
+        Provider<NotificationProvider>(create: (_)=>NotificationProvider()),
    //     Provider<CreateEnvironmentProvider>(create: (_)=>CreateEnvironmentProvider()),
       ],
       child: ChangeNotifierProvider<AppProvider>.value(

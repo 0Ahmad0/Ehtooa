@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/color_manager.dart';
@@ -13,11 +14,16 @@ import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
+import '../../../controller/groups_provider.dart';
+import '../../../controller/profile_provider.dart';
 import '../../../model/models.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:provider/provider.dart';
+
+import '../../../model/utils/const.dart';
 class QuestionsPageView extends StatefulWidget {
   late List<Question> questions;
   String descriptionDisease;
@@ -79,6 +85,9 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
   final pageController = PageController();
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final homeProvider = Provider.of<HomeProvider>(context);
+    final groupsProvider = Provider.of<GroupsProvider>(context);
     print(widget.index);
     return Scaffold(
         body: FutureBuilder(
@@ -226,9 +235,20 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                                       text:  (testResult*10 >50)
                                                                           ?tr(LocaleKeys.ok)
                                                                           :tr(LocaleKeys.another_test),
-                                                                      onTap: () {
+                                                                      onTap: () async {
+                                                                        profileProvider.user.listUsedQuizzes[widget.index]=true;
+
+                                                                        Const.LOADIG(context);
+                                                                        await profileProvider.editUser(context);
+                                                                        Navigator.of(context).pop();
                                                                         Navigator.pop(context);
                                                                         if(testResult*10>50){
+                                                                          Const.LOADIG(context);
+                                                                          int indexGroup=homeProvider.fetchIndexGroupFromIndexList(index: widget.index);
+                                                                          await homeProvider.addUserToGroup(context, idUser: profileProvider.user.id,
+                                                                              idGroup: homeProvider.groups.groups[indexGroup].id);
+                                                                          groupsProvider.groups.groups.add(homeProvider.groups.groups[indexGroup]);
+                                                                          Navigator.of(context).pop();
                                                                           Navigator.pushReplacement(
                                                                             context,
                                                                             MaterialPageRoute(builder: (ctx)=>BottomNavBarView()

@@ -13,6 +13,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 import 'package:provider/provider.dart';
 import '../../../controller/profile_provider.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 class GroupsView extends StatelessWidget {
   const GroupsView({Key? key}) : super(key: key);
 
@@ -33,8 +34,10 @@ class GroupsView extends StatelessWidget {
           if (snapshot.hasError) {
             return const Text('Error');
           } else if (snapshot.hasData) {
+
+
             return ListView.builder(
-              itemCount: 2,
+              itemCount: groupsProvider.groups.groups.length,
               itemBuilder: (_, index) {
                 return                                Container(
                   decoration: BoxDecoration(
@@ -55,17 +58,44 @@ class GroupsView extends StatelessWidget {
                     leading: Transform.scale(
                       scale: 1.5,
                       child: CircleAvatar(
-                        child: FlutterLogo(),
+                        child: CachedNetworkImage(
+                          fit: BoxFit.fill,
+                          width: Sizer.getW(context) * 0.1,
+                          height: Sizer.getW(context) * 0.1,
+                          imageUrl:
+                          // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                          "${groupsProvider.groups.groups[index].photoUrl}",
+                          imageBuilder: (context, imageProvider) =>
+                              Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                                  ),
+                                ),
+                              ),
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              FlutterLogo(),
+                        ),
                       ),
                     ),
                     title: Text(
-                      // "${value.groups.groups.length}",
-                      tr(LocaleKeys.anxiety_patients),
+
+                       "${!(context.locale == 'en')?groupsProvider.groups.groups[index].nameAr:groupsProvider.groups.groups[index].nameEn}",
+                      //tr(LocaleKeys.anxiety_patients),
                       style: getRegularStyle(
                           color: Theme.of(context).textTheme.bodyText1!.color,
                           fontSize: Sizer.getW(context)/26
                       ),),
-                    subtitle: Text("السلام عليكم ورحمة الله",
+                    subtitle: Text(
+                      ((groupsProvider.groups.groups[index].chat.id=="")
+                          ?"جاري التحميل .."
+                      ///ToDo mriwed
+                          :"${groupsProvider.groups.groups[index].chat.messages.last.typeMessage}"),
+                     // "السلام عليكم ورحمة الله",
                       style: getLightStyle(
                           color: Theme.of(context).textTheme.bodyText1!.color,
                           fontSize: Sizer.getW(context)/32

@@ -22,6 +22,7 @@ class HomeProvider with ChangeNotifier{
   Map<String,dynamic> cacheUser=Map<String,dynamic>();
   List<InteractiveSessions> sessionsToUser=[];
   String idUser="";
+  String search="";
   fetchDoctors(context) async {
     var result =await FirebaseFun.fetchDoctors();
     print(result);
@@ -29,6 +30,7 @@ class HomeProvider with ChangeNotifier{
     return result;
   }
   fetchGroups(context) async {
+
     var result =await FirebaseFun.fetchGroups();
     print(result);
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
@@ -43,6 +45,10 @@ class HomeProvider with ChangeNotifier{
     var result =await FirebaseFun.fetchSessionsToUser(idGroups: idGroups);
     print(result);
     if(result['status']){
+      sessions=models.Sessions.fromJson(result['body']);
+      if(search!=""){
+        sessions.sessions =await searchListSession(context, search: search, sessions: sessions.sessions);
+      }
       sessionsToUser=[];
       await processessionsToUser(context, paySession: paySession);
     }
@@ -53,14 +59,15 @@ class HomeProvider with ChangeNotifier{
   fetchNameUser(context,{required String idUser}) async {
     if(cacheUser.containsKey(idUser)) return cacheUser[idUser];
     var result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionPatient);
-    if(!result['status']){
+    if(result['status']&&result['body']==null){
        result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionDoctor);
-      if(!result['status']){
+      if(result['status']&&result['body']==null){
          result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionAdmin);
       }
     }
-    cacheUser[idUser]=(result['status'])?models.User.fromJson(result['body']).name:"user";
-    return cacheUser[idUser];
+      cacheUser[idUser]=(result['status'])?models.User.fromJson(result['body']).name:"user";
+      return cacheUser[idUser];
+
    /* print(result);
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;*/
@@ -83,18 +90,73 @@ class HomeProvider with ChangeNotifier{
       ));
     }
   }
+  addUserToGroup(context,{required String idUser,required String idGroup}) async {
+    if(!groups.groups[fetchIndexGroup(idGroup: idGroup)].listUsers.contains(idUser)){
+      groups.groups[fetchIndexGroup(idGroup: idGroup)].listUsers.add(idUser);
+    }
+    var result =await FirebaseFun.updateGroup(group: groups.groups[fetchIndexGroup(idGroup: idGroup)], id: idGroup,updateGroupType:models.UpdateGroupType.add_user);
+    print(result);
+    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
+    return result;
+  }
+
+
  int fetchIndexFromListPaySession({required String idGroup}){
     switch(idGroup){
-      case "V59ILq22VmKnzXgKvxSV":
-        return 0;
-      case "z36yvFsn9zaAXj2uEXzL":
+      case "YMfMrXosR8VF1xmbw1uU":
+        return 3;
+      case "eGcR8N9qBycAH6Y9xupV":
         return 1;
-      case  "pmB1yVQEZgKYWhZZBm0f":
+      case  "eK8OgCTMRTeIx3OWZz4Z":
+        return 0;
+    }
+    return 2;
+ }
+
+  int fetchIndexGroup({required String idGroup}){
+    switch(idGroup){
+      case "YMfMrXosR8VF1xmbw1uU":
+        return 0;
+      case "eGcR8N9qBycAH6Y9xupV":
+        return 1;
+      case  "eK8OgCTMRTeIx3OWZz4Z":
         return 2;
     }
     return 3;
- }
+  }
+  int fetchIndexGroupFromIndexList({required int index}){
+    switch(index){
+      case 3:
+        return 0;
+      case 1:
+        return 1;
+      case  0:
+        return 2;
+    }
+    return 3;
+  }
 
+Future<List<models.Session>> searchListSession(context,
+    {required String search, required List<models.Session> sessions}) async {
+    List<models.Session> tempSessions=[];
+    for(models.Session session in sessions){
+      String tempNameDoctor=await fetchNameUser(context, idUser: session.listDoctor[0]);
+      if(tempNameDoctor.contains(search)){
+        tempSessions.add(session);
+      }
+    }
+    return tempSessions;
+}
+  List<models.User> searchListDoctors(context,
+      {required String search, required List<models.User> users})  {
+    List<models.User> tempUsers=[];
+    for(models.User user in users){
+      if(user.name.contains(search)){
+        tempUsers.add(user);
+      }
+    }
+    return tempUsers;
+  }
 
 
 

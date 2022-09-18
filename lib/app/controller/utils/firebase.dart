@@ -1,10 +1,15 @@
 
+import 'dart:io';
+
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/model/models.dart' as model;
 import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 import '../../../translations/locale_keys.g.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -173,6 +178,7 @@ class FirebaseFun{
   static fetchGroupsToUser( {required String idUser})  async {
     final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
         .where('listUsers',arrayContains: idUser)
+  //  .orderBy('sort')
         .get()
         .then((onValueFetchGroupToUser))
         .catchError(onError);
@@ -238,6 +244,7 @@ class FirebaseFun{
   }
   static fetchGroups()  async {
     final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
+       // .orderBy("sort")
         .get()
         .then((onValueFetchGroups))
         .catchError(onError);
@@ -564,5 +571,21 @@ class FirebaseFun{
      return (year*365+
             month*30+
             day);
+  }
+  static Future uploadImage({required XFile image, required String folder}) async {
+    try {
+      String path = basename(image!.path);
+      print(image!.path);
+      File file =File(image!.path);
+
+//FirebaseStorage storage = FirebaseStorage.instance.ref().child(path);
+      Reference storage = FirebaseStorage.instance.ref().child("${folder}/${path}");
+      UploadTask storageUploadTask = storage.putFile(file);
+      TaskSnapshot taskSnapshot = await storageUploadTask;
+      String url = await taskSnapshot.ref.getDownloadURL();
+      return url;
+    } catch (ex) {
+      //Const.TOAST( context,textToast:FirebaseFun.findTextToast("Please, upload the image"));
+    }
   }
 }

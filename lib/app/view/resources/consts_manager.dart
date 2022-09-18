@@ -17,13 +17,13 @@ class AppConstants {
 
   static String storageUrl = "gs://ehtooa-266e1.appspot.com";
   static String photoProfilePatient =
-      "$storageUrl/const/images/photoProfilePatient.png";
+      "https://firebasestorage.googleapis.com/v0/b/ehtooa-266e1.appspot.com/o/const%2Fimages%2FphotoProfilePatient.png?alt=media&token=47a6b5e2-9b83-486e-85c8-bf1a12f614b2";
   static String photoProfileAdmin =
-      "$storageUrl/const/images/photoProfileAdmin.png";
+      "https://firebasestorage.googleapis.com/v0/b/ehtooa-266e1.appspot.com/o/const%2Fimages%2FphotoProfileAdmin.png?alt=media&token=d2267ef3-e473-4248-8a5f-d5b7cd450b7d";
   static String photoProfileDoctor =
-      "$storageUrl/const/images/photoProfileDoctor.png";
+      "https://firebasestorage.googleapis.com/v0/b/ehtooa-266e1.appspot.com/o/const%2Fimages%2FphotoProfileDoctor.png?alt=media&token=4225ba33-d453-4036-afe9-37d3c29ff43d";
   static String photoGroup =
-      "$storageUrl/const/images/photoGroup.png";
+      "https://firebasestorage.googleapis.com/v0/b/ehtooa-266e1.appspot.com/o/const%2Fimages%2FphotoGroup.png?alt=media&token=afd6dcbb-8299-4525-8d44-c9d5b6cbe52e";
 
   //collection
   static String collection = "";

@@ -12,8 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 
+import '../../../controller/profile_provider.dart';
 import '../../resources/color_manager.dart';
-
+import 'package:provider/provider.dart';
 class QuestionsView extends StatefulWidget {
    List<int> indexTaken;
 
@@ -114,6 +115,7 @@ class _QuestionsViewState extends State<QuestionsView> {
 
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
     return WillPopScope(
       onWillPop: () async => false,
       child: Scaffold(
@@ -139,15 +141,15 @@ class _QuestionsViewState extends State<QuestionsView> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children:
                   List.generate(4, (index) {
-                    widget.indexTaken.forEach((element) {
+                    profileProvider.user.listUsedQuizzes.forEach((element) {
                       print(element == index);
                     });
                     return ButtonApp(
                       bottomMargin: AppSize.s20,
-                      backColor: widget.indexTaken.first == index?
+                      backColor: profileProvider.user.listUsedQuizzes[index]?
                       Colors.transparent : Theme.of(context).primaryColor,
                       text: tr(textButtons[index]),
-                      onTap:  widget.indexTaken.first == index?()=>null:(){
+                      onTap:  profileProvider.user.listUsedQuizzes[index]?()=>null:(){
                         Navigator.of(context)
                             .pushReplacement(MaterialPageRoute(
                           builder: (ctx)=>

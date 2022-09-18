@@ -82,8 +82,8 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                                 child: //FlutterLogo(),
                                 CachedNetworkImage(
                                   fit: BoxFit.fill,
-                                  width: double.infinity,
-                                  height: Sizer.getW(context) * 0.7,
+                                  width: Sizer.getW(context) * 0.12,
+                                  height: Sizer.getW(context) * 0.12,
                                   imageUrl:
                                   // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
                                   "${value.user.photoUrl}",
@@ -160,7 +160,10 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                   _buildListTile(
                     text: tr(LocaleKeys.logout),
                     icon: Icons.logout,
-                    onTap: (){
+                    onTap: () async {
+                      Const.LOADIG(context);
+                      await profileProvider.logout(context);
+                      Navigator.of(context).pop();
                       Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>LoginView()));
                     },
 

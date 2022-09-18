@@ -1,3 +1,4 @@
+
 import 'dart:io';
 
 import 'package:ehtooa/app/model/utils/sizer.dart';
@@ -11,11 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import '../../../controller/profile_provider.dart';
+import '../../../controller/utils/firebase.dart';
 import '../../../model/utils/const.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 class ProfileView extends StatefulWidget {
   @override
   State<ProfileView> createState() => _ProfileViewState();
@@ -31,7 +35,6 @@ class _ProfileViewState extends State<ProfileView> {
   ImagePicker picker = ImagePicker();
 
   XFile? image;
-
   pickFromCamera() async {
     image = await picker.pickImage(source: ImageSource.camera);
     setState(() {
@@ -41,9 +44,29 @@ class _ProfileViewState extends State<ProfileView> {
 
   pickFromGallery() async {
     image = await picker.pickImage(source: ImageSource.gallery);
+   // await uploadImage( );
     setState(() {
 
     });
+  }
+  Future uploadImage() async {
+    try {
+      String path = basename(image!.path);
+      print(image!.path);
+      File file =File(image!.path);
+
+//FirebaseStorage storage = FirebaseStorage.instance.ref().child(path);
+      Reference storage = FirebaseStorage.instance.ref().child("profileImage/${path}");
+      UploadTask storageUploadTask = storage.putFile(file);
+      TaskSnapshot taskSnapshot = await storageUploadTask;
+      //Const.LOADIG(context);
+      String url = await taskSnapshot.ref.getDownloadURL();
+      //Navigator.of(context).pop();
+      print('url $url');
+      return url;
+    } catch (ex) {
+      //Const.TOAST( context,textToast:FirebaseFun.findTextToast("Please, upload the image"));
+    }
   }
 
   @override
@@ -69,11 +92,33 @@ class _ProfileViewState extends State<ProfileView> {
                                 color: Theme.of(context).primaryColor,
                                 width: AppSize.s4)),
                         child: image == null
-                            ? ProfilePicture(
+                            ? ClipOval(
+                            child: CachedNetworkImage(
+                          fit: BoxFit.fill,
+                          width: Sizer.getW(context) * 0.14,
+                          height: Sizer.getW(context) * 0.14,
+                          imageUrl:
+                          // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                          "${profileProvider.user.photoUrl}",
+                          imageBuilder: (context, imageProvider) =>
+                              Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: imageProvider,
+                                    fit: BoxFit.cover,
+                                    //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                                  ),
+                                ),
+                              ),
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              ProfilePicture(
                                 name: profileProvider.user.name,
                                 radius: AppSize.s30,
                                 fontsize: Sizer.getW(context) / 22,
-                              )
+                              ),
+                        ))
                             : ClipOval(
                                 child: Image.file(File(image!.path),
                                   fit: BoxFit.fill,
@@ -131,7 +176,7 @@ class _ProfileViewState extends State<ProfileView> {
                                               ),
                                               Expanded(
                                                 child: InkWell(
-                                                  onTap: () {
+                                                  onTap: ()  {
 
                                                     pickFromGallery();
                                                     Navigator.pop(context);
@@ -251,6 +296,7 @@ class _ProfileViewState extends State<ProfileView> {
                             return ButtonApp(
                                 text: tr(LocaleKeys.edit),
                                 onTap: () async {
+                                  await profileProvider.uploadImage(context, image!);
                                   Const.LOADIG(context);
                                   await profileProvider.editUser(context);
                                   Navigator.of(context).pop();
