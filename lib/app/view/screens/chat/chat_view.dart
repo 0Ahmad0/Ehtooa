@@ -101,7 +101,7 @@ class _ChatViewState extends State<ChatView> {
             title: Text(
                 "${!(context.locale == 'en')?chatProvider.group.nameAr:chatProvider.group.nameEn}",
               /*tr(LocaleKeys.anxiety_patients)*/),
-            subtitle: Text("${chatProvider.group.listUsers.length} Member"/*"35 Member"*/),
+            subtitle: Text("${chatProvider.group.listUsers.length+1} Member"/*"35 Member"*/),
             trailing: IconButton(onPressed: () {
               Navigator.push(context,
                   MaterialPageRoute(builder: (ctx) => ListOfMemberView(
@@ -393,9 +393,10 @@ class _ChatViewState extends State<ChatView> {
                               padding: EdgeInsets.all(
                               AppPadding.p10,
                               ),
-                              itemCount:list.length, ///chatProvider.group.chat.messages.length,//,
+                              itemCount:chatProvider.group.chat.messages.length,//list.length,
                               itemBuilder: (_, pos) {
-                              return list[pos];
+                              return BuildMessageShape(isMe: true, child: Text("gg"));
+                                //list[pos];
                           // return ListTile(title: Text(list[pos]));
                           });
                         } else {

@@ -56,15 +56,19 @@ class HomeProvider with ChangeNotifier{
     return result;
   }
 
-  fetchNameUser(context,{required String idUser}) async {
+  fetchNameUser(context,{required String idUser}) async{
+  //  print("id ${idUser} user ${cacheUser[idUser]}");
     if(cacheUser.containsKey(idUser)) return cacheUser[idUser];
     var result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionPatient);
     if(result['status']&&result['body']==null){
        result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionDoctor);
+       print("result ${result}");
+       print("id ${idUser} user ${cacheUser[idUser]}");
       if(result['status']&&result['body']==null){
          result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionAdmin);
       }
     }
+
       cacheUser[idUser]=(result['status'])?models.User.fromJson(result['body']).name:"user";
       return cacheUser[idUser];
 

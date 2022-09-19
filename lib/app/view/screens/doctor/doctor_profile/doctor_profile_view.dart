@@ -7,7 +7,7 @@ import 'package:easy_localization/easy_localization.dart';
 import '../../../../model/models.dart';
 import '../../../resources/color_manager.dart';
 import '../../../resources/style_manager.dart';
-
+import 'package:cached_network_image/cached_network_image.dart';
 class DoctorProfile extends StatelessWidget {
   //final Doctor doctor;
   final User doctor;
@@ -22,8 +22,31 @@ class DoctorProfile extends StatelessWidget {
       ),
       body: Column(
         children: [
+          SizedBox(height: Sizer.getW(context)*0.03,),
           Expanded(child: Container(
-            color: Colors.green,
+            //color: Colors.green,
+            child: CachedNetworkImage(
+              fit: BoxFit.fill,
+              width: Sizer.getW(context) * 0.5,
+              height: Sizer.getW(context) * 0.5,
+              imageUrl:
+              // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+              "${doctor.photoUrl}",
+              imageBuilder: (context, imageProvider) =>
+                  Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                        //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                      ),
+                    ),
+                  ),
+              placeholder: (context, url) =>
+                  CircularProgressIndicator(),
+              errorWidget: (context, url, error) =>
+                  FlutterLogo(),
+            ),
           )),
           const SizedBox(height: AppSize.s20,),
           Expanded(

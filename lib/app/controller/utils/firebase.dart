@@ -104,6 +104,7 @@ class FirebaseFun{
         .get()
         .then((onValueFetchUserId))
         .catchError(onError);
+
     return result;
   }
   static createGroup( {required model.Group group}) async {

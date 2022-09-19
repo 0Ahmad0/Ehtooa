@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/controller/groups_provider.dart';
 import 'package:ehtooa/app/controller/utils/chat_provider.dart';
+import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
@@ -36,9 +37,16 @@ class GroupsView extends StatelessWidget {
           if (snapshot.hasError) {
             return const Text('Error');
           } else if (snapshot.hasData) {
-
-
-            return ListView.builder(
+            Map<String, dynamic> data = snapshot.data as Map<
+                String,
+                dynamic>;
+            groupsProvider.groups = Groups.fromJson(data['body']);
+            return
+    ChangeNotifierProvider<GroupsProvider>.value(
+    value: groupsProvider,
+    child: Consumer<GroupsProvider>(
+    builder: (context, value, child) =>
+              ListView.builder(
               itemCount: groupsProvider.groups.groups.length,
               itemBuilder: (_, index) {
                 return                                Container(
@@ -54,7 +62,11 @@ class GroupsView extends StatelessWidget {
                     onTap: (){
                     //  print("${groupsProvider.groups.groups[index].nameAr} ${groupsProvider.groups.groups[index].chat.messages.length}");
                       chatProvider.group=groupsProvider.groups.groups[index];
-                      Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatView()));
+                      print("chat : ${groupsProvider.groups.groups[index].chat.id}");
+                      (value.groups.groups[index].listBlockUsers.contains(profileProvider.user.id))?
+                          Const.TOAST(context,textToast: "لقد تم حظرك من هذه المجموعة")
+                      :Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatView()));
+                      groupsProvider.notifyListeners();
                     },
                     onLongPress: (){
                       Const.LOADIG(context);
@@ -94,12 +106,15 @@ class GroupsView extends StatelessWidget {
                           color: Theme.of(context).textTheme.bodyText1!.color,
                           fontSize: Sizer.getW(context)/26
                       ),),
-                    subtitle: Text(
-                      ((groupsProvider.groups.groups[index].chat.id=="")
+                    subtitle:
+                    Text(
+                      (value.groups.groups[index].listBlockUsers.contains(profileProvider.user.id))?
+                          "لقد تم حظرك من هذه المجموعة":
+                      ((value.groups.groups[index].chat.id=="")
                           ?"جاري التحميل .."
                       ///ToDo mriwed
-                          :"${(groupsProvider.groups.groups[index].chat.messages.length>0)?
-                      groupsProvider.groups.groups[index].chat.messages.last.typeMessage:""
+                          :"${(value.groups.groups[index].chat.messages.length>0)?
+                      value.groups.groups[index].chat.messages.last.typeMessage:""
                       }"),
                      // "السلام عليكم ورحمة الله",
                       style: getLightStyle(
@@ -110,8 +125,8 @@ class GroupsView extends StatelessWidget {
                 )
                 ;
               },
-            );
-
+            ),
+    ));
           } else {
             return const Text('Empty data');
           }

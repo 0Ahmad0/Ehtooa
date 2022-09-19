@@ -22,15 +22,19 @@ class ListOfMemberView extends StatelessWidget {
   Widget build(BuildContext context) {
      final chatProvider = Provider.of<ChatProvider>(context);
      final homeProvider = Provider.of<HomeProvider>(context);
+     List listUsers=[chatProvider.group.idAmin];
+     listUsers.addAll(chatProvider.group.listUsers);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Memmbers"),
+        title: Text("Members"),
       ),
       body: ListView.builder(
             padding: EdgeInsets.all(AppPadding.p10),
-            itemCount: chatProvider.group.listUsers.length,//users.length + 3,
+            itemCount: listUsers.length,//users.length + 3,
             itemBuilder: (_,index){
-              return user(context, homeProvider, idUser: chatProvider.group.listUsers[index],typeUser: AppConstants.collectionPatient);
+              return user(context, homeProvider, idUser: listUsers[index],
+                  typeUser: (index==0)?AppConstants.collectionAdmin:AppConstants.collectionPatient,
+                  checkblock:(chatProvider.group.listBlockUsers.contains( listUsers[index]))?true:false);
               /**
                   Container(
                   margin: EdgeInsets.symmetric(vertical: AppMargin.m4),
@@ -175,7 +179,7 @@ class ListOfMemberView extends StatelessWidget {
 
     );
   }
-  user(context,homeProvider,{required String idUser,required String typeUser}){
+  user(context,homeProvider,{required String idUser,required String typeUser,required bool checkblock}){
     return Container(
       margin: EdgeInsets.symmetric(vertical: AppMargin.m4),
       padding: EdgeInsets.symmetric(
@@ -192,7 +196,9 @@ class ListOfMemberView extends StatelessWidget {
           height: Sizer.getW(context) * 0.1,
           imageUrl:
           // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-          "${AppConstants.photoProfilePatient}",
+          (typeUser.contains(AppConstants.collectionPatient))
+              ?"${AppConstants.photoProfilePatient}"
+              :"${AppConstants.photoProfileAdmin}",
           imageBuilder: (context, imageProvider) =>
               Container(
                 decoration: BoxDecoration(
@@ -231,7 +237,18 @@ class ListOfMemberView extends StatelessWidget {
               if (snapshot.hasData) {
                 // Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
                 //homeProvider.sessions=Sessions.fromJson(data['body']);
-                return Text("${snapshot.data}");
+                return Row(
+                  children: [
+                Text("${snapshot.data}"),
+                    SizedBox(width: Sizer.getW(context)*0.01,),
+                    (typeUser.contains(AppConstants.collectionPatient))?
+                     SizedBox():
+                    Icon(Icons.star),
+                    (!checkblock)?
+                    SizedBox():
+                    Icon(Icons.block),
+                  ],
+                );
               } else {
                 return const Text(
                     'Empty data');
@@ -244,7 +261,9 @@ class ListOfMemberView extends StatelessWidget {
           },
         ),
         ///subtitle: Text("users[index].name"),
-        trailing: InkWell(
+
+        trailing: (typeUser.contains(AppConstants.collectionPatient))?
+        InkWell(
             onTap: (){
               Get.defaultDialog(
                 confirm: Row(
@@ -310,7 +329,8 @@ class ListOfMemberView extends StatelessWidget {
                   color: ColorManager.white
               ),),
             )
-        ),
+        )
+        :SizedBox(),
       ),
     );
   }
