@@ -45,7 +45,7 @@ class User {
       required this.password,
         required this.typeUser,
         required this.photoUrl,
-         this.listUsedQuizzes=const <bool>[false,false,false,false],
+         required this.listUsedQuizzes,
         this.description=""});
   factory User.fromJson( json){
     return User(id: json['id'],

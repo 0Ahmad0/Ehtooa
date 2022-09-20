@@ -81,7 +81,8 @@ class _ChatViewState extends State<ChatView> {
                           phoneNumber: "0522325465",
                           password: "password",
                           typeUser: "typeUser",
-                          photoUrl: "photoUrl"
+                          photoUrl: "photoUrl",
+                          listUsedQuizzes: [false,false,false,false]
                       )
                     ],
                   )));
@@ -128,7 +129,7 @@ class _ChatViewState extends State<ChatView> {
                           phoneNumber: "0522325465",
                           password: "password",
                           typeUser: "typeUser",
-                          photoUrl: "photoUrl"
+                          photoUrl: "photoUrl", listUsedQuizzes: [false,false,false,false]
                       )
                     ],
                   )));
@@ -722,7 +723,7 @@ class _ChatViewState extends State<ChatView> {
       String url=await chatProvider.uploadImage(details.selectedFile.path);
       tempMessage.url=url;
       print("${tempMessage.toJson()}");
-     // await chatProvider.addMessage(context,idGroup: chatProvider.group.id,message: tempMessage);
+      await chatProvider.addMessage(context,idGroup: chatProvider.group.id,message: tempMessage);
       //setState1(() {});
     }
 

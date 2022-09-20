@@ -17,7 +17,7 @@ class ProfileProvider with ChangeNotifier{
   var email = TextEditingController(text: "Ahmad2001@gmail.com");
   bool nameIgnor = true;
   bool emailIgnor = true;
-  User user= User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser");
+  User user= User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser",listUsedQuizzes: [false,false,false,false]);
   PaySession paySession=PaySession(idUser: "", listSessionPay: [DateTime.now(),DateTime.now(),DateTime.now(),DateTime.now()]);
   updateUser({ required User user}){
 
@@ -47,7 +47,7 @@ class ProfileProvider with ChangeNotifier{
    logout(context)async{
      var result =await FirebaseFun.logout();
      if(result['status']){
-       user= User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser");
+       user= User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser",listUsedQuizzes: [false,false,false,false]);
        AppStorage.depose();
      }
      print(result);

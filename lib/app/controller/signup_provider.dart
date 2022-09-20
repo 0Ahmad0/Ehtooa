@@ -17,11 +17,11 @@ class SignupProvider with ChangeNotifier{
   final password = TextEditingController();
   final confirmPassword = TextEditingController();
   final keyForm = GlobalKey<FormState>();
-  models.User user= models.User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser");
+  models.User user= models.User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser",listUsedQuizzes: [false,false,false,false]);
    signup(context) async{
    var result =await FirebaseFun.signup(email: email.text, password: password.text);
    if(result['status']){
-     user= models.User(id: "",uid:result['body']['uid'], name: name.text, email: email.text, phoneNumber: phoneNumber.text, password: password.text,photoUrl: AppConstants.photoProfilePatient,typeUser: AppConstants.collectionPatient);
+     user= models.User(id: "",uid:result['body']['uid'], name: name.text, email: email.text, phoneNumber: phoneNumber.text, password: password.text,photoUrl: AppConstants.photoProfilePatient,typeUser: AppConstants.collectionPatient,listUsedQuizzes: [false,false,false,false]);
      result = await FirebaseFun.createUser(user: user);
      if(result['status']){
 
@@ -56,6 +56,7 @@ class SignupProvider with ChangeNotifier{
     var result =await FirebaseFun.signup(email: email.text, password: password.text);
     if(result['status']){
       user= models.User(id: "",uid:result['body']['uid'],
+          listUsedQuizzes: [false,false,false,false],
           name: name.text,
           email: email.text,
           phoneNumber: phoneNumber.text,
@@ -93,6 +94,7 @@ class SignupProvider with ChangeNotifier{
     var result =await FirebaseFun.signup(email: email.text, password: password.text);
     if(result['status']){
       user= models.User(id: "",uid:result['body']['uid'],
+          listUsedQuizzes: [false,false,false,false],
           name: name.text,
           email: email.text,
           phoneNumber: phoneNumber.text,

@@ -15,7 +15,7 @@ class LoginProvider with ChangeNotifier{
   final email = TextEditingController();
   final password = TextEditingController();
   final keyForm = GlobalKey<FormState>();
-  models.User user= models.User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser");
+  models.User user= models.User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser",listUsedQuizzes: [false,false,false,false]);
    login(context) async{
    var resultUser =await FirebaseFun.login(email: email.text, password: password.text);
    var result;
