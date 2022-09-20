@@ -45,6 +45,7 @@ class CreateSessionsView extends StatelessWidget {
             Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ListSessionsView(
               sessions: [
                 InteractiveSessions(
+                  idGroup: "idGroup",
                     name: "name",
                     id_link: "id_link",
                     isSold: true,

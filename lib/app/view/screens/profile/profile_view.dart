@@ -296,6 +296,7 @@ class _ProfileViewState extends State<ProfileView> {
                             return ButtonApp(
                                 text: tr(LocaleKeys.edit),
                                 onTap: () async {
+                                  if(image!=null)
                                   await profileProvider.uploadImage(context, image!);
                                   Const.LOADIG(context);
                                   await profileProvider.editUser(context);

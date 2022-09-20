@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/controller/utils/firebase.dart';
 import 'package:ehtooa/app/model/utils/local/storage.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
@@ -19,7 +20,7 @@ class NotificationProvider with ChangeNotifier{
   models.Sessions sessions=models.Sessions(sessions: []);
   List<InteractiveSessions> sessionsToUser=[];
   String idUser="";
-  fetchSessionsToUser(context,{required List groups,required PaySession paySession}) async {
+  fetchSessionsToUser(context,{required List groups,required PaySession paySession,required idUser}) async {
     List idGroups=[];
     for(models.Group group in groups){
       idGroups.add(group.id);
@@ -30,23 +31,24 @@ class NotificationProvider with ChangeNotifier{
     if(result['status']){
       sessions=models.Sessions.fromJson(result['body']);
       sessionsToUser=[];
-      await processessionsToUser(context, paySession: paySession);
+      await processessionsToUser(context,groupsUser:  groups, paySession: paySession);
     }
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
   
-  processessionsToUser(context, {required PaySession paySession}){
+  processessionsToUser(context, {required PaySession paySession,required List groupsUser}){
     for(models.Session session in sessions.sessions){
       int indexListPaySession=fetchIndexFromListPaySession(idGroup: session.idGroup);
       bool isSold=false;
-      if(paySession.listCheckSessionPay[indexListPaySession]){
-        if(FirebaseFun.compareDateWithDateNowToDay(dateTime: paySession.listSessionPay[indexListPaySession])<=30){
+      ///if(paySession.listCheckSessionPay[indexListPaySession]){
+        if(HomeProvider().checkUserPay(groupsUser, session.idGroup, idUser)){
           isSold=true;
         }
-      }
+     /// }
       if(session.date.compareTo(DateTime.now())<=0){
         sessionsToUser.add( InteractiveSessions(
+          idGroup: session.idGroup,
             name: session.name,
             id_link:session.sessionUrl,
             doctorName: session.listDoctor[0],

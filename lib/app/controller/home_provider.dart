@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../model/models.dart' as models;
 import '../model/models.dart';
 import '../model/utils/const.dart';
@@ -36,7 +37,7 @@ class HomeProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
-  fetchSessionsToUser(context,{required List groups,required PaySession paySession}) async {
+  fetchSessionsToUser(context,{required List groups,required PaySession paySession,required String idUser}) async {
     List idGroups=[];
     for(models.Group group in groups){
       idGroups.add(group.id);
@@ -50,7 +51,7 @@ class HomeProvider with ChangeNotifier{
         sessions.sessions =await searchListSession(context, search: search, sessions: sessions.sessions);
       }
       sessionsToUser=[];
-      await processessionsToUser(context, paySession: paySession);
+      await processessionsToUser(context,groupsUser: groups, paySession: paySession);
     }
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
@@ -78,16 +79,19 @@ class HomeProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;*/
   }
-  processessionsToUser(context, {required PaySession paySession}){
+  processessionsToUser(context, {required List groupsUser,required PaySession paySession}){
+    sessionsToUser=[];
     for(models.Session session in sessions.sessions){
       int indexListPaySession=fetchIndexFromListPaySession(idGroup: session.idGroup);
       bool isSold=false;
-      if(paySession.listCheckSessionPay[indexListPaySession]){
-        if(FirebaseFun.compareDateWithDateNowToDay(dateTime: paySession.listSessionPay[indexListPaySession])<=30){
+      ///if(paySession.listCheckSessionPay[indexListPaySession]){
+        ///if(FirebaseFun.compareDateWithDateNowToDay(dateTime: paySession.listSessionPay[indexListPaySession])<=30){
+        if(checkUserPay(groupsUser, session.idGroup, idUser)){
           isSold=true;
-        }
-      }
+       }
+          /// }
       sessionsToUser.add( InteractiveSessions(
+        idGroup: session.idGroup,
           name: session.name,
           id_link:session.sessionUrl,
           doctorName: session.listDoctor[0],
@@ -105,8 +109,6 @@ class HomeProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
-
-
  int fetchIndexFromListPaySession({required String idGroup}){
     switch(idGroup){
       case "YMfMrXosR8VF1xmbw1uU":
@@ -118,7 +120,6 @@ class HomeProvider with ChangeNotifier{
     }
     return 2;
  }
-
   int fetchIndexGroup({required String idGroup}){
     switch(idGroup){
       case "YMfMrXosR8VF1xmbw1uU":
@@ -153,6 +154,7 @@ Future<List<models.Session>> searchListSession(context,
     }
     return tempSessions;
 }
+
   List<models.User> searchListDoctors(context,
       {required String search, required List<models.User> users})  {
     List<models.User> tempUsers=[];
@@ -164,7 +166,46 @@ Future<List<models.Session>> searchListSession(context,
     return tempUsers;
   }
 
+  bool checkUserPay(List groupsUser,String idGroup,String idUser){
+    Map listUserPay={};
+   /// print("idgroup ${idGroup}");
+    groupsUser.forEach((element) {
+      if(idGroup.contains(element.id)){
+        listUserPay=element.listUserPay;
+        ///print("listUserPay ${listUserPay}");
+      }
 
+    });
+   /// print("listUserPay ${idUser}");
+    if(listUserPay.containsKey(idUser)){
+      return checkUserPayTimestamp(timestamp: listUserPay[idUser]);
+    }else
+      return false;
+  }
+  bool checkUserPayTimestamp({required Timestamp timestamp}){
+    double secondInDay=60*60*24;
+    double currentNumberDaysPayment=(Timestamp.now().seconds-timestamp.seconds)/secondInDay;
+    if(currentNumberDaysPayment>0&&currentNumberDaysPayment<=30)
+      return true;
+    else
+      return false;
+
+    /*print("listUserPay : ${timestamp.seconds/secondInDay}");
+    print("listUserPay : ${Timestamp.now().seconds/secondInDay}");
+    DateTime dateTime =DateTime.now();
+    DateTime tempDateTime=DateTime(2022,9,29,23);
+    print("listUserPay : ${}");*/
+  }
+Future<void> goToUrl(context,String idLink) async {
+  var urllaunchable = await canLaunchUrl(Uri.parse(idLink)); //canLaunch is from url_launcher package
+  if(urllaunchable){
+    Const.LOADIG(context);
+    await launchUrl(Uri.parse(idLink));
+    Navigator.of(context).pop();//launch is from url_launcher package to launch URL
+  }else{
+    Const.TOAST(context,textToast: FirebaseFun.findTextToast("URL can't be launched."));
+  }
+}
 
   onError(error){
     print(false);

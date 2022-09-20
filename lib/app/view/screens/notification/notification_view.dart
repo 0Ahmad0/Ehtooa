@@ -15,6 +15,7 @@ import '../../../controller/groups_provider.dart';
 import '../../../controller/home_provider.dart';
 import '../../../controller/notification_provider.dart';
 import '../../../controller/profile_provider.dart';
+import '../../../controller/utils/firebase.dart';
 class NotificationView extends StatelessWidget {
   const NotificationView({Key? key}) : super(key: key);
 
@@ -28,7 +29,8 @@ class NotificationView extends StatelessWidget {
         child: FutureBuilder(
           future: notificationProvider.fetchSessionsToUser(
               context, groups: groupsProvider.groups.groups,
-              paySession: profileProvider.paySession),
+              paySession: profileProvider.paySession,
+          idUser: profileProvider.user.id),
           builder: (context, snapshot,) {
             //  print(snapshot.error);
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -50,11 +52,11 @@ class NotificationView extends StatelessWidget {
                         itemCount: notificationProvider.sessionsToUser.length,
                         itemBuilder: (_, index) {
                           return InkWell(
-                            onTap: (){
+                            onTap: () async {
                               if(notificationProvider.sessionsToUser[index].isSold){
-
+                                await homeProvider.goToUrl(context,notificationProvider.sessionsToUser[index].id_link);
                               }else{
-                                Const.TOAST(context,textToast: "This session not pay ");
+                                Const.TOAST(context,textToast: FirebaseFun.findTextToast("This session not pay"));
                               }
                             },
                             child: FadeInRightBig(

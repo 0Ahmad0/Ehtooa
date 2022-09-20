@@ -63,6 +63,7 @@ dependencies:
   flutter_profile_picture: ^2.0.0
   video_thumbnail: ^0.5.3
   firebase_storage: ^8.0.3
+  url_launcher: ^6.0.3
 
 
 

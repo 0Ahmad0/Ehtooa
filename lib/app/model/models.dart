@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chat_composer/utils/utils.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -121,12 +122,14 @@ class Answer {
 class InteractiveSessions {
   String name;
   String id_link;
+  String idGroup;
   String doctorName;
   String price;
   bool isSold;
 
   InteractiveSessions({
     required this.name,
+    required this.idGroup,
     required this.id_link,
     required this.isSold,
     required this.doctorName,
@@ -282,6 +285,7 @@ class Group {
   List<String> listBlockUsers;
   String photoUrl;
   DateTime date;
+  Map<String,dynamic> listUserPay;
 
   Group(
       {this.id="",
@@ -293,6 +297,7 @@ class Group {
         required this.photoUrl,
         required this.listUsers,
         required this.listBlockUsers,
+         this.listUserPay=const {},
         required this.date});
   factory Group.fromJson( json){
     List<String> tempUsers = [];
@@ -309,6 +314,7 @@ class Group {
         sort: json["sort"],
         nameAr: json["nameAr"],
         nameEn: json["nameEn"],
+        listUserPay: json["listUserPay"],
         chat: Chat.fromJson(json["chat"]),
         photoUrl: json["photoUrl"],
         listUsers: tempUsers,//json["listUsers"],
@@ -324,6 +330,7 @@ class Group {
     for(String user in json["listBlockUsers"]){
       tempBlockUsers.add(user);
     }
+    Map tempMap=json["listUserPay"];
     return Group(
         idAmin: json["idAmin"],
         sort: json["sort"],
@@ -331,6 +338,7 @@ class Group {
         nameEn: json["nameEn"],
         chat: Chat(id: "", messages: []), //Chat.fromJson(json["chat"]),
         photoUrl: json["photoUrl"],
+        listUserPay: json["listUserPay"],
         listUsers: tempUsers,//json["listUsers"],
         listBlockUsers: tempBlockUsers,//json["listBlockUsers"],
         date: json["date"].toDate());
@@ -353,6 +361,7 @@ class Group {
     'photoUrl':photoUrl,
     'listUsers':tempUsers,//listUsers,
     'listBlockUsers':tempBlockUsers,//listBlockUsers,
+    'listUserPay':listUserPay,//listBlockUsers,
     'date':date,
   };
 }
@@ -374,6 +383,7 @@ class Group {
       'photoUrl':photoUrl,
       'listUsers':tempUsers,//listUsers,
       'listBlockUsers':tempBlockUsers,//listBlockUsers,
+      'listUserPay':listUserPay,//listBlockUsers,
       'date':date,
     };
   }
@@ -669,7 +679,7 @@ class Notification {
 
 enum ChatMessageType{text,audio,image,video}
 enum MessageStatus{not_sent,not_view,view}
-enum UpdateGroupType{update,change_name,add_user,block_user,delete_user}
+enum UpdateGroupType{update,change_name,add_user,block_user,delete_user,PaySessions}
 /*
 
 flutter pub run easy_localization:generate -S "assets/translations/" -O "lib/translations"

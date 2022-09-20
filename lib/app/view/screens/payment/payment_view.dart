@@ -1,5 +1,10 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ehtooa/app/controller/groups_provider.dart';
+import 'package:ehtooa/app/controller/payment_provider.dart';
+import 'package:ehtooa/app/controller/profile_provider.dart';
+import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/consts_manager.dart';
@@ -11,27 +16,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:provider/provider.dart';
 import '../../../model/utils/sizer.dart';
 import '../../resources/color_manager.dart';
 import '../../widgets/custome_button.dart';
 class PaymentView extends StatelessWidget {
-  final formKey = GlobalKey<FormState>();
-  final cardNumber = TextEditingController();
-  final dateCard = TextEditingController(text: "${
-      DateFormat.yM().format(DateTime.now())
-  }");
-  final cvv = TextEditingController();
-  final name = TextEditingController();
-  DateTime _selectedDate = DateTime.now();
+  late PaymentProvider paymentProvider;
   @override
   Widget build(BuildContext context) {
+    final paymentProvider = Provider.of<PaymentProvider>(context);
+    final  profileProvider= Provider.of<ProfileProvider>(context);
+    final  groupsProvider= Provider.of<GroupsProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(tr(LocaleKeys.payment)),
       ),
       body: Form(
-        key: formKey,
+        key: paymentProvider.formKey,
         child: Center(
           child: SingleChildScrollView(
             child: Column(
@@ -55,7 +56,7 @@ class PaymentView extends StatelessWidget {
                     children: [
                       CustomTextFiled(
                         maxLength: null,
-                          controller: cardNumber,
+                          controller: paymentProvider.cardNumber,
                           validator: (String? val){
                             if(val!.trim().isEmpty){
                               return tr(LocaleKeys.field_required);
@@ -75,7 +76,7 @@ class PaymentView extends StatelessWidget {
                           Expanded(
                             child: CustomTextFiled(
                                 maxLength: null,
-                                controller: cvv,
+                                controller: paymentProvider.cvv,
                                 textInputType: TextInputType.number,
                                 validator: (String? val){
                                   if(val!.trim().isEmpty){
@@ -99,7 +100,7 @@ class PaymentView extends StatelessWidget {
                               },
                               readOnly: true,
                                 maxLength: null,
-                                controller: dateCard,
+                                controller: paymentProvider.dateCard,
                                 validator: (String? val){
                                   if(val!.trim().isEmpty){
                                     return tr(LocaleKeys.field_required);
@@ -120,7 +121,7 @@ class PaymentView extends StatelessWidget {
                       CustomTextFiled(
                           maxLength: null,
                           textInputAction: TextInputAction.done,
-                          controller: name,
+                          controller: paymentProvider.name,
                           validator: (String? val){
                             if(val!.trim().isEmpty){
                               return tr(LocaleKeys.field_required);
@@ -135,42 +136,73 @@ class PaymentView extends StatelessWidget {
                       const SizedBox(height: AppSize.s10,),
                       ButtonApp(
                         text: tr(LocaleKeys.payment),
-                        onTap: (){
+                        onTap: () async {
                           Const.LOADIG(context);
-                          Timer(
-                            Duration(seconds: AppConstants.splashDelay - 4),
-                              (){
-                              Navigator.pop(context);
-                              Get.defaultDialog(
-                                radius: AppSize.s14,
-                                title: tr(LocaleKeys.done_payment),
-                                titleStyle: getBoldStyle(
-                                    color: Theme.of(context).textTheme.bodyText1!.color,
-                                  fontSize: Sizer.getW(context) /20
-                                ),
-                                content: SvgPicture.asset(
-                                    ImagesAssets.paymentDone,
-                                  width: Sizer.getW(context)*0.35,
-                                  height: Sizer.getW(context)*0.35,
-                                ),
-                                confirm:  TextButton(
-                                    style: TextButton.styleFrom(
-                                        backgroundColor: Theme.of(context).primaryColor,
-                                      minimumSize: Size(double.infinity, 60),
-
-                                    ),
-                                    onPressed: (){
-                                      Navigator.pop(context);
-                                    }, child: Text(
-                                  tr(LocaleKeys.ok),
-                                  style: getLightStyle(
-                                      color: ColorManager.white,
-                                      fontSize: Sizer.getW(context) / 26
-                                  ),
-                                ))
-                              );
+                          late Group group;
+                          bool isPayOld=false;
+                          Timestamp datePayOld=Timestamp.now();
+                          groupsProvider.groups.groups.forEach((element) {
+                            if(element.id.contains(paymentProvider.idGroup)){
+                              group=element;
+                              if(group.listUserPay.containsKey(profileProvider.user.id)){
+                                 isPayOld=true;
+                                 datePayOld=group.listUserPay[profileProvider.user.id];
                               }
-                          );
+                              group.listUserPay[profileProvider.user.id]=Timestamp.now();
+                            }
+                          });
+                          ///print("id group  ${group.toJson()} ${paymentProvider.idGroup}");
+                          var result =await paymentProvider.payUser(context, group);
+                          Navigator.pop(context);
+                         if(result['status']){
+                            Timer(
+                                Duration(seconds: AppConstants.splashDelay - AppConstants.splashDelay),
+                                    (){
+                                  paymentProvider.setStat3((){});
+                                  /// Navigator.pop(context);
+                                  Get.defaultDialog(
+                                      radius: AppSize.s14,
+                                      title: tr(LocaleKeys.done_payment),
+                                      titleStyle: getBoldStyle(
+                                          color: Theme.of(context).textTheme.bodyText1!.color,
+                                          fontSize: Sizer.getW(context) /20
+                                      ),
+                                      content: SvgPicture.asset(
+                                        ImagesAssets.paymentDone,
+                                        width: Sizer.getW(context)*0.35,
+                                        height: Sizer.getW(context)*0.35,
+                                      ),
+                                      confirm:  TextButton(
+                                          style: TextButton.styleFrom(
+                                            backgroundColor: Theme.of(context).primaryColor,
+                                            minimumSize: Size(double.infinity, 60),
+
+                                          ),
+                                          onPressed: (){
+                                            Navigator.pop(context);
+                                            Navigator.pop(context);
+                                          }, child: Text(
+                                        tr(LocaleKeys.ok),
+                                        style: getLightStyle(
+                                            color: ColorManager.white,
+                                            fontSize: Sizer.getW(context) / 26
+                                        ),
+                                      ))
+                                  );
+
+                                }
+                            );
+                          }
+                         else{
+                           if(isPayOld){
+                             group.listUserPay[profileProvider.user.id]=datePayOld;
+                           }else{
+                             group.listUserPay.remove(profileProvider.user.id);
+                           }
+
+                         }
+
+                        //  Navigator.pop(context);
                         },
                       )
                     ],
@@ -189,17 +221,17 @@ class PaymentView extends StatelessWidget {
         return child!;
       },
       context: context,
-      initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
+      initialDate: paymentProvider.selectedDate != null ? paymentProvider.selectedDate : DateTime.now(),
       firstDate: DateTime.now(),
       lastDate: DateTime(2027),
     );
 
     if (newSelectedDate != null) {
-      _selectedDate = newSelectedDate;
-      dateCard
-        ..text = DateFormat.yM().format(_selectedDate)
+      paymentProvider.selectedDate = newSelectedDate;
+      paymentProvider.dateCard
+        ..text = DateFormat.yM().format(paymentProvider.selectedDate)
         ..selection = TextSelection.fromPosition(TextPosition(
-            offset: dateCard.text.length,
+            offset: paymentProvider.dateCard.text.length,
             affinity: TextAffinity.upstream)
         );
     }
