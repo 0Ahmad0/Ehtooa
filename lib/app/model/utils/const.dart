@@ -124,6 +124,62 @@ class Const{
       );
     }
 
+  static SHOWDELETEDIALOOG(BuildContext context){
+    Get.dialog(
+
+      Center(
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            margin: const EdgeInsets.symmetric(
+                horizontal: AppMargin.m10,
+                vertical: AppMargin.m20),
+            padding: EdgeInsets.symmetric(
+                horizontal: AppPadding.p20,
+                vertical: AppPadding.p10),
+            width: Sizer.getW(context),
+            decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius:
+                BorderRadius.circular(AppSize.s14)),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const SizedBox(height: AppSize.s30,),
+                Text(
+                  tr(LocaleKeys.delete),
+                  style: getRegularStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: Sizer.getW(context) * 0.045
+                  ),
+                ),
+                const SizedBox(height: AppSize.s40,),
+                Row(
+                  children: [
+                    ButtonApp(
+                      text: tr(LocaleKeys.ok),
+                      onTap: (){
+                        Navigator.pop(context);
+                        Const.TOAST(context,textToast: tr(LocaleKeys.rate));
+                      },
+                    ),
+                    ButtonApp(
+                      text: tr(LocaleKeys.no),
+                      onTap: (){
+                        Navigator.pop(context);
+                        Const.TOAST(context,textToast: tr(LocaleKeys.rate));
+                      },
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
     static SHOWLOADINGINDECATOR(){
       return Center(
         child: CircularProgressIndicator(

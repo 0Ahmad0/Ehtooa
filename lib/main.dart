@@ -22,7 +22,7 @@ import 'app/controller/groups_provider.dart';
 import 'app/controller/home_provider.dart';
 import 'app/controller/list_sessions_provider.dart';
 import 'app/controller/notification_provider.dart';
-import 'app/controller/utils/chat_provider.dart';
+import 'app/controller/chat_provider.dart';
 import 'app/controller/utils/create_environment_provider.dart';
 import 'app/controller/login_provider.dart';
 import 'app/controller/profile_provider.dart';

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/controller/groups_provider.dart';
-import 'package:ehtooa/app/controller/utils/chat_provider.dart';
+import 'package:ehtooa/app/controller/chat_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';

@@ -154,8 +154,10 @@ class Doctor {
 //Message
 class Message {
   String id;
+  bool checkSend;
   int index;
   String textMessage;
+  String url;
   String typeMessage;
   String senderId;
   String replayId;
@@ -164,7 +166,9 @@ class Message {
   Message(
       {this.id="",
       this.index=-1,
+      this.checkSend=true,
       required this.textMessage,
+       this.url="",
         required this.replayId,
       required this.typeMessage,
       required this.senderId,
@@ -175,7 +179,12 @@ class Message {
     for(String user in json["deleteUserMessage"]){
       tempDeleteUserMessage.add(user);
     }
+    String tempUrl="";
+    if(!json["typeMessage"].contains(ChatMessageType.text.name)){
+      tempUrl=json["url"];
+    }
     return Message(
+      url: tempUrl,
         textMessage: json["textMessage"],
         typeMessage: json["typeMessage"],
         sendingTime: json["sendingTime"].toDate(),
@@ -195,6 +204,7 @@ class Message {
       'deleteUserMessage': tempDeleteUserMessage,
       'senderId': senderId,
       'replayId': replayId,
+      'url': url,
     };
   }
 }
@@ -231,6 +241,20 @@ class Chat {
         messages: tempMessages//json["messages"],
       //  date: json["date"]
           );
+  }
+  factory Chat.fromJsonWithFilterIdUser( json,{required String idUser}){
+    List<Message> tempMessages = [];
+    for(int i=1;i<json['messages'].length;i++){
+      Message tempMessage=Message.fromJson(json['messages'][i]);
+      tempMessage.id=json['messages'][i].id;
+      if(!tempMessage.deleteUserMessage.contains(idUser))
+         tempMessages.add(tempMessage);
+    }
+    return Chat(
+        id: json['id'],
+        messages: tempMessages//json["messages"],
+      //  date: json["date"]
+    );
   }
   Map<String,dynamic> toJson(){
     List<Map<String,dynamic>> tempMessages = [];
@@ -643,7 +667,7 @@ class Notification {
 }
 
 
-enum ChatMessageType{text,audio,image,vedio}
+enum ChatMessageType{text,audio,image,video}
 enum MessageStatus{not_sent,not_view,view}
 enum UpdateGroupType{update,change_name,add_user,block_user,delete_user}
 /*

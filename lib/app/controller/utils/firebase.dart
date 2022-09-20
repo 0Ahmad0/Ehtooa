@@ -104,7 +104,7 @@ class FirebaseFun{
         .get()
         .then((onValueFetchUserId))
         .catchError(onError);
-
+  //  print("${id} ${result}");
     return result;
   }
   static createGroup( {required model.Group group}) async {
@@ -199,6 +199,17 @@ class FirebaseFun{
     final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
         .doc(id)
         .collection(AppConstants.collectionChat)
+        .orderBy("sendingTime")
+        .get()
+        .then((onValueFetchChat))
+        .catchError(onError);
+    return result;
+  }
+  static fetchChatIdUser( {required String id,required String idUser})  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
+        .doc(id)
+        .collection(AppConstants.collectionChat)
+        .where("deleteUserMessage",arrayContains: idUser)
         .orderBy("sendingTime")
         .get()
         .then((onValueFetchChat))

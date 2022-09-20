@@ -58,6 +58,7 @@ class HomeProvider with ChangeNotifier{
 
   fetchNameUser(context,{required String idUser}) async{
   //  print("id ${idUser} user ${cacheUser[idUser]}");
+    //print("gggggggggggggggggggggggggg${cacheUser.containsKey(idUser)} ${cacheUser[idUser]}");
     if(cacheUser.containsKey(idUser)) return cacheUser[idUser];
     var result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionPatient);
     if(result['status']&&result['body']==null){
@@ -70,6 +71,7 @@ class HomeProvider with ChangeNotifier{
     }
 
       cacheUser[idUser]=(result['status'])?models.User.fromJson(result['body']).name:"user";
+  //  print("gggggggggggggggggggggggggg ${cacheUser[idUser]} ${cacheUser.containsKey(idUser)}");
       return cacheUser[idUser];
 
    /* print(result);

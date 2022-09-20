@@ -4,7 +4,7 @@ import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
-import '../../../controller/utils/chat_provider.dart';
+import '../../../controller/chat_provider.dart';
 import '../../../controller/utils/firebase.dart';
 import '../../../model/models.dart';
 import '../../../model/utils/const.dart';
