@@ -26,7 +26,7 @@ class ListOfMemberView extends StatelessWidget {
      listUsers.addAll(chatProvider.group.listUsers);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Members"),
+        title: Text("kk"),
       ),
       body: ListView.builder(
             padding: EdgeInsets.all(AppPadding.p10),

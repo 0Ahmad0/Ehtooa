@@ -252,7 +252,10 @@ class CodegenLoader extends AssetLoader{
   "confirm_delete_user": "هل تريد حقا القبام بحذف المستخدم؟ ",
   "del": "حذف",
   "add_member": "إضافة أعضاء",
-  "add": "إضافة"
+  "add": "إضافة",
+  "member": "الأعضاء",
+  "dle_for_me": "الحذف لدي",
+  "dle_for_all": "الحذف لدى الجميع"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Doctor name",
@@ -491,7 +494,10 @@ static const Map<String,dynamic> en = {
   "confirm_delete_user": "Do you really want to delete the user?",
   "del": "Delete",
   "add_member": "Add members",
-  "add": "Add"
+  "add": "Add",
+  "member": "Members",
+  "dle_for_me": "Delete for me",
+  "dle_for_all": "Delete for all"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

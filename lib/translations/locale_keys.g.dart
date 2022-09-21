@@ -239,5 +239,8 @@ abstract class  LocaleKeys {
   static const del = 'del';
   static const add_member = 'add_member';
   static const add = 'add';
+  static const member = 'member';
+  static const dle_for_me = 'dle_for_me';
+  static const dle_for_all = 'dle_for_all';
 
 }

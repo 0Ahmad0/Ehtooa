@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
@@ -50,7 +51,8 @@ class _ChatViewState extends State<ChatView> {
   List<Message> listSendMessage = [];
   TextEditingController con = TextEditingController();
   final foucsNode = FocusNode();
- var setState3;
+  var setState3;
+
   //String? replayMessage;
   String? replayIdMessage = "";
   late ChatProvider chatProvider;
@@ -66,6 +68,7 @@ class _ChatViewState extends State<ChatView> {
     chatProvider = Provider.of<ChatProvider>(context);
     homeProvider = Provider.of<HomeProvider>(context);
     widthImageChat = Sizer.getW(context) * 0.20;
+
     ///print(chatProvider.group.nameAr);
     return Scaffold(
       appBar: AppBar(
@@ -121,10 +124,8 @@ class _ChatViewState extends State<ChatView> {
               "${chatProvider.group.listUsers.length + 1} Member" /*"35 Member"*/),
           trailing: IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (ctx) => GlobalMemberView()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (ctx) => GlobalMemberView()));
               },
               icon: Icon(Icons.person_add)),
         ),
@@ -398,172 +399,88 @@ class _ChatViewState extends State<ChatView> {
                         }, idUser: profileProvider.user.id);
 
                         convertListMessagesToListUsers(chatProvider.group.chat);
-                            convertListMessagesToListWidget(chatProvider.group.chat);
-                          return StatefulBuilder(builder: (_, setStateChat) {
-                            setState3=setStateChat;
-                            convertListSendMessagesToListWidget(listSendMessage);
-                            // Navigator.of(context).pop();
-                            return SingleChildScrollView(
-                              reverse: true,
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  physics: NeverScrollableScrollPhysics(),
-                                  padding: EdgeInsets.all(
-                                    AppPadding.p10,
-                                  ),
-                                  itemCount:
+                        convertListMessagesToListWidget(
+                            chatProvider.group.chat);
+                        return StatefulBuilder(builder: (_, setStateChat) {
+                          setState3 = setStateChat;
+                          convertListSendMessagesToListWidget(listSendMessage);
+                          // Navigator.of(context).pop();
+                          return SingleChildScrollView(
+                            reverse: true,
+                            child: ListView.builder(
+                                shrinkWrap: true,
+                                physics: NeverScrollableScrollPhysics(),
+                                padding: EdgeInsets.all(
+                                  AppPadding.p10,
+                                ),
+                                itemCount:
+                                    chatProvider.group.chat.messages.length +
+                                        listSendMessage.length,
 
-                                  chatProvider.group.chat.messages.length+listSendMessage.length,
-                                  ///list.length,
-                                  itemBuilder: (_, pos) {
-                                    //   chatProvider.group.chat.messages[pos].index = pos;
-                                    return
+                                ///list.length,
+                                itemBuilder: (_, pos) {
+                                  //   chatProvider.group.chat.messages[pos].index = pos;
+                                  return
 
                                       ///BuildMessageShape(isMe: true, child: Text("${chatProvider.group.chat.messages[pos].textMessage}"));
                                       list[pos];
-                                    // return ListTile(title: Text(list[pos]));
-                                  }),
-                            );
-                          });
+                                  // return ListTile(title: Text(list[pos]));
+                                }),
+                          );
+                        });
 
-                     /// }));
-                        } else {
-                          return const Text('Empty data');
-                        }
+                        /// }));
                       } else {
-                        return Text('State: ${snapshot.connectionState}');
+                        return const Text('Empty data');
                       }
-                    }),
-                /**
-                    ListView.builder(
-                    padding: EdgeInsets.all(
-                    AppPadding.p10,
-                    ),
-                    itemCount: list.length,
-                    itemBuilder: (_, pos) {
-                    return list[pos];
-                    // return ListTile(title: Text(list[pos]));
-                    });
-                 **/
-              ),
+                    } else {
+                      return Text('State: ${snapshot.connectionState}');
+                    }
+                  }),
+              /**
+                  ListView.builder(
+                  padding: EdgeInsets.all(
+                  AppPadding.p10,
+                  ),
+                  itemCount: list.length,
+                  itemBuilder: (_, pos) {
+                  return list[pos];
+                  // return ListTile(title: Text(list[pos]));
+                  });
+               **/
             ),
-            ChangeNotifierProvider<ChatProvider>.value(
-                value: chatProvider,
-                child: Consumer<ChatProvider>(
-                  builder: (context, value, child) =>
+          ),
+          ChangeNotifierProvider<ChatProvider>.value(
+              value: chatProvider,
+              child: Consumer<ChatProvider>(
+                builder: (context, value, child) =>
 
                     // print("chat replay massege${value.replayMessage}");
                     //  setStateChat=setState1;
                     Column(
                   children: [
                     if (value.isReplay) buildReplay(),
-                    ChatComposer(
-                      borderRadius: value.isReplay
-                          ? BorderRadius.vertical(
-                              bottom: Radius.circular(AppSize.s8))
-                          : BorderRadius.circular(AppSize.s8),
-                      focusNode: foucsNode,
-                      textFieldDecoration: InputDecoration(
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                      ),
-                      textStyle: getRegularStyle(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: Sizer.getW(context) / 30),
-                      controller: con,
-                      onReceiveText: (str) async {
-                        //  print("gggg${str}");
-                        ///   setState1(() async {
-                        // print("chat lists : ${list.length}");
-                        Message tempMessage = Message(
-                            textMessage: str.toString(),
-                            replayId: "",
-                            typeMessage: "text",
-                            senderId: profileProvider.user.id,
-                            deleteUserMessage: [],
-                            sendingTime: DateTime.now(),
-                            checkSend: false);
-                        value.getReplayMessage();
-                        if (value.isReplay) {
-                          tempMessage.replayId = value.replayIdMessage;
-                          print(value.replayIdMessage);
-                          list.add(SwipeTo(
-                              onRightSwipe: () {
-                                print(str);
-
-                                /// value.replayMessage = str;
-                                foucsNode.requestFocus();
-                                chatProvider.changeReplayMessage(
-                                    replayMessage: str);
-
-                                // setState1(() {});
-                              },
-                              child: BuildMessageShape(
-                                //isMe: true,
-                                message: tempMessage,
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.start,
-                                  children: [
-                                    Container(
-                                      height: Sizer.getW(context) * 0.15,
-                                      padding: EdgeInsets.all(AppPadding.p8),
-                                      decoration: BoxDecoration(
-                                        color: ColorManager.lightGray
-                                            .withOpacity(.5),
-                                        borderRadius:
-                                            BorderRadius.circular(AppSize.s8),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          VerticalDivider(
-                                            thickness: AppSize.s4,
-                                            color: Theme.of(context)
-                                                .primaryColor
-                                                .withOpacity(.5),
-                                          ),
-                                          Flexible(
-                                            child: Column(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  ("${(homeProvider.cacheUser.containsKey(value.messageReplay.senderId) ? homeProvider.cacheUser[value.messageReplay.senderId] : "")}"),
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                ),
-                                                SizedBox(
-                                                  height:
-                                                      Sizer.getW(context) *
-                                                          0.01,
-                                                ),
-                                                Text(
-                                                  value.messageReplay
-                                                      .textMessage,
-                                                )
-                                              ],
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(con.text),
-                                    )
-                                  ],
-                                ),
-                              )));
-
-                          /// value.replayMessage = null;
-                          /// chatProvider.replayIdMessage="";
-                          ///   chatProvider.changeReplayMessage(replayMessage: null);
-                          ///setState1(() {});
-                        } else {
+                    Directionality(
+                      textDirection: ui.TextDirection.ltr,
+                      child: ChatComposer(
+                        borderRadius: value.isReplay
+                            ? BorderRadius.vertical(
+                                bottom: Radius.circular(AppSize.s8))
+                            : BorderRadius.circular(AppSize.s8),
+                        focusNode: foucsNode,
+                        textFieldDecoration: InputDecoration(
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                        ),
+                        textStyle: getRegularStyle(
+                            color: Theme.of(context).textTheme.bodyText1!.color,
+                            fontSize: Sizer.getW(context) / 30),
+                        controller: con,
+                        onReceiveText: (str) async {
+                          //  print("gggg${str}");
+                          ///   setState1(() async {
+                          // print("chat lists : ${list.length}");
                           Message tempMessage = Message(
                               textMessage: str.toString(),
                               replayId: "",
@@ -572,123 +489,210 @@ class _ChatViewState extends State<ChatView> {
                               deleteUserMessage: [],
                               sendingTime: DateTime.now(),
                               checkSend: false);
-                          list.add(SwipeTo(
-                              onRightSwipe: () {
-                                print(str);
+                          value.getReplayMessage();
+                          if (value.isReplay) {
+                            tempMessage.replayId = value.replayIdMessage;
+                            print(value.replayIdMessage);
+                            list.add(SwipeTo(
+                                onRightSwipe: () {
+                                  print(str);
 
-                                ///value.replayMessage = str;
-                                foucsNode.requestFocus();
-                                chatProvider.changeReplayMessage(
-                                    replayMessage: str);
+                                  /// value.replayMessage = str;
+                                  foucsNode.requestFocus();
+                                  chatProvider.changeReplayMessage(
+                                      replayMessage: str);
 
-                                /// setState1(() {});
-                              },
-                              child: BuildMessageShape(
-                                //    isMe: false,
-                                message: tempMessage,
-
-                                child: Row(
-                                  children: [
-                                    Text(str.toString()),
-                                  ],
-                                ),
-                              )));
-                        }
-                        print("${tempMessage.toJson()}");
-
-                        ///toDo هنا لا يختفي الرسالة حتا تتم ارسالها
-                        ///في حال اردت التغير قم بوضع السطر الاول في الاخر
-                        con.text = '';
-                        chatProvider.replayIdMessage = "";
-                        chatProvider.changeReplayMessage(replayMessage: null);
-                        await value.addMessage(context,
-                            idGroup: chatProvider.group.id,
-                            message: tempMessage);
-                        //chatProvider.replayIdMessage = "";
-                        //chatProvider.changeReplayMessage(replayMessage: null);
-
-
-
-                        ///  });
-                      },
-                      onRecordEnd: (path) {
-                        ///  setState1(() {
-                        list.add(Container(
-                            margin: EdgeInsets.only(
-                                top: AppMargin.m4,
-                                bottom: AppMargin.m4,
-                                //TODO check audio List Sender
-                                left: Sizer.getW(context) / 2 - AppSize.s20),
-                            child: SizedBox()
-                            /*
-                                      VoiceMessage(
-                                        key: Key(path!),
-                                        audioSrc: path,
-                                        me: true,
+                                  // setState1(() {});
+                                },
+                                child: BuildMessageShape(
+                                  //isMe: true,
+                                  message: tempMessage,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: Sizer.getW(context) * 0.15,
+                                        padding: EdgeInsets.all(AppPadding.p8),
+                                        decoration: BoxDecoration(
+                                          color: ColorManager.lightGray
+                                              .withOpacity(.5),
+                                          borderRadius:
+                                              BorderRadius.circular(AppSize.s8),
+                                        ),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            VerticalDivider(
+                                              thickness: AppSize.s4,
+                                              color: Theme.of(context)
+                                                  .primaryColor
+                                                  .withOpacity(.5),
+                                            ),
+                                            Flexible(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    ("${(homeProvider.cacheUser.containsKey(value.messageReplay.senderId) ? homeProvider.cacheUser[value.messageReplay.senderId] : "")}"),
+                                                    style: TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                                  ),
+                                                  SizedBox(
+                                                    height:
+                                                        Sizer.getW(context) *
+                                                            0.01,
+                                                  ),
+                                                  Text(
+                                                    value.messageReplay
+                                                        .textMessage,
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      */
-                            ));
-                        chatProvider.changeReplayMessage(
-                            replayMessage: chatProvider.replayMessage);
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(con.text),
+                                      )
+                                    ],
+                                  ),
+                                )));
 
-                        ///});
-                      },
-                      textPadding: EdgeInsets.zero,
-                      leading: CupertinoButton(
-                        padding: EdgeInsets.zero,
-                        child: const Icon(
-                          Icons.insert_emoticon_outlined,
-                          size: 25,
-                          color: Colors.grey,
+                            /// value.replayMessage = null;
+                            /// chatProvider.replayIdMessage="";
+                            ///   chatProvider.changeReplayMessage(replayMessage: null);
+                            ///setState1(() {});
+                          } else {
+                            Message tempMessage = Message(
+                                textMessage: str.toString(),
+                                replayId: "",
+                                typeMessage: "text",
+                                senderId: profileProvider.user.id,
+                                deleteUserMessage: [],
+                                sendingTime: DateTime.now(),
+                                checkSend: false);
+                            list.add(SwipeTo(
+                                onRightSwipe: () {
+                                  print(str);
+
+                                  ///value.replayMessage = str;
+                                  foucsNode.requestFocus();
+                                  chatProvider.changeReplayMessage(
+                                      replayMessage: str);
+
+                                  /// setState1(() {});
+                                },
+                                child: BuildMessageShape(
+                                  //    isMe: false,
+                                  message: tempMessage,
+
+                                  child: Row(
+                                    children: [
+                                      Text(str.toString()),
+                                    ],
+                                  ),
+                                )));
+                          }
+                          print("${tempMessage.toJson()}");
+
+                          ///toDo هنا لا يختفي الرسالة حتا تتم ارسالها
+                          ///في حال اردت التغير قم بوضع السطر الاول في الاخر
+                          con.text = '';
+                          chatProvider.replayIdMessage = "";
+                          chatProvider.changeReplayMessage(replayMessage: null);
+                          await value.addMessage(context,
+                              idGroup: chatProvider.group.id,
+                              message: tempMessage);
+                          //chatProvider.replayIdMessage = "";
+                          //chatProvider.changeReplayMessage(replayMessage: null);
+
+                          ///  });
+                        },
+                        onRecordEnd: (path) {
+                          ///  setState1(() {
+                          list.add(Container(
+                              margin: EdgeInsets.only(
+                                  top: AppMargin.m4,
+                                  bottom: AppMargin.m4,
+                                  //TODO check audio List Sender
+                                  left: Sizer.getW(context) / 2 - AppSize.s20),
+                              child: SizedBox()
+                              /*
+                                        VoiceMessage(
+                                          key: Key(path!),
+                                          audioSrc: path,
+                                          me: true,
+                                        ),
+                                        */
+                              ));
+                          chatProvider.changeReplayMessage(
+                              replayMessage: chatProvider.replayMessage);
+
+                          ///});
+                        },
+                        textPadding: EdgeInsets.zero,
+                        leading: CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          child: const Icon(
+                            Icons.insert_emoticon_outlined,
+                            size: 25,
+                            color: Colors.grey,
+                          ),
+                          onPressed: () {},
                         ),
-                        onPressed: () {},
+                        actions: [
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            child: const Icon(
+                              Icons.attach_file_rounded,
+                              size: 25,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              showModalBottomSheet(
+                                  backgroundColor: Colors.transparent,
+                                  context: context,
+                                  builder: (_) => bottomSheet());
+                            },
+                          ),
+                          CupertinoButton(
+                            padding: EdgeInsets.zero,
+                            child: const Icon(
+                              Icons.camera_alt_rounded,
+                              size: 25,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () async {
+                              ImagePickerPlus picker = ImagePickerPlus(context);
+                              SelectedImagesDetails? details =
+                                  await picker.pickBoth(
+                                source: ImageSource.both,
+                                multiSelection: false,
+                                galleryDisplaySettings: GalleryDisplaySettings(
+                                  tabsTexts: TabsTexts(
+                                      videoText: tr(LocaleKeys.video),
+                                      galleryText: tr(LocaleKeys.gallery),
+                                      photoText: tr(LocaleKeys.camera),
+                                      deletingText: tr(LocaleKeys.del)),
+                                  appTheme: AppTheme(
+                                      focusColor: Colors.white,
+                                      primaryColor: Colors.black),
+                                  showImagePreview: true,
+                                  cropImage: true,
+                                ),
+                              );
+                              if (details != null)
+                                await displayDetails(details);
+                            },
+                          ),
+                        ],
                       ),
-                      actions: [
-                        CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          child: const Icon(
-                            Icons.attach_file_rounded,
-                            size: 25,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {
-                            showModalBottomSheet(
-                                backgroundColor: Colors.transparent,
-                                context: context,
-                                builder: (_) => bottomSheet());
-                          },
-                        ),
-                        CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          child: const Icon(
-                            Icons.camera_alt_rounded,
-                            size: 25,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () async {
-                            ImagePickerPlus picker = ImagePickerPlus(context);
-                            SelectedImagesDetails? details =
-                                await picker.pickBoth(
-                              source: ImageSource.both,
-                              multiSelection: false,
-                              galleryDisplaySettings: GalleryDisplaySettings(
-                                tabsTexts: TabsTexts(
-                                    videoText: tr(LocaleKeys.video),
-                                    galleryText: tr(LocaleKeys.gallery),
-                                    photoText: tr(LocaleKeys.camera),
-                                    deletingText: tr(LocaleKeys.del)),
-                                appTheme: AppTheme(
-                                    focusColor: Colors.white,
-                                    primaryColor: Colors.black),
-                                showImagePreview: true,
-                                cropImage: true,
-                              ),
-                            );
-                            if (details != null)
-                              await displayDetails(details);
-                          },
-                        ),
-                      ],
                     ),
                   ],
                 ),
@@ -758,25 +762,33 @@ class _ChatViewState extends State<ChatView> {
                 details: details,
                 aspectRatio: details.aspectRatio)),
       ));
+
       ///add local message
       var tempMessageSemd = Message(
-          textMessage: "",///chatProvider.findbasename(details.selectedFile.path),
+          textMessage: "",
+
+          ///chatProvider.findbasename(details.selectedFile.path),
           url: "",
-          replayId: "",///chatProvider.replayIdMessage,
+          replayId: "",
+
+          ///chatProvider.replayIdMessage,
           typeMessage: "image",
-          senderId: "",///profileProvider.user.id,
+          senderId: "",
+
+          ///profileProvider.user.id,
           deleteUserMessage: [],
           sendingTime: DateTime.now(),
           checkSend: false);
-       tempMessageSemd.url=details.selectedFile.path;
+      tempMessageSemd.url = details.selectedFile.path;
       listSendMessage.add(tempMessageSemd);
-      setState3((){});
+      setState3(() {});
       chatProvider.replayIdMessage = "";
       chatProvider.changeReplayMessage(replayMessage: null);
 
       String url = await chatProvider.uploadImage(details.selectedFile.path);
       tempMessage.url = url;
       print("${tempMessage.toJson()}");
+
       ///remove local message
       listSendMessage.remove(tempMessageSemd);
       await chatProvider.addMessage(context,
@@ -821,16 +833,13 @@ class _ChatViewState extends State<ChatView> {
   Widget buildReplay() {
     return Container(
       height: Sizer.getW(context) * 0.25,
-      decoration: BoxDecoration(
-        color: Theme.of(context).cardColor
-      ),
+      decoration: BoxDecoration(color: Theme.of(context).cardColor),
       padding: EdgeInsets.all(AppPadding.p8),
       child: Container(
         padding: EdgeInsets.all(AppPadding.p4),
         decoration: BoxDecoration(
-          color: ColorManager.lightGray.withOpacity(.2),
-          borderRadius: BorderRadius.circular(AppSize.s8)
-        ),
+            color: ColorManager.lightGray.withOpacity(.2),
+            borderRadius: BorderRadius.circular(AppSize.s8)),
         child: Stack(
           children: [
             Row(
@@ -844,8 +853,8 @@ class _ChatViewState extends State<ChatView> {
             ),
             Positioned(
               top: 0,
-              left: context.locale == "en"?null:0,
-              right: context.locale == "en"?0:null,
+              left: context.locale == "en" ? null : 0,
+              right: context.locale == "en" ? 0 : null,
               child: IconButton(
                   onPressed: () {
                     ///chatProvider.replayMessage = null;
@@ -861,6 +870,7 @@ class _ChatViewState extends State<ChatView> {
       ),
     );
   }
+
 /*
 Stack(
       children: [
@@ -979,7 +989,8 @@ Stack(
                       for (File file in files) {
                         String url = await chatProvider.uploadFile(file.path);
                         tempMessage.url = url;
-                        tempMessage.textMessage = chatProvider.findbasename(file.path);
+                        tempMessage.textMessage =
+                            chatProvider.findbasename(file.path);
                         print("${tempMessage.toJson()}");
                         await chatProvider.addMessage(context,
                             idGroup: chatProvider.group.id,
@@ -1068,9 +1079,9 @@ Stack(
           children: [
             Text(
               ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
-              style: getBoldStyle(color: Theme.of(context).textTheme.bodyText1!.color),
+              style: getBoldStyle(
+                  color: Theme.of(context).textTheme.bodyText1!.color),
             ),
-
             Text(
               chatProvider.messageReplay.textMessage,
               overflow: TextOverflow.ellipsis,
@@ -1095,9 +1106,9 @@ Stack(
                   width: Sizer.getW(context) * 0.1,
                   height: Sizer.getW(context) * 0.1,
                   imageUrl:
-                  // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                  ///"${chatProvider.replayMessage}",
-                  "${chatProvider.messageReplay.url}",
+                      // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                      ///"${chatProvider.replayMessage}",
+                      "${chatProvider.messageReplay.url}",
                   // "${AppConstants.photoGroup}",
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
@@ -1111,7 +1122,6 @@ Stack(
                   placeholder: (context, url) => CircularProgressIndicator(),
                   errorWidget: (context, url, error) => FlutterLogo(),
                 ),
-
                 SizedBox(
                   width: Sizer.getW(context) * 0.01,
                 ),
@@ -1125,7 +1135,6 @@ Stack(
       case "file":
         return Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-
           children: [
             Text(
               ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
@@ -1171,27 +1180,29 @@ Stack(
                 thickness: AppSize.s4,
                 color: Theme.of(context).primaryColor.withOpacity(.5),
               ),
-          Flexible(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  ("${receiveReplayname(message: message)}"),
-                  style: getBoldStyle(color: Theme.of(context).textTheme.bodyText1!.color),
+              Flexible(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Text(
+                      ("${receiveReplayname(message: message)}"),
+                      style: getBoldStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
+                    const SizedBox(
+                      height: AppSize.s4,
+                    ),
+                    Text(
+                      messageReplay.textMessage,
+                      //"gjgjhghnghmjqhvsjvsjdhvjsvdjcvjsvdjcvsjcdvjsdhvjscvjdsvdscjvdcsjcdvsjdcsv",
+                      overflow: TextOverflow.ellipsis,
+
+                      ///"${messageReplay.url}",
+                    )
+                  ],
                 ),
-                const SizedBox(
-                  height: AppSize.s4,
-                ),
-                Text(
-                  messageReplay.textMessage,
-                  //"gjgjhghnghmjqhvsjvsjdhvjsvdjcvjsvdjcvsjcdvjsdhvjscvjdsvdscjvdcsjcdvsjdcsv",
-                  overflow: TextOverflow.ellipsis,
-                  ///"${messageReplay.url}",
-                )
-              ],
-            ),
-          )
+              )
             ],
           ),
         );
@@ -1218,7 +1229,6 @@ Stack(
                       ("${receiveReplayname(message: message)}"),
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-
                     SizedBox(
                       width: Sizer.getW(context) * 0.02,
                     ),
@@ -1229,9 +1239,9 @@ Stack(
                           width: Sizer.getW(context) * 0.1,
                           height: Sizer.getW(context) * 0.1,
                           imageUrl:
-                          // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                          // "${messageReplay.textMessage}",
-                          "${messageReplay.url}",
+                              // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                              // "${messageReplay.textMessage}",
+                              "${messageReplay.url}",
 
                           /// "${AppConstants.photoGroup}",
                           imageBuilder: (context, imageProvider) => Container(
@@ -1247,7 +1257,6 @@ Stack(
                               CircularProgressIndicator(),
                           errorWidget: (context, url, error) => FlutterLogo(),
                         ),
-
                         SizedBox(
                           width: Sizer.getW(context) * 0.01,
                         ),
@@ -1296,7 +1305,7 @@ Stack(
     return SizedBox();
   }
 
-///function
+  ///function
   ///==================================================================
   convertListMessagesToListUsers(Chat chat) async {
     ///print("objectffffffffffffffffffffffffffffffffffff");
@@ -1332,7 +1341,8 @@ Stack(
     });
     list.addAll(tempList);
   }
-///==================================================================
+
+  ///==================================================================
   receiveReplay({required Message message}) {
     String textReplay = "delete_message";
     for (Message element in chatProvider.group.chat.messages) {
@@ -1409,14 +1419,13 @@ Stack(
           child: BuildMessageShape(
             //  isMe: true,
             message: message,
-            child:                 Column(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 buildrReplayMessage(message: message),
                 Text(message.textMessage)
               ],
             ),
-
           ));
 
       ///setState(() {});
@@ -1747,10 +1756,44 @@ class BuildMessageShape extends StatelessWidget {
     final isMe = (message.senderId.contains(profileProvider.user.id));
     //print(homeProvider.cacheUser);
     return InkWell(
-      onLongPress: () async => {
+      onLongPress: () async {
+        Get.defaultDialog(
+          titleStyle: getBoldStyle(
+              color: Theme.of(context).textTheme.bodyText1!.color,
+              fontSize: Sizer.getW(context) / 22),
+          content: Column(
+            children: [
+              TextButton(
+                  style: TextButton.styleFrom(
+                      minimumSize: Size(double.infinity, 80)),
+                  onPressed: () {},
+                  child: Text(
+                    tr(LocaleKeys.dle_for_me),
+                    style: getRegularStyle(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: Sizer.getW(context) / 24),
+                  )),
+              TextButton(
+                  style: TextButton.styleFrom(
+                      minimumSize: Size(double.infinity, 80)),
+                  onPressed: () async {
+                    await chatProvider.deleteMessage(context,
+                        message: message, idUser: profileProvider.user.id);
+                  },
+                  child: Text(
+                    tr(LocaleKeys.dle_for_all),
+                    style: getRegularStyle(
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: Sizer.getW(context) / 24),
+                  )),
+            ],
+          ),
+          title: tr(LocaleKeys.are_you_sure),
+          radius: AppSize.s14,
+        );
+
         ///TODO add SHOWDELETEDIALOOG
-        await chatProvider.deleteMessage(context,
-            message: message, idUser: profileProvider.user.id),
+
         // print("object"),
         //  Const.SHOWDELETEDIALOOG(context),
       },
@@ -1780,10 +1823,11 @@ class BuildMessageShape extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             (homeProvider.cacheUser.containsKey(message.senderId))
-                ? Text("${homeProvider.cacheUser[message.senderId]}",
-            //TODO
-              // textAlign: TextAlign.left,
-            )
+                ? Text(
+                    "${homeProvider.cacheUser[message.senderId]}",
+                    //TODO
+                    // textAlign: TextAlign.left,
+                  )
                 : FutureBuilder(
                     future: HomeProvider().fetchNameUser(context,
                         idUser: message
@@ -1825,7 +1869,7 @@ class BuildMessageShape extends StatelessWidget {
                       }
                     },
                   ),
-             child,
+            child,
             const SizedBox(
               height: AppSize.s8,
             ),
@@ -1842,52 +1886,49 @@ class BuildMessageShape extends StatelessWidget {
                         Text(
                       "${DateFormat().add_jm().format(message.sendingTime)}",
                       style: getRegularStyle(
-                          color:  Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: AppSize.s10
-                      ),
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: AppSize.s10),
                     )),
                 (isMe)
                     ? ((message.checkSend)
-                        ? Icon(
-                    Icons.check_circle_outline,
-                    size: AppSize.s14
-                )
-                        :SizedBox()
-       /**
-                FutureBuilder(
-                            future: chatProvider.addMessage(context,
-                                idGroup: chatProvider.group.id,
-                                message: message),
-                            builder: (
-                              context,
-                              snapshot,
-                            ) {
-                              print(snapshot.error);
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Icon(Icons
-                                    .check_circle_outline,
-                                  size: AppSize.s1_5,
-                                ); // Expanded(child: Const.SHOWLOADINGINDECATOR());
-                                //Const.CIRCLE(context);
-                              } else if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                if (snapshot.hasError) {
-                                  return Icon(Icons.error_outline);
-                                } else if (snapshot.hasData) {
-                                  // Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
-                                  //homeProvider.sessions=Sessions.fromJson(data['body']);
-                                  return Icon(Icons.check_circle_outline);
-                                } else {
-                                  return Icon(Icons.error_outline);
-                                }
-                              } else {
-                                return Icon(Icons.error_outline);
-                              }
-                            },
-                          )
-    **/
-                )
+                            ? Icon(Icons.check_circle_outline,
+                                size: AppSize.s14)
+                            : SizedBox()
+                        /**
+                        FutureBuilder(
+                        future: chatProvider.addMessage(context,
+                        idGroup: chatProvider.group.id,
+                        message: message),
+                        builder: (
+                        context,
+                        snapshot,
+                        ) {
+                        print(snapshot.error);
+                        if (snapshot.connectionState ==
+                        ConnectionState.waiting) {
+                        return Icon(Icons
+                        .check_circle_outline,
+                        size: AppSize.s1_5,
+                        ); // Expanded(child: Const.SHOWLOADINGINDECATOR());
+                        //Const.CIRCLE(context);
+                        } else if (snapshot.connectionState ==
+                        ConnectionState.done) {
+                        if (snapshot.hasError) {
+                        return Icon(Icons.error_outline);
+                        } else if (snapshot.hasData) {
+                        // Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
+                        //homeProvider.sessions=Sessions.fromJson(data['body']);
+                        return Icon(Icons.check_circle_outline);
+                        } else {
+                        return Icon(Icons.error_outline);
+                        }
+                        } else {
+                        return Icon(Icons.error_outline);
+                        }
+                        },
+                        )
+                     **/
+                        )
                     : SizedBox(),
                 // Icon(Icons.check_circle_outline),
               ],
