@@ -49,7 +49,7 @@ class _ChatViewState extends State<ChatView> {
   List<Message> listSendMessage = [];
   TextEditingController con = TextEditingController();
   final foucsNode = FocusNode();
-
+ var setState3;
   //String? replayMessage;
   String? replayIdMessage = "";
   late ChatProvider chatProvider;
@@ -400,37 +400,36 @@ class _ChatViewState extends State<ChatView> {
                             'messages': snapshot.data!.docs
                           }, idUser: profileProvider.user.id);
 
-                       return   ChangeNotifierProvider<ChatProvider>.value(
-                      value: chatProvider,
-                      child: Consumer<ChatProvider>(
-                      builder: (context, value, child){
                         convertListMessagesToListUsers(chatProvider.group.chat);
-                        convertListMessagesToListWidget(chatProvider.group.chat);
-                        convertListSendMessagesToListWidget(listSendMessage);
-                        // Navigator.of(context).pop();
-                        return SingleChildScrollView(
-                          reverse: true,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.all(
-                                AppPadding.p10,
-                              ),
-                              itemCount:
+                            convertListMessagesToListWidget(chatProvider.group.chat);
+                          return StatefulBuilder(key:setState3 ,builder: (_, setStateChat) {
+                            setState3=setStateChat;
+                            convertListSendMessagesToListWidget(listSendMessage);
+                            // Navigator.of(context).pop();
+                            return SingleChildScrollView(
+                              reverse: true,
+                              child: ListView.builder(
+                                  shrinkWrap: true,
+                                  physics: NeverScrollableScrollPhysics(),
+                                  padding: EdgeInsets.all(
+                                    AppPadding.p10,
+                                  ),
+                                  itemCount:
 
-                              ///chatProvider.group.chat.messages.length,
-                              list.length,
-                              itemBuilder: (_, pos) {
-                             //   chatProvider.group.chat.messages[pos].index = pos;
-                                return
+                                  chatProvider.group.chat.messages.length+listSendMessage.length,
+                                  ///list.length,
+                                  itemBuilder: (_, pos) {
+                                    //   chatProvider.group.chat.messages[pos].index = pos;
+                                    return
 
-                                  ///BuildMessageShape(isMe: true, child: Text("${chatProvider.group.chat.messages[pos].textMessage}"));
-                                  list[pos];
-                                // return ListTile(title: Text(list[pos]));
-                              }),
-                        );
-                      }
-                      ));
+                                      ///BuildMessageShape(isMe: true, child: Text("${chatProvider.group.chat.messages[pos].textMessage}"));
+                                      list[pos];
+                                    // return ListTile(title: Text(list[pos]));
+                                  }),
+                            );
+                          });
+
+                     /// }));
                         } else {
                           return const Text('Empty data');
                         }
@@ -770,25 +769,28 @@ class _ChatViewState extends State<ChatView> {
                 aspectRatio: details.aspectRatio)),
       ));
       ///add local message
-      var tempMessageSemd=Message(textMessage: "textMessage",
-          replayId: "replayId",
-          typeMessage: "typeMessage"
-          , senderId: "senderId",
+      var tempMessageSemd = Message(
+          textMessage: "",///chatProvider.findbasename(details.selectedFile.path),
+          url: "",
+          replayId: "",///chatProvider.replayIdMessage,
+          typeMessage: "image",
+          senderId: "",///profileProvider.user.id,
           deleteUserMessage: [],
-          sendingTime: DateTime.now());
-       tempMessage.url=details.selectedFile.path;
-      listSendMessage.add(tempMessage);
+          sendingTime: DateTime.now(),
+          checkSend: false);
+       tempMessageSemd.url=details.selectedFile.path;
+      listSendMessage.add(tempMessageSemd);
+      setState3((){});
       chatProvider.replayIdMessage = "";
       chatProvider.changeReplayMessage(replayMessage: null);
-
       String url = await chatProvider.uploadImage(details.selectedFile.path);
       tempMessage.url = url;
       print("${tempMessage.toJson()}");
       ///remove local message
-      listSendMessage.remove(tempMessage);
+      listSendMessage.remove(tempMessageSemd);
       await chatProvider.addMessage(context,
           idGroup: chatProvider.group.id, message: tempMessage);
-      chatProvider.notifyListeners();
+      //chatProvider.notifyListeners();
 
       //setState1(() {});
     } else {
