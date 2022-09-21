@@ -18,6 +18,8 @@ class ChatProvider with ChangeNotifier{
  String replayIdMessage="";
  models.Message messageReplay=models.Message(textMessage: "", replayId: "", typeMessage: "", senderId: "", deleteUserMessage: [], sendingTime: DateTime.now());
  bool isReplay = false;
+
+
  changeReplayMessage({required String? replayMessage}){
    this.replayMessage=replayMessage;
    isReplay = replayMessage != null;
@@ -146,6 +148,41 @@ class ChatProvider with ChangeNotifier{
  findbasename(filePath){
    return basename(filePath);
  }
+
+
+
+
+ bool checkBlockUserInGroup({required String idUser}){
+   if(group.listBlockUsers.contains(idUser))
+     return true;
+   return false;
+ }
+ blockUserInGroup(context,{required String idUser}) async {
+   Const.LOADIG(context);
+   if(!checkBlockUserInGroup(idUser: idUser)) {
+     group.listBlockUsers.add(idUser);
+   }
+   var result =await FirebaseFun.updateGroup(group: group, id: group.id,updateGroupType: models.UpdateGroupType.block_user);
+   print(result);
+   Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+   notifyListeners();
+   Navigator.of(context).pop();
+   return result;
+ }
+ deleteUserInGroup(context,{required String idUser}) async {
+   Const.LOADIG(context);
+   if(checkBlockUserInGroup(idUser: idUser)) {
+     group.listBlockUsers.remove(idUser);
+   }
+   group.listUsers.remove(idUser);
+   var result =await FirebaseFun.updateGroup(group: group, id: group.id,updateGroupType: models.UpdateGroupType.delete_user);
+   print(result);
+   Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+   notifyListeners();
+   Navigator.of(context).pop();
+   return result;
+ }
+
  Future uploadImage(String imagePath) async {
    try {
      String path = basename(imagePath);

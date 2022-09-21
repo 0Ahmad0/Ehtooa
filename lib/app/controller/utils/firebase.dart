@@ -335,6 +335,13 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+  static fetchUsers()  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionPatient)
+        .get()
+        .then((onValueFetchUsers))
+        .catchError(onError);
+    return result;
+  }
 
    static Future<Map<String,dynamic>>  onError(error) async {
     print(false);
@@ -540,6 +547,17 @@ class FirebaseFun{
       'body':(value.docs.length>0)?value.docs:body
     };
   }
+  static Future<Map<String,dynamic>> onValueFetchUsers(value) async{
+    print(true);
+    print("Users count : ${value.docs.length}");
+
+    return {
+      'status':true,
+      'message':'Sessions successfully fetch',
+      'body':value.docs
+    };
+  }
+
 
   static String findTextToast(String text){
      if(text.contains("Password should be at least 6 characters")){
