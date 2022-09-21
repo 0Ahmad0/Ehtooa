@@ -53,7 +53,6 @@ dependencies:
   chat_package: ^0.0.7
   permission_handler: ^8.3.0
   record: ^3.0.4
-  chat_composer: ^1.0.1
   voice_message_package: ^0.0.74
   camera: ^0.10.0+1
   path: ^1.8.2
@@ -64,6 +63,9 @@ dependencies:
   video_thumbnail: ^0.5.3
   firebase_storage: ^8.0.3
   url_launcher: ^6.0.3
+  flutter_sound_lite: ^8.5.0
+  flutter_bloc: ^8.1.1
+  fluttertoast: ^8.0.9
 
 
 

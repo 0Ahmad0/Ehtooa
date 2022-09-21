@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'dart:io';
-import 'package:chat_composer/chat_composer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
@@ -35,7 +34,9 @@ import 'package:provider/provider.dart';
 import '../../resources/consts_manager.dart';
 import '../list_of_member/list_of_member_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:ui' as ui;
 
+import 'ex/chat_composer.dart';
 class ChatView extends StatefulWidget {
   const ChatView({super.key});
 
@@ -65,427 +66,505 @@ class _ChatViewState extends State<ChatView> {
     chatProvider = Provider.of<ChatProvider>(context);
     homeProvider = Provider.of<HomeProvider>(context);
     widthImageChat = Sizer.getW(context) * 0.20;
-
     ///print(chatProvider.group.nameAr);
-
-    return Directionality(
-      textDirection: ui.TextDirection.ltr,
-      child: Scaffold(
-        appBar: AppBar(
-          titleSpacing: 1,
-          title: ListTile(
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (ctx) => ListOfMemberView(
-                            users: [
-                              User(
-                                  id: "id",
-                                  uid: "uid",
-                                  name: "Kholod",
-                                  email: "Kholod@gmail.com",
-                                  phoneNumber: "0522325465",
-                                  password: "password",
-                                  typeUser: "typeUser",
-                                  photoUrl: "photoUrl",
-                                  listUsedQuizzes: [false, false, false, false])
-                            ],
-                          )));
-            },
-            leading: CircleAvatar(
-              radius: AppSize.s24,
-              child: CachedNetworkImage(
-                fit: BoxFit.fill,
-                width: Sizer.getW(context) * 0.1,
-                height: Sizer.getW(context) * 0.1,
-                imageUrl:
-                    // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                    "${chatProvider.group.photoUrl}",
-                imageBuilder: (context, imageProvider) => Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: imageProvider,
-                      fit: BoxFit.cover,
-                      //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
-                    ),
+    return Scaffold(
+      appBar: AppBar(
+        titleSpacing: 1,
+        title: ListTile(
+          onTap: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (ctx) => ListOfMemberView(
+                          users: [
+                            User(
+                                id: "id",
+                                uid: "uid",
+                                name: "Kholod",
+                                email: "Kholod@gmail.com",
+                                phoneNumber: "0522325465",
+                                password: "password",
+                                typeUser: "typeUser",
+                                photoUrl: "photoUrl",
+                                listUsedQuizzes: [false, false, false, false])
+                          ],
+                        )));
+          },
+          leading: CircleAvatar(
+            radius: AppSize.s24,
+            child: CachedNetworkImage(
+              fit: BoxFit.fill,
+              width: Sizer.getW(context) * 0.1,
+              height: Sizer.getW(context) * 0.1,
+              imageUrl:
+                  // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                  "${chatProvider.group.photoUrl}",
+              imageBuilder: (context, imageProvider) => Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: imageProvider,
+                    fit: BoxFit.cover,
+                    //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
                   ),
                 ),
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) =>
-                    //FlutterLogo(),
-                    SizedBox(),
               ),
+              placeholder: (context, url) => CircularProgressIndicator(),
+              errorWidget: (context, url, error) =>
+                  //FlutterLogo(),
+                  SizedBox(),
             ),
-            title: Text(
-              "${!(context.locale == 'en') ? chatProvider.group.nameAr : chatProvider.group.nameEn}", /*tr(LocaleKeys.anxiety_patients)*/
-            ),
-            subtitle: Text(
-                "${chatProvider.group.listUsers.length + 1} Member" /*"35 Member"*/),
-            trailing: IconButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (ctx) => GlobalMemberView()));
-                },
-                icon: Icon(Icons.person_add)),
           ),
+          title: Text(
+            "${!(context.locale == 'en') ? chatProvider.group.nameAr : chatProvider.group.nameEn}", /*tr(LocaleKeys.anxiety_patients)*/
+          ),
+          subtitle: Text(
+              "${chatProvider.group.listUsers.length + 1} Member" /*"35 Member"*/),
+          trailing: IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (ctx) => GlobalMemberView()));
+              },
+              icon: Icon(Icons.person_add)),
         ),
-        body:
-            /**
-            StreamBuilder<QuerySnapshot>( //prints the messages to the screen0
-            stream: FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
-            .doc("taoId1xj5dSDNEoaYlFd")
-            .collection(AppConstants.collectionChat)
-            .orderBy("sendingTime")
-            .snapshots(),
-            builder: (context,snapshot){
-            // List<messageLine> messageWidgets=[];// all the messages saved here
-            if (!snapshot.hasData) { //is there data(messages) or not
-            //////////add spinner 1:48
-            }
-            final messages=snapshot.data!.docs.reversed;
-            for (var message in messages) { //print each message
-            //final messageText = message.get('text'); //get the text
-            //final messageSender = message.get('sender');//  the sender email
-            /* final currentUser= signedInUser.email; //the user currently signed in email
-            final messageWidget =
-            messageLine(sender:messageSender,
-            text:messageText,
-            isMe: messageSender==currentUser,
-            );
-            messageWidgets.add(messageWidget);*/
-            }
-            return Column(
-            children: [
-            Expanded(
-            child:
-
-
-            Container(
-            decoration: BoxDecoration(
-            image: DecorationImage(
-            fit: BoxFit.cover,
-            colorFilter: ColorFilter.mode(
-            Colors.black.withOpacity(.2), BlendMode.darken),
-            image: AssetImage(ImagesAssets.backgroundChat))),
-            child: ListView.builder(
-            padding: EdgeInsets.all(
-            AppPadding.p10,
-            ),
-            itemCount: list.length,
-            itemBuilder: (_, pos) {
-            return list[pos];
-            // return ListTile(title: Text(list[pos]));
-            }),
-            ),
-            ),
-
-            Column(
-            children: [
-            if (isReplay) buildReplay(),
-            ChatComposer(
-            backgroundColor: Colors.green,
-            borderRadius: isReplay
-            ? BorderRadius.vertical(
-            bottom: Radius.circular(AppSize.s8))
-            : BorderRadius.circular(AppSize.s8),
-            padding: EdgeInsets.only(
-            top: 0.0,
-            bottom: AppPadding.p10,
-            left: AppPadding.p10,
-            right: AppPadding.p10,
-            ),
-            focusNode: foucsNode,
-            textFieldDecoration: InputDecoration(
-            border: InputBorder.none,
-            enabledBorder: InputBorder.none,
-            focusedBorder: InputBorder.none,
-            ),
-            textStyle: getRegularStyle(
-            color: Theme
-            .of(context)
-            .textTheme
-            .bodyText1!
-            .color,
-            fontSize: Sizer.getW(context) / 30),
-            controller: con,
-            onReceiveText: (str) {
-            setState(() {
-            if (isReplay) {
-            list.add(SwipeTo(
-            onRightSwipe: () {
-            print(str);
-            replayMessage = str;
-            foucsNode.requestFocus();
-            setState(() {});
-            },
-            child: BuildMessageShape(
-            isMe: true,
-            child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-            Container(
-            height: Sizer.getW(context) * 0.15,
-            padding: EdgeInsets.all(AppPadding.p8),
-            decoration: BoxDecoration(
-            color: ColorManager.lightGray
-            .withOpacity(.5),
-            borderRadius:
-            BorderRadius.circular(AppSize.s8),
-            ),
-            child: Row(
-            mainAxisAlignment:
-            MainAxisAlignment.start,
-            children: [
-            VerticalDivider(
-            thickness: AppSize.s4,
-            color: Theme
-            .of(context)
-            .primaryColor
-            .withOpacity(.5),
-            ),
-            Flexible(
-            child: Text(
-            replayMessage!,
-            ))
-            ],
-            ),
-            ),
-            Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(con.text),
-            )
-            ],
-            ),
-            )));
-            replayMessage = null;
-            setState(() {});
-            } else
-            list.add(SwipeTo(
-            onRightSwipe: () {
-            print(str);
-            replayMessage = str;
-            foucsNode.requestFocus();
-            setState(() {});
-            },
-            child: BuildMessageShape(
-            isMe: false,
-            child: Row(
-            children: [
-            Text(str.toString()),
-            ],
-            ),
-            )));
-            con.text = '';
-            });
-            },
-            onRecordEnd: (path) {
-            setState(() {
-            list.add(Container(
-            margin: EdgeInsets.only(
-            top: AppMargin.m4,
-            bottom: AppMargin.m4,
-            //TODO check audio List Sender
-            left: Sizer.getW(context) / 2 - AppSize.s20),
-            child: SizedBox()
-            /*
-            VoiceMessage(
-            key: Key(path!),
-            audioSrc: path,
-            me: true,
-            ),
-            */
-            ));
-            });
-            },
-            textPadding: EdgeInsets.zero,
-            leading: CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: const Icon(
-            Icons.insert_emoticon_outlined,
-            size: 25,
-            color: Colors.grey,
-            ),
-            onPressed: () {},
-            ),
-            actions: [
-            CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: const Icon(
-            Icons.attach_file_rounded,
-            size: 25,
-            color: Colors.grey,
-            ),
-            onPressed: () {
-            showModalBottomSheet(
-            backgroundColor: Colors.transparent,
-            context: context,
-            builder: (_) => bottomSheet());
-            },
-            ),
-            CupertinoButton(
-            padding: EdgeInsets.zero,
-            child: const Icon(
-            Icons.camera_alt_rounded,
-            size: 25,
-            color: Colors.grey,
-            ),
-            onPressed: () async {
-            ImagePickerPlus picker = ImagePickerPlus(context);
-            SelectedImagesDetails? details = await picker.pickBoth(
-            source: ImageSource.both,
-            multiSelection: false,
-            galleryDisplaySettings: GalleryDisplaySettings(
-            tabsTexts: TabsTexts(
-            videoText: tr(LocaleKeys.video),
-            galleryText: tr(LocaleKeys.gallery),
-            photoText: tr(LocaleKeys.camera),
-            deletingText: tr(LocaleKeys.delete)),
-            appTheme: AppTheme(
-            focusColor: Colors.white,
-            primaryColor: Colors.black),
-            showImagePreview: true,
-            cropImage: true,
-            ),
-
-            );
-            if (details != null) await displayDetails(details);
-            },
-            ),
-            ],
-            ),
-            ],
-            ),
-            ],
-            );
-            },
-
-            ),
-         **/
-            Column(
+      ),
+      body:
+          /**
+          StreamBuilder<QuerySnapshot>( //prints the messages to the screen0
+          stream: FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
+          .doc("taoId1xj5dSDNEoaYlFd")
+          .collection(AppConstants.collectionChat)
+          .orderBy("sendingTime")
+          .snapshots(),
+          builder: (context,snapshot){
+          // List<messageLine> messageWidgets=[];// all the messages saved here
+          if (!snapshot.hasData) { //is there data(messages) or not
+          //////////add spinner 1:48
+          }
+          final messages=snapshot.data!.docs.reversed;
+          for (var message in messages) { //print each message
+          //final messageText = message.get('text'); //get the text
+          //final messageSender = message.get('sender');//  the sender email
+          /* final currentUser= signedInUser.email; //the user currently signed in email
+          final messageWidget =
+          messageLine(sender:messageSender,
+          text:messageText,
+          isMe: messageSender==currentUser,
+          );
+          messageWidgets.add(messageWidget);*/
+          }
+          return Column(
           children: [
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        fit: BoxFit.cover,
-                        colorFilter: ColorFilter.mode(
-                            Colors.black.withOpacity(.2), BlendMode.darken),
-                        image: AssetImage(ImagesAssets.backgroundChat))),
-                child: StreamBuilder<QuerySnapshot>(
-                    //prints the messages to the screen0
-                    stream: FirebaseFirestore.instance
-                        .collection(AppConstants.collectionGroup)
-                        // .doc("taoId1xj5dSDNEoaYlFd")
-                        .doc(chatProvider.group.id)
-                        .collection(AppConstants.collectionChat)
-                        .orderBy("sendingTime")
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Const.SHOWLOADINGINDECATOR();
-                        //Const.CIRCLE(context);
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.active) {
-                        if (snapshot.hasError) {
-                          return const Text('Error');
-                        } else if (snapshot.hasData) {
-                          Const.SHOWLOADINGINDECATOR();
-                          print("streame ${snapshot.data!.docs.length}");
-                          chatProvider.group.chat =
-                              Chat.fromJsonWithFilterIdUser({
-                            'id': chatProvider.group.id,
-                            'messages': snapshot.data!.docs
-                          }, idUser: profileProvider.user.id);
+          Expanded(
+          child:
 
-                       return   ChangeNotifierProvider<ChatProvider>.value(
-                      value: chatProvider,
-                      child: Consumer<ChatProvider>(
-                      builder: (context, value, child){
-                        convertListMessagesToListUsers(chatProvider.group.chat);
-                        convertListMessagesToListWidget(chatProvider.group.chat);
-                        convertListSendMessagesToListWidget(listSendMessage);
-                        // Navigator.of(context).pop();
-                        return SingleChildScrollView(
-                          reverse: true,
-                          child: ListView.builder(
-                              shrinkWrap: true,
-                              physics: NeverScrollableScrollPhysics(),
-                              padding: EdgeInsets.all(
-                                AppPadding.p10,
-                              ),
-                              itemCount:
 
-                              ///chatProvider.group.chat.messages.length,
-                              list.length,
-                              itemBuilder: (_, pos) {
-                             //   chatProvider.group.chat.messages[pos].index = pos;
-                                return
+          Container(
+          decoration: BoxDecoration(
+          image: DecorationImage(
+          fit: BoxFit.cover,
+          colorFilter: ColorFilter.mode(
+          Colors.black.withOpacity(.2), BlendMode.darken),
+          image: AssetImage(ImagesAssets.backgroundChat))),
+          child: ListView.builder(
+          padding: EdgeInsets.all(
+          AppPadding.p10,
+          ),
+          itemCount: list.length,
+          itemBuilder: (_, pos) {
+          return list[pos];
+          // return ListTile(title: Text(list[pos]));
+          }),
+          ),
+          ),
 
-                                  ///BuildMessageShape(isMe: true, child: Text("${chatProvider.group.chat.messages[pos].textMessage}"));
-                                  list[pos];
-                                // return ListTile(title: Text(list[pos]));
-                              }),
-                        );
-                      }
-                      ));
-                        } else {
-                          return const Text('Empty data');
-                        }
+          Column(
+          children: [
+          if (isReplay) buildReplay(),
+          ChatComposer(
+          backgroundColor: Colors.green,
+          borderRadius: isReplay
+          ? BorderRadius.vertical(
+          bottom: Radius.circular(AppSize.s8))
+          : BorderRadius.circular(AppSize.s8),
+          padding: EdgeInsets.only(
+          top: 0.0,
+          bottom: AppPadding.p10,
+          left: AppPadding.p10,
+          right: AppPadding.p10,
+          ),
+          focusNode: foucsNode,
+          textFieldDecoration: InputDecoration(
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          ),
+          textStyle: getRegularStyle(
+          color: Theme
+          .of(context)
+          .textTheme
+          .bodyText1!
+          .color,
+          fontSize: Sizer.getW(context) / 30),
+          controller: con,
+          onReceiveText: (str) {
+          setState(() {
+          if (isReplay) {
+          list.add(SwipeTo(
+          onRightSwipe: () {
+          print(str);
+          replayMessage = str;
+          foucsNode.requestFocus();
+          setState(() {});
+          },
+          child: BuildMessageShape(
+          isMe: true,
+          child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+          Container(
+          height: Sizer.getW(context) * 0.15,
+          padding: EdgeInsets.all(AppPadding.p8),
+          decoration: BoxDecoration(
+          color: ColorManager.lightGray
+          .withOpacity(.5),
+          borderRadius:
+          BorderRadius.circular(AppSize.s8),
+          ),
+          child: Row(
+          mainAxisAlignment:
+          MainAxisAlignment.start,
+          children: [
+          VerticalDivider(
+          thickness: AppSize.s4,
+          color: Theme
+          .of(context)
+          .primaryColor
+          .withOpacity(.5),
+          ),
+          Flexible(
+          child: Text(
+          replayMessage!,
+          ))
+          ],
+          ),
+          ),
+          Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(con.text),
+          )
+          ],
+          ),
+          )));
+          replayMessage = null;
+          setState(() {});
+          } else
+          list.add(SwipeTo(
+          onRightSwipe: () {
+          print(str);
+          replayMessage = str;
+          foucsNode.requestFocus();
+          setState(() {});
+          },
+          child: BuildMessageShape(
+          isMe: false,
+          child: Row(
+          children: [
+          Text(str.toString()),
+          ],
+          ),
+          )));
+          con.text = '';
+          });
+          },
+          onRecordEnd: (path) {
+          setState(() {
+          list.add(Container(
+          margin: EdgeInsets.only(
+          top: AppMargin.m4,
+          bottom: AppMargin.m4,
+          //TODO check audio List Sender
+          left: Sizer.getW(context) / 2 - AppSize.s20),
+          child: SizedBox()
+          /*
+          VoiceMessage(
+          key: Key(path!),
+          audioSrc: path,
+          me: true,
+          ),
+          */
+          ));
+          });
+          },
+          textPadding: EdgeInsets.zero,
+          leading: CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: const Icon(
+          Icons.insert_emoticon_outlined,
+          size: 25,
+          color: Colors.grey,
+          ),
+          onPressed: () {},
+          ),
+          actions: [
+          CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: const Icon(
+          Icons.attach_file_rounded,
+          size: 25,
+          color: Colors.grey,
+          ),
+          onPressed: () {
+          showModalBottomSheet(
+          backgroundColor: Colors.transparent,
+          context: context,
+          builder: (_) => bottomSheet());
+          },
+          ),
+          CupertinoButton(
+          padding: EdgeInsets.zero,
+          child: const Icon(
+          Icons.camera_alt_rounded,
+          size: 25,
+          color: Colors.grey,
+          ),
+          onPressed: () async {
+          ImagePickerPlus picker = ImagePickerPlus(context);
+          SelectedImagesDetails? details = await picker.pickBoth(
+          source: ImageSource.both,
+          multiSelection: false,
+          galleryDisplaySettings: GalleryDisplaySettings(
+          tabsTexts: TabsTexts(
+          videoText: tr(LocaleKeys.video),
+          galleryText: tr(LocaleKeys.gallery),
+          photoText: tr(LocaleKeys.camera),
+          deletingText: tr(LocaleKeys.delete)),
+          appTheme: AppTheme(
+          focusColor: Colors.white,
+          primaryColor: Colors.black),
+          showImagePreview: true,
+          cropImage: true,
+          ),
+
+          );
+          if (details != null) await displayDetails(details);
+          },
+          ),
+          ],
+          ),
+          ],
+          ),
+          ],
+          );
+          },
+
+          ),
+       **/
+          Column(
+        children: [
+          Expanded(
+            child: Container(
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(.2), BlendMode.darken),
+                      image: AssetImage(ImagesAssets.backgroundChat))),
+              child: StreamBuilder<QuerySnapshot>(
+                  //prints the messages to the screen0
+                  stream: FirebaseFirestore.instance
+                      .collection(AppConstants.collectionGroup)
+                      // .doc("taoId1xj5dSDNEoaYlFd")
+                      .doc(chatProvider.group.id)
+                      .collection(AppConstants.collectionChat)
+                      .orderBy("sendingTime")
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Const.SHOWLOADINGINDECATOR();
+                      //Const.CIRCLE(context);
+                    } else if (snapshot.connectionState ==
+                        ConnectionState.active) {
+                      if (snapshot.hasError) {
+                        return const Text('Error');
+                      } else if (snapshot.hasData) {
+                        Const.SHOWLOADINGINDECATOR();
+                        print("streame ${snapshot.data!.docs.length}");
+                        chatProvider.group.chat =
+                            Chat.fromJsonWithFilterIdUser({
+                          'id': chatProvider.group.id,
+                          'messages': snapshot.data!.docs
+                        }, idUser: profileProvider.user.id);
+
+                     return   ChangeNotifierProvider<ChatProvider>.value(
+                    value: chatProvider,
+                    child: Consumer<ChatProvider>(
+                    builder: (context, value, child){
+                      convertListMessagesToListUsers(chatProvider.group.chat);
+                      convertListMessagesToListWidget(chatProvider.group.chat);
+                      convertListSendMessagesToListWidget(listSendMessage);
+                      // Navigator.of(context).pop();
+                      return SingleChildScrollView(
+                        reverse: true,
+                        child: ListView.builder(
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.all(
+                              AppPadding.p10,
+                            ),
+                            itemCount:
+
+                            ///chatProvider.group.chat.messages.length,
+                            list.length,
+                            itemBuilder: (_, pos) {
+                           //   chatProvider.group.chat.messages[pos].index = pos;
+                              return
+
+                                ///BuildMessageShape(isMe: true, child: Text("${chatProvider.group.chat.messages[pos].textMessage}"));
+                                list[pos];
+                              // return ListTile(title: Text(list[pos]));
+                            }),
+                      );
+                    }
+                    ));
                       } else {
-                        return Text('State: ${snapshot.connectionState}');
+                        return const Text('Empty data');
                       }
-                    }),
-                /**
-                    ListView.builder(
-                    padding: EdgeInsets.all(
-                    AppPadding.p10,
-                    ),
-                    itemCount: list.length,
-                    itemBuilder: (_, pos) {
-                    return list[pos];
-                    // return ListTile(title: Text(list[pos]));
-                    });
-                 **/
-              ),
+                    } else {
+                      return Text('State: ${snapshot.connectionState}');
+                    }
+                  }),
+              /**
+                  ListView.builder(
+                  padding: EdgeInsets.all(
+                  AppPadding.p10,
+                  ),
+                  itemCount: list.length,
+                  itemBuilder: (_, pos) {
+                  return list[pos];
+                  // return ListTile(title: Text(list[pos]));
+                  });
+               **/
             ),
-            ChangeNotifierProvider<ChatProvider>.value(
-                value: chatProvider,
-                child: Consumer<ChatProvider>(
-                  builder: (context, value, child) =>
+          ),
+          ChangeNotifierProvider<ChatProvider>.value(
+              value: chatProvider,
+              child: Consumer<ChatProvider>(
+                builder: (context, value, child) =>
 
-                      // print("chat replay massege${value.replayMessage}");
-                      //  setStateChat=setState1;
-                      Column(
-                    children: [
-                      if (value.isReplay) buildReplay(),
-                      ChatComposer(
-                        borderRadius: value.isReplay
-                            ? BorderRadius.vertical(
-                                bottom: Radius.circular(AppSize.s8))
-                            : BorderRadius.circular(AppSize.s8),
-                        padding: EdgeInsets.only(
-                          top: 0.0,
-                          bottom: AppPadding.p10,
-                          left: AppPadding.p10,
-                          right: AppPadding.p10,
-                        ),
-                        focusNode: foucsNode,
-                        textFieldDecoration: InputDecoration(
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        textStyle: getRegularStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontSize: Sizer.getW(context) / 30),
-                        controller: con,
-                        onReceiveText: (str) async {
-                          //  print("gggg${str}");
-                          ///   setState1(() async {
-                          // print("chat lists : ${list.length}");
+                    // print("chat replay massege${value.replayMessage}");
+                    //  setStateChat=setState1;
+                    Column(
+                  children: [
+                    if (value.isReplay) buildReplay(),
+                    ChatComposer(
+                      borderRadius: value.isReplay
+                          ? BorderRadius.vertical(
+                              bottom: Radius.circular(AppSize.s8))
+                          : BorderRadius.circular(AppSize.s8),
+                      focusNode: foucsNode,
+                      textFieldDecoration: InputDecoration(
+                        border: InputBorder.none,
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                      ),
+                      textStyle: getRegularStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: Sizer.getW(context) / 30),
+                      controller: con,
+                      onReceiveText: (str) async {
+                        //  print("gggg${str}");
+                        ///   setState1(() async {
+                        // print("chat lists : ${list.length}");
+                        Message tempMessage = Message(
+                            textMessage: str.toString(),
+                            replayId: "",
+                            typeMessage: "text",
+                            senderId: profileProvider.user.id,
+                            deleteUserMessage: [],
+                            sendingTime: DateTime.now(),
+                            checkSend: false);
+                        value.getReplayMessage();
+                        if (value.isReplay) {
+                          tempMessage.replayId = value.replayIdMessage;
+                          print(value.replayIdMessage);
+                          list.add(SwipeTo(
+                              onRightSwipe: () {
+                                print(str);
+
+                                /// value.replayMessage = str;
+                                foucsNode.requestFocus();
+                                chatProvider.changeReplayMessage(
+                                    replayMessage: str);
+
+                                // setState1(() {});
+                              },
+                              child: BuildMessageShape(
+                                //isMe: true,
+                                message: tempMessage,
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      height: Sizer.getW(context) * 0.15,
+                                      padding: EdgeInsets.all(AppPadding.p8),
+                                      decoration: BoxDecoration(
+                                        color: ColorManager.lightGray
+                                            .withOpacity(.5),
+                                        borderRadius:
+                                            BorderRadius.circular(AppSize.s8),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          VerticalDivider(
+                                            thickness: AppSize.s4,
+                                            color: Theme.of(context)
+                                                .primaryColor
+                                                .withOpacity(.5),
+                                          ),
+                                          Flexible(
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  ("${(homeProvider.cacheUser.containsKey(value.messageReplay.senderId) ? homeProvider.cacheUser[value.messageReplay.senderId] : "")}"),
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  height:
+                                                      Sizer.getW(context) *
+                                                          0.01,
+                                                ),
+                                                Text(
+                                                  value.messageReplay
+                                                      .textMessage,
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(con.text),
+                                    )
+                                  ],
+                                ),
+                              )));
+
+                          /// value.replayMessage = null;
+                          /// chatProvider.replayIdMessage="";
+                          ///   chatProvider.changeReplayMessage(replayMessage: null);
+                          ///setState1(() {});
+                        } else {
                           Message tempMessage = Message(
                               textMessage: str.toString(),
                               replayId: "",
@@ -494,218 +573,129 @@ class _ChatViewState extends State<ChatView> {
                               deleteUserMessage: [],
                               sendingTime: DateTime.now(),
                               checkSend: false);
-                          value.getReplayMessage();
-                          if (value.isReplay) {
-                            tempMessage.replayId = value.replayIdMessage;
-                            print(value.replayIdMessage);
-                            list.add(SwipeTo(
-                                onRightSwipe: () {
-                                  print(str);
+                          list.add(SwipeTo(
+                              onRightSwipe: () {
+                                print(str);
 
-                                  /// value.replayMessage = str;
-                                  foucsNode.requestFocus();
-                                  chatProvider.changeReplayMessage(
-                                      replayMessage: str);
+                                ///value.replayMessage = str;
+                                foucsNode.requestFocus();
+                                chatProvider.changeReplayMessage(
+                                    replayMessage: str);
 
-                                  // setState1(() {});
-                                },
-                                child: BuildMessageShape(
-                                  //isMe: true,
-                                  message: tempMessage,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: Sizer.getW(context) * 0.15,
-                                        padding: EdgeInsets.all(AppPadding.p8),
-                                        decoration: BoxDecoration(
-                                          color: ColorManager.lightGray
-                                              .withOpacity(.5),
-                                          borderRadius:
-                                              BorderRadius.circular(AppSize.s8),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            VerticalDivider(
-                                              thickness: AppSize.s4,
-                                              color: Theme.of(context)
-                                                  .primaryColor
-                                                  .withOpacity(.5),
-                                            ),
-                                            Flexible(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    ("${(homeProvider.cacheUser.containsKey(value.messageReplay.senderId) ? homeProvider.cacheUser[value.messageReplay.senderId] : "")}"),
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                        Sizer.getW(context) *
-                                                            0.01,
-                                                  ),
-                                                  Text(
-                                                    value.messageReplay
-                                                        .textMessage,
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                /// setState1(() {});
+                              },
+                              child: BuildMessageShape(
+                                //    isMe: false,
+                                message: tempMessage,
+
+                                child: Row(
+                                  children: [
+                                    Text(str.toString()),
+                                  ],
+                                ),
+                              )));
+                        }
+                        print("${tempMessage.toJson()}");
+
+                        ///toDo هنا لا يختفي الرسالة حتا تتم ارسالها
+                        ///في حال اردت التغير قم بوضع السطر الاول في الاخر
+                        con.text = '';
+                        chatProvider.replayIdMessage = "";
+                        chatProvider.changeReplayMessage(replayMessage: null);
+                        await value.addMessage(context,
+                            idGroup: chatProvider.group.id,
+                            message: tempMessage);
+                        //chatProvider.replayIdMessage = "";
+                        //chatProvider.changeReplayMessage(replayMessage: null);
+
+
+
+                        ///  });
+                      },
+                      onRecordEnd: (path) {
+                        ///  setState1(() {
+                        list.add(Container(
+                            margin: EdgeInsets.only(
+                                top: AppMargin.m4,
+                                bottom: AppMargin.m4,
+                                //TODO check audio List Sender
+                                left: Sizer.getW(context) / 2 - AppSize.s20),
+                            child: SizedBox()
+                            /*
+                                      VoiceMessage(
+                                        key: Key(path!),
+                                        audioSrc: path,
+                                        me: true,
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(con.text),
-                                      )
-                                    ],
-                                  ),
-                                )));
+                                      */
+                            ));
+                        chatProvider.changeReplayMessage(
+                            replayMessage: chatProvider.replayMessage);
 
-                            /// value.replayMessage = null;
-                            /// chatProvider.replayIdMessage="";
-                            ///   chatProvider.changeReplayMessage(replayMessage: null);
-                            ///setState1(() {});
-                          } else {
-                            Message tempMessage = Message(
-                                textMessage: str.toString(),
-                                replayId: "",
-                                typeMessage: "text",
-                                senderId: profileProvider.user.id,
-                                deleteUserMessage: [],
-                                sendingTime: DateTime.now(),
-                                checkSend: false);
-                            list.add(SwipeTo(
-                                onRightSwipe: () {
-                                  print(str);
-
-                                  ///value.replayMessage = str;
-                                  foucsNode.requestFocus();
-                                  chatProvider.changeReplayMessage(
-                                      replayMessage: str);
-
-                                  /// setState1(() {});
-                                },
-                                child: BuildMessageShape(
-                                  //    isMe: false,
-                                  message: tempMessage,
-
-                                  child: Row(
-                                    children: [
-                                      Text(str.toString()),
-                                    ],
-                                  ),
-                                )));
-                          }
-                          print("${tempMessage.toJson()}");
-
-                          ///toDo هنا لا يختفي الرسالة حتا تتم ارسالها
-                          ///في حال اردت التغير قم بوضع السطر الاول في الاخر
-                          con.text = '';
-                          chatProvider.replayIdMessage = "";
-                          chatProvider.changeReplayMessage(replayMessage: null);
-                          await value.addMessage(context,
-                              idGroup: chatProvider.group.id,
-                              message: tempMessage);
-                          //chatProvider.replayIdMessage = "";
-                          //chatProvider.changeReplayMessage(replayMessage: null);
-
-
-
-                          ///  });
-                        },
-                        onRecordEnd: (path) {
-                          ///  setState1(() {
-                          list.add(Container(
-                              margin: EdgeInsets.only(
-                                  top: AppMargin.m4,
-                                  bottom: AppMargin.m4,
-                                  //TODO check audio List Sender
-                                  left: Sizer.getW(context) / 2 - AppSize.s20),
-                              child: SizedBox()
-                              /*
-                                        VoiceMessage(
-                                          key: Key(path!),
-                                          audioSrc: path,
-                                          me: true,
-                                        ),
-                                        */
-                              ));
-                          chatProvider.changeReplayMessage(
-                              replayMessage: chatProvider.replayMessage);
-
-                          ///});
-                        },
-                        textPadding: EdgeInsets.zero,
-                        leading: CupertinoButton(
+                        ///});
+                      },
+                      textPadding: EdgeInsets.zero,
+                      leading: CupertinoButton(
+                        padding: EdgeInsets.zero,
+                        child: const Icon(
+                          Icons.insert_emoticon_outlined,
+                          size: 25,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {},
+                      ),
+                      actions: [
+                        CupertinoButton(
                           padding: EdgeInsets.zero,
                           child: const Icon(
-                            Icons.insert_emoticon_outlined,
+                            Icons.attach_file_rounded,
                             size: 25,
                             color: Colors.grey,
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            showModalBottomSheet(
+                                backgroundColor: Colors.transparent,
+                                context: context,
+                                builder: (_) => bottomSheet());
+                          },
                         ),
-                        actions: [
-                          CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            child: const Icon(
-                              Icons.attach_file_rounded,
-                              size: 25,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  backgroundColor: Colors.transparent,
-                                  context: context,
-                                  builder: (_) => bottomSheet());
-                            },
+                        CupertinoButton(
+                          padding: EdgeInsets.zero,
+                          child: const Icon(
+                            Icons.camera_alt_rounded,
+                            size: 25,
+                            color: Colors.grey,
                           ),
-                          CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            child: const Icon(
-                              Icons.camera_alt_rounded,
-                              size: 25,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () async {
-                              ImagePickerPlus picker = ImagePickerPlus(context);
-                              SelectedImagesDetails? details =
-                                  await picker.pickBoth(
-                                source: ImageSource.both,
-                                multiSelection: false,
-                                galleryDisplaySettings: GalleryDisplaySettings(
-                                  tabsTexts: TabsTexts(
-                                      videoText: tr(LocaleKeys.video),
-                                      galleryText: tr(LocaleKeys.gallery),
-                                      photoText: tr(LocaleKeys.camera),
-                                      deletingText: tr(LocaleKeys.delete)),
-                                  appTheme: AppTheme(
-                                      focusColor: Colors.white,
-                                      primaryColor: Colors.black),
-                                  showImagePreview: true,
-                                  cropImage: true,
-                                ),
-                              );
-                              if (details != null)
-                                await displayDetails(details);
-                            },
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  //     }),
-                ))
-          ],
-        ),
+                          onPressed: () async {
+                            ImagePickerPlus picker = ImagePickerPlus(context);
+                            SelectedImagesDetails? details =
+                                await picker.pickBoth(
+                              source: ImageSource.both,
+                              multiSelection: false,
+                              galleryDisplaySettings: GalleryDisplaySettings(
+                                tabsTexts: TabsTexts(
+                                    videoText: tr(LocaleKeys.video),
+                                    galleryText: tr(LocaleKeys.gallery),
+                                    photoText: tr(LocaleKeys.camera),
+                                    deletingText: tr(LocaleKeys.delete)),
+                                appTheme: AppTheme(
+                                    focusColor: Colors.white,
+                                    primaryColor: Colors.black),
+                                showImagePreview: true,
+                                cropImage: true,
+                              ),
+                            );
+                            if (details != null)
+                              await displayDetails(details);
+                          },
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                //     }),
+              ))
+        ],
       ),
     );
   }
@@ -865,7 +855,8 @@ class _ChatViewState extends State<ChatView> {
               ),
               Positioned(
                 top: 0,
-                right: 0,
+                left: context.locale == "en"?null:0,
+                right: context.locale == "en"?0:null,
                 child: IconButton(
                     onPressed: () {
                       ///chatProvider.replayMessage = null;

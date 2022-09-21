@@ -65,7 +65,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.locale;
     return  MultiProvider(
       providers: [
 
@@ -92,7 +91,7 @@ class MyApp extends StatelessWidget {
           builder: (c, value, child) {
             print(appProvider.darkTheme);
             return GetMaterialApp(
-              title: tr(LocaleKeys.app_name),
+              title: "Ehtooa",
               supportedLocales: context.supportedLocales,
               localizationsDelegates: context.localizationDelegates,
               locale: context.locale,
