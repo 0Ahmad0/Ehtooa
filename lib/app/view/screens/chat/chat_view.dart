@@ -35,6 +35,8 @@ import '../../resources/consts_manager.dart';
 import '../list_of_member/list_of_member_view.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import 'ex/chat_composer.dart';
+
 class ChatView extends StatefulWidget {
   const ChatView({super.key});
 
