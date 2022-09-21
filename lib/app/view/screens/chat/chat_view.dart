@@ -45,6 +45,7 @@ class ChatView extends StatefulWidget {
 class _ChatViewState extends State<ChatView> {
   List<Widget> list = [];
   List<Widget> listSend = [];
+  List<Message> listSendMessage = [];
   TextEditingController con = TextEditingController();
   final foucsNode = FocusNode();
 
@@ -415,33 +416,38 @@ class _ChatViewState extends State<ChatView> {
                             'id': chatProvider.group.id,
                             'messages': snapshot.data!.docs
                           }, idUser: profileProvider.user.id);
-                          convertListMessagesToListUsers(
-                              chatProvider.group.chat);
-                          convertListMessagesToListWidget(
-                              chatProvider.group.chat);
-                          // Navigator.of(context).pop();
-                          return SingleChildScrollView(
-                            reverse: true,
-                            child: ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                padding: EdgeInsets.all(
-                                  AppPadding.p10,
-                                ),
-                                itemCount:
 
-                                    ///chatProvider.group.chat.messages.length,
-                                    list.length,
-                                itemBuilder: (_, pos) {
-                                  chatProvider.group.chat.messages[pos].index =
-                                      pos;
-                                  return
+                       return   ChangeNotifierProvider<ChatProvider>.value(
+                      value: chatProvider,
+                      child: Consumer<ChatProvider>(
+                      builder: (context, value, child){
+                        convertListMessagesToListUsers(chatProvider.group.chat);
+                        convertListMessagesToListWidget(chatProvider.group.chat);
+                        convertListSendMessagesToListWidget(listSendMessage);
+                        // Navigator.of(context).pop();
+                        return SingleChildScrollView(
+                          reverse: true,
+                          child: ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              padding: EdgeInsets.all(
+                                AppPadding.p10,
+                              ),
+                              itemCount:
 
-                                      ///BuildMessageShape(isMe: true, child: Text("${chatProvider.group.chat.messages[pos].textMessage}"));
-                                      list[pos];
-                                  // return ListTile(title: Text(list[pos]));
-                                }),
-                          );
+                              ///chatProvider.group.chat.messages.length,
+                              list.length,
+                              itemBuilder: (_, pos) {
+                             //   chatProvider.group.chat.messages[pos].index = pos;
+                                return
+
+                                  ///BuildMessageShape(isMe: true, child: Text("${chatProvider.group.chat.messages[pos].textMessage}"));
+                                  list[pos];
+                                // return ListTile(title: Text(list[pos]));
+                              }),
+                        );
+                      }
+                      ));
                         } else {
                           return const Text('Empty data');
                         }
@@ -619,12 +625,16 @@ class _ChatViewState extends State<ChatView> {
 
                           ///toDo هنا لا يختفي الرسالة حتا تتم ارسالها
                           ///في حال اردت التغير قم بوضع السطر الاول في الاخر
+                          con.text = '';
+                          chatProvider.replayIdMessage = "";
+                          chatProvider.changeReplayMessage(replayMessage: null);
                           await value.addMessage(context,
                               idGroup: chatProvider.group.id,
                               message: tempMessage);
-                          chatProvider.replayIdMessage = "";
-                          chatProvider.changeReplayMessage(replayMessage: null);
-                          con.text = '';
+                          //chatProvider.replayIdMessage = "";
+                          //chatProvider.changeReplayMessage(replayMessage: null);
+
+
 
                           ///  });
                         },
@@ -776,13 +786,27 @@ class _ChatViewState extends State<ChatView> {
                 details: details,
                 aspectRatio: details.aspectRatio)),
       ));
+      ///add local message
+      var tempMessageSemd=Message(textMessage: "textMessage",
+          replayId: "replayId",
+          typeMessage: "typeMessage"
+          , senderId: "senderId",
+          deleteUserMessage: [],
+          sendingTime: DateTime.now());
+       tempMessage.url=details.selectedFile.path;
+      listSendMessage.add(tempMessage);
       chatProvider.replayIdMessage = "";
       chatProvider.changeReplayMessage(replayMessage: null);
+
       String url = await chatProvider.uploadImage(details.selectedFile.path);
       tempMessage.url = url;
       print("${tempMessage.toJson()}");
+      ///remove local message
+      listSendMessage.remove(tempMessage);
       await chatProvider.addMessage(context,
           idGroup: chatProvider.group.id, message: tempMessage);
+      chatProvider.notifyListeners();
+
       //setState1(() {});
     } else {
       // final video = await VideoThumbnail.thumbnailData(
@@ -945,8 +969,7 @@ class _ChatViewState extends State<ChatView> {
                       for (File file in files) {
                         String url = await chatProvider.uploadFile(file.path);
                         tempMessage.url = url;
-                        tempMessage.textMessage =
-                            chatProvider.findbasename(file.path);
+                        tempMessage.textMessage = chatProvider.findbasename(file.path);
                         print("${tempMessage.toJson()}");
                         await chatProvider.addMessage(context,
                             idGroup: chatProvider.group.id,
@@ -1405,40 +1428,7 @@ class _ChatViewState extends State<ChatView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  height: Sizer.getW(context) * 0.15,
-                  padding: EdgeInsets.all(AppPadding.p8),
-                  decoration: BoxDecoration(
-                    color: ColorManager.lightGray.withOpacity(.5),
-                    borderRadius: BorderRadius.circular(AppSize.s8),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      VerticalDivider(
-                        thickness: AppSize.s4,
-                        color: Theme.of(context).primaryColor.withOpacity(.5),
-                      ),
-                      Flexible(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              ("${receiveReplayname(message: message)}"),
-                              style: TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(
-                              height: Sizer.getW(context) * 0.01,
-                            ),
-                            Text(
-                              replaytext,
-                            )
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
-                ),
+                buildrReplayMessage(message: message),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(message.textMessage),
@@ -1886,7 +1876,9 @@ class BuildMessageShape extends StatelessWidget {
                     Icons.check_circle_outline,
                     size: AppSize.s14
                 )
-                        : FutureBuilder(
+                        :SizedBox()
+       /**
+                FutureBuilder(
                             future: chatProvider.addMessage(context,
                                 idGroup: chatProvider.group.id,
                                 message: message),
@@ -1917,7 +1909,9 @@ class BuildMessageShape extends StatelessWidget {
                                 return Icon(Icons.error_outline);
                               }
                             },
-                          ))
+                          )
+    **/
+                )
                     : SizedBox(),
                 // Icon(Icons.check_circle_outline),
               ],

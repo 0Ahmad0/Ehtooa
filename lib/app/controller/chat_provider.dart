@@ -87,6 +87,7 @@ class ChatProvider with ChangeNotifier{
                   , typeMessage: models.ChatMessageType.text.name
                   , senderId: "Tytxd8ae9TRz1wF70iMC"
                   , sendingTime: DateTime.now()));*/
+   message.sendingTime=DateTime.now();
    var result =await FirebaseFun
        .addMessage(id: idGroup,
        message:message);
