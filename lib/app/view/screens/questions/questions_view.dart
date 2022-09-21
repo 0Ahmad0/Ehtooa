@@ -15,6 +15,8 @@ import 'package:get/get.dart';
 import '../../../controller/profile_provider.dart';
 import '../../resources/color_manager.dart';
 import 'package:provider/provider.dart';
+
+import '../login/login_view.dart';
 class QuestionsView extends StatefulWidget {
    List<int> indexTaken;
 
@@ -121,6 +123,12 @@ class _QuestionsViewState extends State<QuestionsView> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(tr(LocaleKeys.mental_health)),
+          leading: IconButton(
+            onPressed: (){
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>LoginView()));
+            },
+            icon: Icon(Icons.logout),
+          ),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(

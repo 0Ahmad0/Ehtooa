@@ -41,7 +41,6 @@ class SignupView extends StatelessWidget {
     child: Consumer<SignupProvider>(
     builder: (context, value, child) =>
         Scaffold(
-        resizeToAvoidBottomInset: false,
         body: Column(
           children: [
             FadeInDownBig(child: SvgPicture.asset(fit: BoxFit.fill, ImagesAssets.signupBack)),

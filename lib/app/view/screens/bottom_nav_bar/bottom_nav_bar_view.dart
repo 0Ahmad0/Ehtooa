@@ -81,7 +81,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
 
                               ):Container(
                                 decoration: BoxDecoration(
-                                  color: Colors.green,
+                                  color: Theme.of(context).primaryColor,
                                     shape: BoxShape.circle,
                                 ),
                                 child:ClipOval(
