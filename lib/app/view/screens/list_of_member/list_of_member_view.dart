@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import '../../../controller/chat_provider.dart';
+import '../../../controller/profile_provider.dart';
 import '../../../controller/utils/firebase.dart';
 import '../../../model/models.dart';
 import '../../../model/utils/const.dart';
@@ -21,32 +22,35 @@ class ListOfMemberView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     final chatProvider = Provider.of<ChatProvider>(context);
+      chatProvider = Provider.of<ChatProvider>(context);
      final homeProvider = Provider.of<HomeProvider>(context);
-     List listUsers=[chatProvider.group.idAmin];
-     listUsers.addAll(chatProvider.group.listUsers);
     return Scaffold(
       appBar: AppBar(
-        title: Text("kk"),
+        title: Text("Members"),
       ),
       body: ChangeNotifierProvider<ChatProvider>.value(
     value: chatProvider,
     child: Consumer<ChatProvider>(
-    builder: (context, value, child) =>
-        ListView.builder(
-          padding: EdgeInsets.all(AppPadding.p10),
-          itemCount: listUsers.length,//users.length + 3,
-          itemBuilder: (_,index){
-            return user(context, homeProvider, idUser: listUsers[index],
-                typeUser: (index==0)?AppConstants.collectionAdmin:AppConstants.collectionPatient,
-                checkblock:(chatProvider.checkBlockUserInGroup(idUser: listUsers[index])));
-          },
-        )
-    )),
-
+    builder: (context, value, child) {
+      List listUsers=[chatProvider.group.idAmin];
+      listUsers.addAll(chatProvider.group.listUsers);
+      return ListView.builder(
+        padding: EdgeInsets.all(AppPadding.p10),
+        itemCount: listUsers.length, //users.length + 3,
+        itemBuilder: (_, index) {
+          return user(context, homeProvider, idUser: listUsers[index],
+              typeUser: (index == 0)
+                  ? AppConstants.collectionAdmin
+                  : AppConstants.collectionPatient,
+              checkblock: (chatProvider.checkBlockUserInGroup(
+                  idUser: listUsers[index])));
+        },
+      );
+    }))
     );
   }
   user(context,homeProvider,{required String idUser,required String typeUser,required bool checkblock}){
+    final profileProvider = Provider.of<ProfileProvider>(context);
     return Container(
       margin: EdgeInsets.symmetric(vertical: AppMargin.m4),
       padding: EdgeInsets.symmetric(
@@ -129,7 +133,9 @@ class ListOfMemberView extends StatelessWidget {
         ),
         ///subtitle: Text("users[index].name"),
 
-        trailing: (typeUser.contains(AppConstants.collectionPatient))?
+        trailing: (typeUser.contains(AppConstants.collectionPatient)
+            &&profileProvider.user.typeUser.contains(AppConstants.collectionAdmin)
+        )?
         Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -144,7 +150,7 @@ class ListOfMemberView extends StatelessWidget {
                               Theme.of(context).primaryColor),
                           onPressed: () {
                             Navigator.pop(context);
-                            chatProvider.deleteUserInGroup(context, idUser: idUser);
+                            chatProvider.changeBlockStateUser(context, idUser: idUser);
                           },
                           child: Text(
                             tr(LocaleKeys.yes),
@@ -178,6 +184,8 @@ class ListOfMemberView extends StatelessWidget {
                       fontSize: Sizer.getW(context) / 22),
                   title: tr(LocaleKeys.are_you_sure),
                   content: Text(
+                    checkblock?
+                    tr(LocaleKeys.confirm_unban):
                     tr(LocaleKeys.confirm_ban),
                     style: getRegularStyle(
                         color: Theme.of(context)
@@ -201,7 +209,11 @@ class ListOfMemberView extends StatelessWidget {
                   children: [
                     Icon(Icons.block,color :ColorManager.white),
                     const SizedBox(width: AppSize.s4,),
-                    Text(tr(LocaleKeys.ban),style: getRegularStyle(
+                    Text(
+                      checkblock?
+                      tr(LocaleKeys.unban):
+                      tr(LocaleKeys.ban)
+                      ,style: getRegularStyle(
                         color: ColorManager.white
                     ),),
                   ],

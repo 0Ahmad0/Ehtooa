@@ -234,7 +234,9 @@ abstract class  LocaleKeys {
   static const price = 'price';
   static const video = 'video';
   static const ban = 'ban';
+  static const unban = 'unban';
   static const confirm_ban = 'confirm_ban';
+  static const confirm_unban = 'confirm_unban';
   static const confirm_delete_user = 'confirm_delete_user';
   static const del = 'del';
   static const add_member = 'add_member';

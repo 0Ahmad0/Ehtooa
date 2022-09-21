@@ -158,7 +158,7 @@ class LoginView extends StatelessWidget {
                                 }),
                             ///create group
 
-                            SizedBox(
+                           /** SizedBox(
                               height: AppSize.s20,
                             ),
                             ButtonApp(
@@ -173,7 +173,7 @@ class LoginView extends StatelessWidget {
                                     final result =await CreateEnvironmentProvider().fetchGroup(context);
                                     //CreateEnvironmentProvider().compare();
                                     Navigator.of(context).pop();
-                                }),                            
+                                }),**/
 
                             SizedBox(
                               height: AppSize.s10,

@@ -13,7 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../../controller/profile_provider.dart';
 import '../../../model/models.dart';
+import '../../../model/utils/const.dart';
 import '../../resources/color_manager.dart';
 
 
@@ -24,6 +26,7 @@ class SettingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appModel = Provider.of<AppProvider>(context);
+    final profileProvider = Provider.of<ProfileProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(tr(LocaleKeys.setting)),
@@ -223,8 +226,10 @@ class SettingView extends StatelessWidget {
                       color: Theme.of(context).textTheme.bodyText1!.color
                   ),),
                   leading: Icon(Icons.logout),
-                onTap: (){
-
+                onTap: () async {
+                  Const.LOADIG(context);
+                  await profileProvider.logout(context);
+                  Navigator.of(context).pop();
                 },
               ),
 

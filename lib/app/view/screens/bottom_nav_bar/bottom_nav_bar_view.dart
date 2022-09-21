@@ -1,6 +1,7 @@
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/color_manager.dart';
+import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/app/view/screens/admin/add_doctor/add_doctor_view.dart';
@@ -40,7 +41,6 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
     ];
     super.initState();
   }
-
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
@@ -120,10 +120,12 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                       Navigator.push(context, MaterialPageRoute(builder: (ctx)=>SettingView()));
                     },
                   ),
+                  (profileProvider.user.typeUser.contains(AppConstants.collectionAdmin))?
                   Divider(
                     thickness: AppSize.s1_5,
                     height: 0.0,
-                  ),
+                  ):SizedBox(),
+                  (profileProvider.user.typeUser.contains(AppConstants.collectionAdmin))?
                   _buildListTile(
                     text: tr(LocaleKeys.add_doctor),
                     icon: Icons.add_box_outlined,
@@ -133,11 +135,13 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                           context,
                           MaterialPageRoute(builder: (ctx)=>AddDoctorView()));
                     },
-                  ),
+                  ):SizedBox(),
+                  (profileProvider.user.typeUser.contains(AppConstants.collectionAdmin))?
                   Divider(
                     thickness: AppSize.s1_5,
                     height: 0.0,
-                  ),
+                  ):SizedBox(),
+                  (profileProvider.user.typeUser.contains(AppConstants.collectionAdmin))?
                   _buildListTile(
                     text: tr(LocaleKeys.create_session),
                     icon: Icons.cast_connected_sharp,
@@ -146,8 +150,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                       Navigator.push(
                           context, MaterialPageRoute(builder: (ctx)=>CreateSessionsView()));
                     },
-                  ),
-
+                  ):SizedBox(),
                   Divider(
                     thickness: AppSize.s1_5,
                     height: 0.0,
@@ -200,8 +203,9 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                   tabBackgroundColor: Theme.of(context).primaryColor,
                   tabMargin: EdgeInsets.symmetric(
                       vertical: AppMargin.m10, horizontal: AppMargin.m4),
-                  tabs: [
-                    GButton(
+
+                  tabs: (profileProvider.user.typeUser.contains(AppConstants.collectionAdmin))?
+                  [GButton(
                       icon: Icons.person,
                       text: tr(LocaleKeys.profile),
                     ),
@@ -210,14 +214,38 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                       text: tr(LocaleKeys.home),
                     ),
                     GButton(
-                      icon: Icons.notifications_active,
-                      text: tr(LocaleKeys.notification),
-                    ),
-                    GButton(
                       icon: Icons.group,
                       text: tr(LocaleKeys.groups),
                     ),
-                  ],
+                  ]:(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))?
+                    [GButton(
+                    icon: Icons.person,
+                    text: tr(LocaleKeys.profile),),
+                    GButton(
+                      icon: Icons.home_filled,
+                      text: tr(LocaleKeys.home),
+                    ),
+                    GButton(
+                      icon: Icons.notifications_active,
+                      text: tr(LocaleKeys.notification),
+                    ),
+                    ]:
+                    [GButton(
+                    icon: Icons.person,
+                        text: tr(LocaleKeys.profile),),
+                    GButton(
+                    icon: Icons.home_filled,
+                    text: tr(LocaleKeys.home),
+                    ),
+                    GButton(
+                    icon: Icons.notifications_active,
+                    text: tr(LocaleKeys.notification),
+                    ),
+                    GButton(
+                    icon: Icons.group,
+                    text: tr(LocaleKeys.groups),
+                    ),
+                    ],
                 )),
           );
         },

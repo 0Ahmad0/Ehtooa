@@ -157,11 +157,26 @@ class ChatProvider with ChangeNotifier{
      return true;
    return false;
  }
+ changeBlockStateUser(context,{required String idUser}) async {
+   if(checkBlockUserInGroup(idUser: idUser)) {
+     return await unBlockUserInGroup(context, idUser: idUser);
+   }else {
+     return await blockUserInGroup(context, idUser: idUser);
+   }
+ }
  blockUserInGroup(context,{required String idUser}) async {
    Const.LOADIG(context);
-   if(!checkBlockUserInGroup(idUser: idUser)) {
      group.listBlockUsers.add(idUser);
-   }
+   var result =await FirebaseFun.updateGroup(group: group, id: group.id,updateGroupType: models.UpdateGroupType.block_user);
+   print(result);
+   Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+   notifyListeners();
+   Navigator.of(context).pop();
+   return result;
+ }
+ unBlockUserInGroup(context,{required String idUser}) async {
+   Const.LOADIG(context);
+   group.listBlockUsers.remove(idUser);
    var result =await FirebaseFun.updateGroup(group: group, id: group.id,updateGroupType: models.UpdateGroupType.block_user);
    print(result);
    Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
