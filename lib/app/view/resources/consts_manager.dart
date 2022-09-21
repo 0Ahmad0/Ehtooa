@@ -14,6 +14,7 @@ class AppConstants {
   static const emailKey = "email";
   static const tokenKEY = "token";
   static const idKEY = "id";
+  static const emailContact = "kholodalaskary9@gmail.com";
 
   static String storageUrl = "gs://ehtooa-266e1.appspot.com";
   static String photoProfilePatient =

@@ -13,6 +13,7 @@ import 'package:path/path.dart';
 import '../model/utils/const.dart';
 
 class ProfileProvider with ChangeNotifier{
+  final serial_number = TextEditingController(text: "000-252-1456-6222");
    var name = TextEditingController(text: "أحمد الحريري");
   var email = TextEditingController(text: "Ahmad2001@gmail.com");
   bool nameIgnor = true;

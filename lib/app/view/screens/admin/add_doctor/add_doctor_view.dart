@@ -17,6 +17,8 @@ class AddDoctorView extends StatelessWidget {
   final passWord = TextEditingController();
   final name = TextEditingController();
   final description = TextEditingController();*/
+
+
   @override
   Widget build(BuildContext context) {
     final addDoctorProvider = Provider.of<AddDoctorProvider>(context);
@@ -74,6 +76,36 @@ class AddDoctorView extends StatelessWidget {
                     prefixIcon: Icons.email,
                     maxLength: null,
                     hintText: tr(LocaleKeys.doctor_email)),
+                SizedBox(height: AppSize.s20,),
+                CustomTextFiled(
+                    controller: value.serialNumber,
+                    validator: (String? val){
+                      if(val!.isEmpty){
+                        return tr(LocaleKeys.field_required);
+                      }
+                      else{
+                        return null;
+                      }
+                    },
+                    onChange: (String? val){},
+                    prefixIcon: Icons.chrome_reader_mode,
+                    maxLength: null,
+                    hintText: tr(LocaleKeys.serial_number)),
+                SizedBox(height: AppSize.s20,),
+                CustomTextFiled(
+                    controller: value.phoneNumber,
+                    validator: (String? val){
+                      if(val!.isEmpty){
+                        return tr(LocaleKeys.field_required);
+                      }
+                      else{
+                        return null;
+                      }
+                    },
+                    onChange: (String? val){},
+                    prefixIcon: Icons.phone_android,
+                    maxLength: null,
+                    hintText: tr(LocaleKeys.phone_number)),
                 SizedBox(height: AppSize.s20,),
                 CustomTextFiled(
                     controller: value.passWord,

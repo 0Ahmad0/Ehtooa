@@ -57,13 +57,13 @@ class DoctorProfile extends StatelessWidget {
                   left: AppPadding.p20,
                   right: AppPadding.p20
                 ),
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.vertical(
-                top: Radius.circular(AppSize.s50
-                ),
-              )
-            ),
+            // decoration: BoxDecoration(
+            //   color: Theme.of(context).primaryColor.withAlpha(25),
+            //   borderRadius: BorderRadius.vertical(
+            //     top: Radius.circular(AppSize.s50
+            //     ),
+            //   )
+            // ),
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
@@ -84,12 +84,17 @@ class DoctorProfile extends StatelessWidget {
                         thickness: AppSize.s1_5,
                       ),
                       _buildListTile(context,
-                          icon: Icons.description,
-                          title: tr(LocaleKeys.description),
-                          subTitle: doctor.description
+                          icon: Icons.email,
+                          title: tr(LocaleKeys.doctor_email),
+                          subTitle: "ahalksmc@gmail.com"//doctor.carer
                       ),
                       const Divider(
                         thickness: AppSize.s1_5,
+                      ),
+                      _buildListTile(context,
+                          icon: Icons.description,
+                          title: tr(LocaleKeys.description),
+                          subTitle: doctor.description
                       ),
                     ],
                   ),
@@ -105,12 +110,12 @@ class DoctorProfile extends StatelessWidget {
       leading: Icon(icon),
       title: Text(title,style: getRegularStyle(
         // color: Theme.of(context).textTheme.bodyText1!.color
-          color: ColorManager.white,
+          color: Theme.of(context).textTheme.bodyText1!.color,
           fontSize: Sizer.getW(context) / 24
       ),),
       subtitle: Text(subTitle,style: getRegularStyle(
         // color: Theme.of(context).textTheme.bodyText1!.color
-          color: ColorManager.white,
+          color: ColorManager.lightGray,
           fontSize: Sizer.getW(context) / 28
       ),),
     );

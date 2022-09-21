@@ -1,10 +1,13 @@
 import 'package:animate_icons/animate_icons.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/model/utils/local/change_theme.dart';
 import 'package:ehtooa/app/model/utils/local/storage.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
+import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
+import 'package:ehtooa/app/view/widgets/custome_button.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -193,7 +196,8 @@ class SettingView extends StatelessWidget {
                       color: Theme.of(context).textTheme.bodyText1!.color
                   ),),
                   leading: Icon(Icons.contact_support),
-                onTap: (){
+                onTap: ()async{
+                   await HomeProvider().goToUrl(context, 'mailto:${AppConstants.emailContact}');
                 },
               ),
 
@@ -232,3 +236,36 @@ class SettingView extends StatelessWidget {
     );
   }
 }
+/*
+                    Get.defaultDialog(
+                      radius: AppSize.s8,
+                      title: tr(LocaleKeys.contact),
+                      titleStyle: getRegularStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: Sizer.getW(context) / 24
+                      ),
+                      content: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Text(tr(LocaleKeys.type_message_here)),
+                          const SizedBox(height: AppSize.s10),
+                          TextFormField(
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              filled: true,
+                              fillColor: ColorManager.lightGray.withOpacity(.3),
+                            ),
+                            minLines: 1,
+                            maxLines: 4,
+                            maxLength: 200,
+                          ),
+                          ButtonApp(text: tr(LocaleKeys.send), onTap: (){
+
+                          })
+                        ],
+                      )
+                    );
+
+ */
