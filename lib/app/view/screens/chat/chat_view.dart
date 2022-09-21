@@ -399,7 +399,7 @@ class _ChatViewState extends State<ChatView> {
 
                         convertListMessagesToListUsers(chatProvider.group.chat);
                             convertListMessagesToListWidget(chatProvider.group.chat);
-                          return StatefulBuilder(key:setState3 ,builder: (_, setStateChat) {
+                          return StatefulBuilder(builder: (_, setStateChat) {
                             setState3=setStateChat;
                             convertListSendMessagesToListWidget(listSendMessage);
                             // Navigator.of(context).pop();
