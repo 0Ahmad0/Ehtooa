@@ -58,6 +58,9 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                       child: Consumer<ProfileProvider>(
                         builder: (context, value, child) =>
                             UserAccountsDrawerHeader(
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor
+                              ),
                               margin: EdgeInsets.zero,
                               accountName: Text(
                                // tr(LocaleKeys.name),

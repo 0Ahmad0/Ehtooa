@@ -63,11 +63,11 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   Widget build(BuildContext context) {
+    foucsNode.requestFocus();
     profileProvider = Provider.of<ProfileProvider>(context);
     chatProvider = Provider.of<ChatProvider>(context);
     homeProvider = Provider.of<HomeProvider>(context);
     widthImageChat = Sizer.getW(context) * 0.20;
-
     ///print(chatProvider.group.nameAr);
     return Scaffold(
       appBar: AppBar(
@@ -224,6 +224,8 @@ class _ChatViewState extends State<ChatView> {
                     Directionality(
                       textDirection: ui.TextDirection.ltr,
                       child: ChatComposer(
+                        composerColor: Theme.of(context).cardColor,
+                        backgroundColor: Theme.of(context).cardColor,
                         borderRadius: value.isReplay
                             ? BorderRadius.vertical(
                                 bottom: Radius.circular(AppSize.s8))
@@ -951,7 +953,7 @@ Stack(
                     Text(
                       ("${receiveReplayname(message: message)}"),
                       style: getBoldStyle(
-                          color: Theme.of(context).textTheme.bodyText1!.color),
+                          color: ColorManager.blackGray),
                     ),
                     const SizedBox(
                       height: AppSize.s4,
@@ -1590,6 +1592,10 @@ class BuildMessageShape extends StatelessWidget {
             (homeProvider.cacheUser.containsKey(message.senderId))
                 ? Text(
                     "${homeProvider.cacheUser[message.senderId]}",
+                    style: getRegularStyle(
+                      color: ColorManager.black,
+                      fontSize: Sizer.getW(context) / 30
+                    ),
                     //TODO
                     // textAlign: TextAlign.left,
                   )
@@ -1656,7 +1662,7 @@ class BuildMessageShape extends StatelessWidget {
                     )),
                 (isMe)
                     ? ((message.checkSend)
-                            ? Icon(Icons.check_circle_outline,
+                            ? Icon(Icons.check,
                                 size: AppSize.s14)
                             : SizedBox()
                         /**

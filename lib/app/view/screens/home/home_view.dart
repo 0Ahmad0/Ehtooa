@@ -409,7 +409,7 @@ class HomeView extends StatelessWidget {
                                                             .size
                                                             .width,
                                                         decoration: BoxDecoration(
-                                                            color: Colors.white,
+                                                            color: Theme.of(context).cardColor,
                                                             borderRadius: BorderRadius
                                                                 .circular(AppSize.s8),
                                                             border: _selectedIndex == e
@@ -537,8 +537,7 @@ class HomeView extends StatelessWidget {
                                                               },
                                                               child: Text(tr(LocaleKeys.go),
                                                                 style: getRegularStyle(
-                                                                    color: ColorManager
-                                                                        .white,
+                                                                    color:Theme.of(context).textTheme.bodyText1!.color,
                                                                     fontSize: Sizer.getW(
                                                                         context) / 30
                                                                 ),
@@ -576,7 +575,7 @@ class HomeView extends StatelessWidget {
                                                     width: double.infinity,
                                                     height: Sizer.getW(context) * 0.2,
                                                     decoration: BoxDecoration(
-                                                        color: ColorManager.white,
+                                                        color: Theme.of(context).cardColor,
                                                         borderRadius: BorderRadius.circular(
                                                             AppSize.s14)
                                                     ),

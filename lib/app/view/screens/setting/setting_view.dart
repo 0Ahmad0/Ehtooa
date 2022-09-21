@@ -12,17 +12,18 @@ import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../controller/profile_provider.dart';
 import '../../../model/models.dart';
 import '../../../model/utils/const.dart';
 import '../../resources/color_manager.dart';
 
-
 class SettingView extends StatelessWidget {
   bool language = false;
   bool theme = false;
-  AnimateIconController c1 =  AnimateIconController();
+  AnimateIconController c1 = AnimateIconController();
+
   @override
   Widget build(BuildContext context) {
     final appModel = Provider.of<AppProvider>(context);
@@ -41,86 +42,87 @@ class SettingView extends StatelessWidget {
           children: [
             Theme(
               data: Theme.of(context).copyWith(
-                  dividerColor: Colors.transparent
+                dividerColor: Colors.transparent,
               ),
               child: Container(
-                margin: EdgeInsets.symmetric(
-                    vertical: AppSize.s8
-                ),
+                margin: EdgeInsets.symmetric(vertical: AppSize.s8),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(AppSize.s14),
-                    color: ColorManager.lightGray.withOpacity(.2)
-                ),
+                    color: ColorManager.lightGray.withOpacity(.2)),
                 child: ExpansionTile(
+                  collapsedIconColor:
+                      Theme.of(context).textTheme.bodyText1!.color,
+                  iconColor: Theme.of(context).textTheme.bodyText1!.color,
                   tilePadding: EdgeInsets.only(
-                    right: Advance.language?AppSize.s16:0,
-                    left: Advance.language?0:AppSize.s16,
+                    right: Advance.language ? AppSize.s16 : 0,
+                    left: Advance.language ? 0 : AppSize.s16,
                   ),
                   title: ListTile(
                     title: Text(
                       tr(LocaleKeys.language),
                       style: getRegularStyle(
-                          color: Theme.of(context).primaryColor,
-                          fontSize: Sizer.getW(context) * 0.035
-                      ),
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: Sizer.getW(context) * 0.035),
                     ),
                     leading: Icon(Icons.language),
                     subtitle: Text(
                       Advance.language
                           ? tr(LocaleKeys.english)
-                          :tr(LocaleKeys.arabic)
-                      ,style: getLightStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color
-                    ),),
-
+                          : tr(LocaleKeys.arabic),
+                      style: getLightStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color),
+                    ),
                   ),
                   children: [
                     ListTile(
-                      onTap: ()async{
+                      onTap: () async {
                         final _newLocale = Locale('en');
                         await context.setLocale(_newLocale);
                         Get.updateLocale(_newLocale);
                         // setState((){});
                         // print(context.locale);
                         // Advance.language = true;
-
                       },
-                      title: Text(tr(LocaleKeys.english),style: getRegularStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: Sizer.getW(context) * 0.035,
-                      ),),
+                      title: Text(
+                        tr(LocaleKeys.english),
+                        style: getRegularStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: Sizer.getW(context) * 0.035,
+                        ),
+                      ),
                       leading: SizedBox(),
                       trailing: Switch(
+                        activeColor: Theme.of(context).primaryColor,
                         value: Advance.language,
-                        onChanged: (val)async{
-
+                        onChanged: (val) async {
                           //
                           final _newLocale = Locale('en');
                           await context.setLocale(_newLocale);
                           Get.updateLocale(_newLocale);
                           Advance.language = true;
-
                         },
                       ),
-
                     ),
                     ListTile(
-                      onTap: ()async{
+                      onTap: () async {
                         final _newLocale = Locale('ar');
                         await context.setLocale(_newLocale);
                         Get.updateLocale(_newLocale);
                         // print(context.locale);
                         Advance.language = false;
-
                       },
-                      title: Text(tr(LocaleKeys.arabic),style: getRegularStyle(
-                        color:Theme.of(context).primaryColor,
-                        fontSize: Sizer.getW(context) * 0.035,
-                      ),),
+                      title: Text(
+                        tr(LocaleKeys.arabic),
+                        style: getRegularStyle(
+                          color: Theme.of(context).textTheme.bodyText1!.color,
+                          fontSize: Sizer.getW(context) * 0.035,
+                        ),
+                      ),
                       leading: SizedBox(),
                       trailing: Switch(
+                        activeColor: Theme.of(context).primaryColor,
                         value: !Advance.language,
-                        onChanged: (val)async{
+                        onChanged: (val) async {
                           final _newLocale = Locale('ar');
                           await context.setLocale(_newLocale);
                           Get.updateLocale(_newLocale);
@@ -129,44 +131,41 @@ class SettingView extends StatelessWidget {
                         },
                       ),
                     ),
-
                   ],
                 ),
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(
-                  vertical: AppSize.s8
-              ),
+              margin: EdgeInsets.symmetric(vertical: AppSize.s8),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppSize.s14),
-                  color: ColorManager.lightGray.withOpacity(.2)
-              ),
+                  color: ColorManager.lightGray.withOpacity(.2)),
               child: ListTile(
                   title: Text(
                     tr(LocaleKeys.theme),
                     style: getRegularStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: Sizer.getW(context) * 0.035
-                    ),
+                        color: Theme.of(context).textTheme.bodyText1!.color,
+                        fontSize: Sizer.getW(context) * 0.035),
                   ),
                   subtitle: Text(
                     appModel.darkTheme
                         ? tr(LocaleKeys.dark_mode)
-                        :tr(LocaleKeys.light_mode)
-                    ,style: getLightStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color
-                  ),),
+                        : tr(LocaleKeys.light_mode),
+                    style: getLightStyle(
+                        color: Theme.of(context).textTheme.bodyText1!.color),
+                  ),
                   leading: Icon(Icons.color_lens_outlined),
                   trailing: AnimateIcons(
+                    startIconColor:
+                        Theme.of(context).textTheme.bodyText1!.color,
+                    endIconColor: Theme.of(context).textTheme.bodyText1!.color,
                     startIcon:
-                    appModel.darkTheme ? Icons.dark_mode : Icons.light_mode,
+                        appModel.darkTheme ? Icons.dark_mode : Icons.light_mode,
                     endIcon:
-                    appModel.darkTheme ? Icons.dark_mode : Icons.light_mode,
+                        appModel.darkTheme ? Icons.dark_mode : Icons.light_mode,
                     controller: c1,
                     onStartIconPress: () {
                       appModel.darkTheme = !appModel.darkTheme;
-
                       return appModel.darkTheme;
                     },
                     onEndIconPress: () {
@@ -174,71 +173,73 @@ class SettingView extends StatelessWidget {
 
                       return appModel.darkTheme;
                     },
-                  )
-              ),
-
+                  )),
             ),
             Container(
-              margin: EdgeInsets.symmetric(
-                  vertical: AppSize.s8
-              ),
+              margin: EdgeInsets.symmetric(vertical: AppSize.s8),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppSize.s14),
-                  color: ColorManager.lightGray.withOpacity(.2)
-              ),
+                  color: ColorManager.lightGray.withOpacity(.2)),
               child: ListTile(
-                  title: Text(
-                    tr(LocaleKeys.contact),
-                    style: getRegularStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: Sizer.getW(context) * 0.035
-                    ),
-                  ),
-                  subtitle: Text(
-                    "",style: getLightStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color
-                  ),),
-                  leading: Icon(Icons.contact_support),
-                onTap: ()async{
-                   await HomeProvider().goToUrl(context, 'mailto:${AppConstants.emailContact}');
+                title: Text(
+                  tr(LocaleKeys.contact),
+                  style: getRegularStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: Sizer.getW(context) * 0.035),
+                ),
+                subtitle: Text(
+                  "",
+                  style: getLightStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color),
+                ),
+                leading: Icon(Icons.contact_support),
+                onTap: () async {
+                  launchEmail(
+                    toEmail: AppConstants.emailContact,
+                    subject: "Hello",
+                    message: "Hello my name is ahmad"
+                  ).then((value) => print(value));
                 },
               ),
-
             ),
             Container(
-              margin: EdgeInsets.symmetric(
-                  vertical: AppSize.s8
-              ),
+              margin: EdgeInsets.symmetric(vertical: AppSize.s8),
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(AppSize.s14),
-                  color: ColorManager.lightGray.withOpacity(.2)
-              ),
+                  color: ColorManager.lightGray.withOpacity(.2)),
               child: ListTile(
-                  title: Text(
-                    tr(LocaleKeys.logout),
-                    style: getRegularStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: Sizer.getW(context) * 0.035
-                    ),
-                  ),
-                  subtitle: Text(
-                    "",style: getLightStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color
-                  ),),
-                  leading: Icon(Icons.logout),
+                title: Text(
+                  tr(LocaleKeys.logout),
+                  style: getRegularStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color,
+                      fontSize: Sizer.getW(context) * 0.035),
+                ),
+                subtitle: Text(
+                  "",
+                  style: getLightStyle(
+                      color: Theme.of(context).textTheme.bodyText1!.color),
+                ),
+                leading: Icon(Icons.logout),
                 onTap: () async {
                   Const.LOADIG(context);
                   await profileProvider.logout(context);
                   Navigator.of(context).pop();
                 },
               ),
-
             ),
             // Text(tr(LocaleKeys.language),style: getBoldStyle(color: ColorManager.redOTP),)
           ],
         ),
       ),
     );
+  }
+
+  Future launchEmail({required String toEmail,required String message, required String subject}) async {
+    String url =
+        'mailto:$toEmail?subject=${Uri.encodeFull(subject)}&body=${Uri.encodeFull(message)}';
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url));
+    }
   }
 }
 /*

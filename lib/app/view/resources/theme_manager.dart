@@ -122,7 +122,9 @@ class MyTheme {
 
 ThemeData getApplicationTheme({bool isDark = false}){
   // return isDark ? MyTheme().darkTheme : MyTheme().lightTheme;
-  return isDark ? ThemeData.dark() : ThemeData.light().copyWith(
+  return isDark ? ThemeData.dark().copyWith(
+    primaryColorDark: ColorManager.lightGray,
+  ) : ThemeData.light().copyWith(
     inputDecorationTheme: InputDecorationTheme(
       // contentPadding:const EdgeInsets.all(AppPadding.p8),
       hintStyle: getRegularStyle(
