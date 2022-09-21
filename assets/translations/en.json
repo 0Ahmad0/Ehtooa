@@ -240,5 +240,8 @@
   "confirm_delete_user": "Do you really want to delete the user?",
   "del": "Delete",
   "add_member": "Add members",
-  "add": "Add"
+  "add": "Add",
+  "member": "Members",
+  "dle_for_me": "Delete for me",
+  "dle_for_all": "Delete for all"
 }

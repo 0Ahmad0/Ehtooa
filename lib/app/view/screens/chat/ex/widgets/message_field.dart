@@ -76,7 +76,8 @@ class _MessageFieldState extends State<MessageField> {
                       context
                           .read<RecordAudioCubit>()
                           .toggleRecord(canRecord: s.isEmpty);
-                      if (validCharacters.hasMatch(s.toString().substring(0,1))){
+                    if(!s.trim().isEmpty){
+                      if (validCharacters.hasMatch(s.toString()..substring(0,1))){
                         isArabic = false;
                         setState(() {
 
@@ -89,6 +90,7 @@ class _MessageFieldState extends State<MessageField> {
                         });
                         print("Ar");
                       }
+                    }
                   },
                   decoration: widget.decoration ??
                       const InputDecoration(

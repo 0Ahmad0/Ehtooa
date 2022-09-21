@@ -27,7 +27,7 @@ class ListOfMemberView extends StatelessWidget {
      listUsers.addAll(chatProvider.group.listUsers);
     return Scaffold(
       appBar: AppBar(
-        title: Text("Members"),
+        title: Text("kk"),
       ),
       body: ChangeNotifierProvider<ChatProvider>.value(
     value: chatProvider,

@@ -1,3 +1,5 @@
+import 'package:ehtooa/app/model/utils/sizer.dart';
+
 import '../../../resources/values_manager.dart';
 import 'consts/consts.dart';
 import 'cubit/recordaudio_cubit.dart';
@@ -155,24 +157,20 @@ class _ChatComposerState extends State<ChatComposer>
                       ),
                     ),
                   ),
-                  const SizedBox(width: AppSize.s10),
-                  SendButton(
-                    composerHeight: composerHeight,
-                    onReceiveText: widget.onReceiveText,
-                    onPanCancel: widget.onPanCancel,
-                  ),
+                   SizedBox(width: Sizer.getW(context) * 0.15),
+
                 ],
               ),
-              // Positioned(
-              //   bottom: 0,
-              //   right: 0,
-              //   left: 0,
-              //   child: SendButton(
-              //     composerHeight: composerHeight,
-              //     onReceiveText: widget.onReceiveText,
-              //     onPanCancel: widget.onPanCancel,
-              //   ),
-              // ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: SendButton(
+                  composerHeight: composerHeight,
+                  onReceiveText: widget.onReceiveText,
+                  onPanCancel: widget.onPanCancel,
+                ),
+              ),
             ],
           ),
         ),
