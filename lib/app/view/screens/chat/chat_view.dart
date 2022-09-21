@@ -53,7 +53,7 @@ class _ChatViewState extends State<ChatView> {
   late ProfileProvider  profileProvider;
   Function? setStateChat;
   double? widthImageChat;
-
+  ScrollController _controller = new ScrollController();
   @override
   Widget build(BuildContext context) {
      profileProvider = Provider.of<ProfileProvider>(context);
@@ -408,8 +408,10 @@ class _ChatViewState extends State<ChatView> {
                           },idUser: profileProvider.user.id);
                           convertListMessagesToListUsers(chatProvider.group.chat);
                           convertListMessagesToListWidget(chatProvider.group.chat);
+                          _controller.jumpTo(_controller.position.maxScrollExtent);
                          // Navigator.of(context).pop();
                           return ListView.builder(
+                            controller: _controller,
                               padding: EdgeInsets.all(
                               AppPadding.p10,
                               ),
