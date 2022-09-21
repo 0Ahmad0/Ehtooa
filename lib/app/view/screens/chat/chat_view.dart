@@ -1258,6 +1258,17 @@ class _ChatViewState extends State<ChatView> {
     list=[];
     list.addAll(tempList);
   }
+  convertListSendMessagesToListWidget(List messages)async{
+    List<Widget> tempList =[];
+    messages.forEach((message) async {
+     // print(homeProvider.cacheUser);
+    //  if(!message.deleteUserMessage.contains(profileProvider.user.id)){
+        tempList.add(receiveMessage(message: message));
+      //}
+
+    });
+    list.addAll(tempList);
+  }
   receiveReplay({required Message message}){
     String textReplay="delete_message";
     for(Message element in chatProvider.group.chat.messages){
