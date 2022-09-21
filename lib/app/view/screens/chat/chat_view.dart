@@ -4,6 +4,7 @@ import 'package:chat_composer/chat_composer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
+import 'package:ehtooa/app/view/screens/global_member/global_member.dart';
 import 'package:open_file/open_file.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
@@ -125,27 +126,9 @@ class _ChatViewState extends State<ChatView> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (ctx) => ListOfMemberView(
-                                users: [
-                                  User(
-                                      id: "id",
-                                      uid: "uid",
-                                      name: "Kholod",
-                                      email: "Kholod@gmail.com",
-                                      phoneNumber: "0522325465",
-                                      password: "password",
-                                      typeUser: "typeUser",
-                                      photoUrl: "photoUrl",
-                                      listUsedQuizzes: [
-                                        false,
-                                        false,
-                                        false,
-                                        false
-                                      ])
-                                ],
-                              )));
+                          builder: (ctx) => GlobalMemberView()));
                 },
-                icon: Icon(Icons.more_vert)),
+                icon: Icon(Icons.person_add)),
           ),
         ),
         body:

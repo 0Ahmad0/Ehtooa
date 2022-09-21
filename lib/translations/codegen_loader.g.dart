@@ -20,6 +20,7 @@ class CodegenLoader extends AssetLoader{
   "session_link": "رابط الجلسة التفاعلية",
   "description": "نبذة عن الدكتور",
   "valid_session": "أدخل رابط جلسة صالح",
+  "serial_number": "الرقم التسلسلي",
   "on_boarding1": "تطبيق احتواء يقدم لك\nالرعاية الكاملة لصحتك العقلية",
   "on_boarding2": "احصل على المساعدة \nفي أي وقت وعندما تحتاج",
   "on_boarding3": "الرعاية الذاتية وصحتك النفسية\nتأتي أولا",
@@ -89,8 +90,11 @@ class CodegenLoader extends AssetLoader{
   "expiry": "تاريخ الاستحقاق",
   "valid_expiry": "أدخل تاريخ استحقاق صالح",
   "rate": "التقييم",
+  "thanks_for_rate": "شكرا لك على التقييم",
+  "type_message_here": "اكتب رسالتك هنا للتواصل معنا : ",
   "done_payment": "تمت عملية الدفع بنجاح",
   "go": "اذهب",
+  "send": "ارسال",
   "tab_to_stop": "انقر للايقاف",
   "slide_to_cancle": "اسحب للالغاء",
   "no_notification_yet": "ليس هناك إشعارات بعد!",
@@ -242,7 +246,13 @@ class CodegenLoader extends AssetLoader{
   "are_you_sure": "هل أنت متأكد؟",
   "confirm_delete": "هل تريد حقا القيام بحذف الجلسة؟",
   "price": "سعر الجلسة",
-  "video": "الفيديو"
+  "video": "الفيديو",
+  "ban": "حظر",
+  "confirm_ban": "هل تريد حقا القبام بحظر المستخدم؟ ",
+  "confirm_delete_user": "هل تريد حقا القبام بحذف المستخدم؟ ",
+  "del": "حذف",
+  "add_member": "إضافة أعضاء",
+  "add": "إضافة"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Doctor name",
@@ -258,6 +268,10 @@ static const Map<String,dynamic> en = {
   "welcome_signup": "Welcome to the ",
   "already_have_account": "Already have an account? ",
   "app_name": "Ehtooa",
+  "serial_number": "Serial number",
+  "thanks_for_rate": "Thanks for rate",
+  "type_message_here": "Type message here for contact with us :",
+  "send": "Send",
   "specialist_info": "Specialist information",
   "welcome": "Welcome",
   "search": "search...",
@@ -471,7 +485,13 @@ static const Map<String,dynamic> en = {
   "are_you_sure": "Are you sure?",
   "confirm_delete": "Do you want to delete the session?",
   "price": "Session price",
-  "video": "Video"
+  "video": "Video",
+  "ban": "Ban",
+  "confirm_ban": "Do you really want to ban the user?",
+  "confirm_delete_user": "Do you really want to delete the user?",
+  "del": "Delete",
+  "add_member": "Add members",
+  "add": "Add"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

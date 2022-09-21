@@ -239,7 +239,7 @@ class ListOfMemberView extends StatelessWidget {
                 //homeProvider.sessions=Sessions.fromJson(data['body']);
                 return Row(
                   children: [
-                Text("${snapshot.data}"),
+                   Text("${snapshot.data}"),
                     SizedBox(width: Sizer.getW(context)*0.01,),
                     (typeUser.contains(AppConstants.collectionPatient))?
                      SizedBox():
@@ -263,72 +263,159 @@ class ListOfMemberView extends StatelessWidget {
         ///subtitle: Text("users[index].name"),
 
         trailing: (typeUser.contains(AppConstants.collectionPatient))?
-        InkWell(
-            onTap: (){
-              Get.defaultDialog(
-                confirm: Row(
-                  children: [
-                    TextButton(
-                        style: TextButton.styleFrom(
-                            backgroundColor:
-                            Theme.of(context).primaryColor),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          tr(LocaleKeys.yes),
-                          style: getLightStyle(
-                              color: ColorManager.white,
-                              fontSize: Sizer.getW(context) / 26),
-                        )),
-                    const SizedBox(
-                      width: AppSize.s8,
-                    ),
-                    TextButton(
-                        style: TextButton.styleFrom(
-                            primary: ColorManager.error,
-                            backgroundColor: ColorManager.error),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: Text(
-                          tr(LocaleKeys.no),
-                          style: getLightStyle(
-                              color: ColorManager.white,
-                              fontSize: Sizer.getW(context) / 26),
-                        )),
-                  ],
-                ),
-                titleStyle: getBoldStyle(
-                    color: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .color,
-                    fontSize: Sizer.getW(context) / 22),
-                title: tr(LocaleKeys.are_you_sure),
-                content: Text(
-                  tr(LocaleKeys.confirm_delete),
-                  style: getRegularStyle(
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            InkWell(
+              onTap: (){
+                Get.defaultDialog(
+                  confirm: Row(
+                    children: [
+                      TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor:
+                              Theme.of(context).primaryColor),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            tr(LocaleKeys.yes),
+                            style: getLightStyle(
+                                color: ColorManager.white,
+                                fontSize: Sizer.getW(context) / 26),
+                          )),
+                      const SizedBox(
+                        width: AppSize.s8,
+                      ),
+                      TextButton(
+                          style: TextButton.styleFrom(
+                              primary: ColorManager.error,
+                              backgroundColor: ColorManager.error),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            tr(LocaleKeys.no),
+                            style: getLightStyle(
+                                color: ColorManager.white,
+                                fontSize: Sizer.getW(context) / 26),
+                          )),
+                    ],
+                  ),
+                  titleStyle: getBoldStyle(
                       color: Theme.of(context)
                           .textTheme
                           .bodyText1!
                           .color,
-                      fontSize: Sizer.getW(context) / 24),
-                ),
-                radius: AppSize.s14,
-              );
+                      fontSize: Sizer.getW(context) / 22),
+                  title: tr(LocaleKeys.are_you_sure),
+                  content: Text(
+                    tr(LocaleKeys.confirm_ban),
+                    style: getRegularStyle(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .color,
+                        fontSize: Sizer.getW(context) / 24),
+                  ),
+                  radius: AppSize.s14,
+                );
 
-            },
-            child: Container(
-              padding: EdgeInsets.all(AppPadding.p14),
-              decoration: BoxDecoration(
-                  color: ColorManager.error,
-                  borderRadius: BorderRadius.circular(AppSize.s8)
+              },
+              child: Container(
+                padding: EdgeInsets.all(AppPadding.p14),
+                decoration: BoxDecoration(
+                    color: ColorManager.error,
+                    borderRadius: BorderRadius.circular(AppSize.s8)
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.block,color :ColorManager.white),
+                    const SizedBox(width: AppSize.s4,),
+                    Text(tr(LocaleKeys.ban),style: getRegularStyle(
+                        color: ColorManager.white
+                    ),),
+                  ],
+                ),
               ),
-              child: Text(tr(LocaleKeys.delete),style: getRegularStyle(
-                  color: ColorManager.white
-              ),),
+            ),
+            const SizedBox(width: AppSize.s8,),
+            InkWell(
+              onTap: (){
+                Get.defaultDialog(
+                  confirm: Row(
+                    children: [
+                      TextButton(
+                          style: TextButton.styleFrom(
+                              backgroundColor:
+                              Theme.of(context).primaryColor),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            tr(LocaleKeys.yes),
+                            style: getLightStyle(
+                                color: ColorManager.white,
+                                fontSize: Sizer.getW(context) / 26),
+                          )),
+                      const SizedBox(
+                        width: AppSize.s8,
+                      ),
+                      TextButton(
+                          style: TextButton.styleFrom(
+                              primary: ColorManager.error,
+                              backgroundColor: ColorManager.error),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            tr(LocaleKeys.no),
+                            style: getLightStyle(
+                                color: ColorManager.white,
+                                fontSize: Sizer.getW(context) / 26),
+                          )),
+                    ],
+                  ),
+                  titleStyle: getBoldStyle(
+                      color: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .color,
+                      fontSize: Sizer.getW(context) / 22),
+                  title: tr(LocaleKeys.are_you_sure),
+                  content: Text(
+                    tr(LocaleKeys.confirm_delete_user),
+                    style: getRegularStyle(
+                        color: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .color,
+                        fontSize: Sizer.getW(context) / 24),
+                  ),
+                  radius: AppSize.s14,
+                );
+
+              },
+              child: Container(
+                padding: EdgeInsets.all(AppPadding.p14),
+                decoration: BoxDecoration(
+                    color: ColorManager.error,
+                    borderRadius: BorderRadius.circular(AppSize.s8)
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.delete,color :ColorManager.white),
+                    const SizedBox(width: AppSize.s4,),
+                    Text(tr(LocaleKeys.del),style: getRegularStyle(
+                        color: ColorManager.white
+                    ),),
+                  ],
+                ),
+              ),
             )
+          ],
         )
         :SizedBox(),
       ),

@@ -16,6 +16,8 @@ class AddDoctorProvider with ChangeNotifier{
   final passWord = TextEditingController();
   final name = TextEditingController();
   final description = TextEditingController();
+  final serialNumber = TextEditingController();
+  final phoneNumber = TextEditingController();
 
   models.User user= models.User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser",listUsedQuizzes: [false,false,false,false]);
    addDoctor(context) async{

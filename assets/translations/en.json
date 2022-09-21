@@ -12,6 +12,10 @@
   "welcome_signup": "Welcome to the ",
   "already_have_account": "Already have an account? ",
   "app_name": "Ehtooa",
+  "serial_number": "Serial number",
+  "thanks_for_rate" : "Thanks for rate",
+  "type_message_here": "Type message here for contact with us :",
+  "send": "Send",
   "specialist_info": "Specialist information",
   "welcome": "Welcome",
   "search": "search...",
@@ -230,6 +234,11 @@
   "are_you_sure": "Are you sure?",
   "confirm_delete": "Do you want to delete the session?",
   "price": "Session price",
-  "video" : "Video"
-
+  "video" : "Video",
+  "ban" : "Ban",
+  "confirm_ban": "Do you really want to ban the user?",
+  "confirm_delete_user": "Do you really want to delete the user?",
+  "del": "Delete",
+  "add_member": "Add members",
+  "add": "Add"
 }

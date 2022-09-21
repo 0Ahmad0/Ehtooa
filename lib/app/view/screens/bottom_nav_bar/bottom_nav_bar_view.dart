@@ -73,35 +73,41 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                                     color: ColorManager.white,
                                     fontSize: Sizer.getW(context) / 28),
                               ),
-                              currentAccountPicture: value.user.photoUrl == null?ProfilePicture(
+                              currentAccountPicture: value.user.photoUrl == null?
+                              ProfilePicture(
                                 name: value.user.name,
                                 radius: AppSize.s30,
                                 fontsize: Sizer.getW(context) / 22,
 
-                              ):CircleAvatar(
-                                child: //FlutterLogo(),
-                                CachedNetworkImage(
-                                  fit: BoxFit.fill,
-                                  width: Sizer.getW(context) * 0.12,
-                                  height: Sizer.getW(context) * 0.12,
-                                  imageUrl:
-                                  // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                                  "${value.user.photoUrl}",
-                                  imageBuilder: (context, imageProvider) =>
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          image: DecorationImage(
-                                            image: imageProvider,
-                                            fit: BoxFit.cover,
-                                            //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                              ):Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                    shape: BoxShape.circle,
+                                ),
+                                child:ClipOval(
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.fill,
+                                    width: Sizer.getW(context) * 0.12,
+                                    height: Sizer.getW(context) * 0.12,
+                                    imageUrl:
+                                    // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                                    "${value.user.photoUrl}",
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                              image: imageProvider,
+                                              fit: BoxFit.cover,
+                                              //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                  placeholder: (context, url) =>
-                                      CircularProgressIndicator(),
-                                  errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                ),
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),
+                                )
                               ),
                             ),
                       )),

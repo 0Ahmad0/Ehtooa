@@ -113,7 +113,7 @@ class Const{
                     text: tr(LocaleKeys.ok),
                     onTap: (){
                       Navigator.pop(context);
-                      Const.TOAST(context,textToast: tr(LocaleKeys.rate));
+                      Const.TOAST(context,textToast: tr(LocaleKeys.thanks_for_rate));
                     },
                   )
                 ],

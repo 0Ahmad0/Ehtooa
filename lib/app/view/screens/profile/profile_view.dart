@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/color_manager.dart';
+import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/app/view/widgets/custome_button.dart';
 import 'package:ehtooa/app/view/widgets/custome_textfiled.dart';
@@ -27,11 +28,12 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   // final name = TextEditingController(text: "أحمد الحريري");
+
   bool nameIgnor = true;
 
   bool emailIgnor = true;
 
-  //ProfileProvider profileProvider = ProfileProvider();
+  // ProfileProvider profileProvider = ProfileProvider();
   ImagePicker picker = ImagePicker();
 
   XFile? image;
@@ -78,143 +80,144 @@ class _ProfileViewState extends State<ProfileView> {
           builder: (context, value, child) => Container(
               padding: EdgeInsets.symmetric(
                   vertical: AppPadding.p10, horizontal: AppPadding.p20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Stack(
-                    children: [
-                      Container(
-                        width: Sizer.getW(context) * 0.35,
-                        height: Sizer.getW(context) * 0.35,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                                color: Theme.of(context).primaryColor,
-                                width: AppSize.s4)),
-                        child: image == null
-                            ? ClipOval(
-                            child: CachedNetworkImage(
-                          fit: BoxFit.fill,
-                          width: Sizer.getW(context) * 0.14,
-                          height: Sizer.getW(context) * 0.14,
-                          imageUrl:
-                          // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                          "${profileProvider.user.photoUrl}",
-                          imageBuilder: (context, imageProvider) =>
-                              Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
-                                    //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+              child: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          width: Sizer.getW(context) * 0.35,
+                          height: Sizer.getW(context) * 0.35,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                  color: Theme.of(context).primaryColor,
+                                  width: AppSize.s4)),
+                          child: image == null
+                              ? ClipOval(
+                              child: CachedNetworkImage(
+                            fit: BoxFit.fill,
+                            width: Sizer.getW(context) * 0.14,
+                            height: Sizer.getW(context) * 0.14,
+                            imageUrl:
+                            // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                            "${profileProvider.user.photoUrl}",
+                            imageBuilder: (context, imageProvider) =>
+                                Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
+                                      //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                                    ),
                                   ),
                                 ),
-                              ),
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              ProfilePicture(
-                                name: profileProvider.user.name,
-                                radius: AppSize.s30,
-                                fontsize: Sizer.getW(context) / 22,
-                              ),
-                        ))
-                            : ClipOval(
-                                child: Image.file(File(image!.path),
-                                  fit: BoxFit.fill,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                ProfilePicture(
+                                  name: profileProvider.user.name,
+                                  radius: AppSize.s30,
+                                  fontsize: Sizer.getW(context) / 22,
                                 ),
-                              ),
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: ColorManager.white,
-                              border: Border.all(
-                                  color: Theme.of(context).primaryColor),
-                              shape: BoxShape.circle),
-                          child: IconButton(
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return Center(
-                                      child: Container(
-                                        height: Sizer.getW(context) * 0.4,
-                                        width:
-                                            Sizer.getW(context) - AppSize.s30,
-                                        color: Theme.of(context).cardColor,
-                                        child: Material(
-                                          color: Colors.transparent,
-                                          child: Column(
-                                            children: [
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: () {
-                                                    pickFromCamera();
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    padding: EdgeInsets.all(
-                                                        AppPadding.p8),
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(Icons.camera),
-                                                        const SizedBox(
-                                                          width: AppSize.s8,
-                                                        ),
-                                                        Text("Camera"),
-                                                      ],
+                          ))
+                              : ClipOval(
+                                  child: Image.file(File(image!.path),
+                                    fit: BoxFit.fill,
+                                  ),
+                                ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: ColorManager.white,
+                                border: Border.all(
+                                    color: Theme.of(context).primaryColor),
+                                shape: BoxShape.circle),
+                            child: IconButton(
+                              onPressed: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) {
+                                      return Center(
+                                        child: Container(
+                                          height: Sizer.getW(context) * 0.4,
+                                          width:
+                                              Sizer.getW(context) - AppSize.s30,
+                                          color: Theme.of(context).cardColor,
+                                          child: Material(
+                                            color: Colors.transparent,
+                                            child: Column(
+                                              children: [
+                                                Expanded(
+                                                  child: InkWell(
+                                                    onTap: () {
+                                                      pickFromCamera();
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Container(
+                                                      alignment: Alignment.center,
+                                                      padding: EdgeInsets.all(
+                                                          AppPadding.p8),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(Icons.camera),
+                                                          const SizedBox(
+                                                            width: AppSize.s8,
+                                                          ),
+                                                          Text("Camera"),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                              Divider(
-                                                height: 0.0,
-                                              ),
-                                              Expanded(
-                                                child: InkWell(
-                                                  onTap: ()  {
+                                                Divider(
+                                                  height: 0.0,
+                                                ),
+                                                Expanded(
+                                                  child: InkWell(
+                                                    onTap: ()  {
 
-                                                    pickFromGallery();
-                                                    Navigator.pop(context);
-                                                  },
-                                                  child: Container(
-                                                    alignment: Alignment.center,
-                                                    padding: EdgeInsets.all(
-                                                        AppPadding.p8),
-                                                    child: Row(
-                                                      children: [
-                                                        Icon(Icons.photo),
-                                                        const SizedBox(
-                                                          width: AppSize.s8,
-                                                        ),
-                                                        Text("Gallery"),
-                                                      ],
+                                                      pickFromGallery();
+                                                      Navigator.pop(context);
+                                                    },
+                                                    child: Container(
+                                                      alignment: Alignment.center,
+                                                      padding: EdgeInsets.all(
+                                                          AppPadding.p8),
+                                                      child: Row(
+                                                        children: [
+                                                          Icon(Icons.photo),
+                                                          const SizedBox(
+                                                            width: AppSize.s8,
+                                                          ),
+                                                          Text("Gallery"),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ],
+                                              ],
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    );
-                                  });
-                            },
-                            icon: Icon(Icons.edit),
+                                      );
+                                    });
+                              },
+                              icon: Icon(Icons.edit),
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: AppSize.s30,
-                  ),
-                  Container(
-                    child: Column(
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: AppSize.s30,
+                    ),
+                    ListView(
+                      shrinkWrap: true,
                       children: [
                         StatefulBuilder(builder: (_, setState1) {
                           return CustomTextFiled(
@@ -288,6 +291,39 @@ class _ProfileViewState extends State<ProfileView> {
                             prefixIcon: Icons.phone_android,
                             maxLength: null,
                             hintText: tr(LocaleKeys.phone_number)),
+                        if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
+                          Column(
+                            children: [
+                              const SizedBox(
+                                height: AppSize.s20,
+                              ),
+                              CustomTextFiled(
+                                  readOnly: true,
+                                  controller: profileProvider.serial_number,
+                                  validator: (String? val) {},
+                                  onChange: (val) {},
+                                  prefixIcon: Icons.confirmation_number,
+                                  maxLength: null,
+                                  hintText: tr(LocaleKeys.serial_number)),
+                            ],
+                          ),
+                        if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
+                          Column(
+                            children: [
+                              const SizedBox(
+                                height: AppSize.s20,
+                              ),
+                              CustomTextFiled(
+                                  readOnly: true,
+                                  controller: TextEditingController(
+                                      text: profileProvider.user.description /*"055 895 658"*/),
+                                  validator: (String? val) {},
+                                  onChange: (val) {},
+                                  prefixIcon: Icons.description,
+                                  maxLength: null,
+                                  hintText: tr(LocaleKeys.description)),
+                            ],
+                          ),
                         const SizedBox(
                           height: AppSize.s20,
                         ),
@@ -309,8 +345,8 @@ class _ProfileViewState extends State<ProfileView> {
                         )
                       ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               )),
         ));
   }

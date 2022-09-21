@@ -6,6 +6,7 @@ abstract class  LocaleKeys {
   static const session_link = 'session_link';
   static const description = 'description';
   static const valid_session = 'valid_session';
+  static const serial_number = 'serial_number';
   static const on_boarding1 = 'on_boarding1';
   static const on_boarding2 = 'on_boarding2';
   static const on_boarding3 = 'on_boarding3';
@@ -75,8 +76,11 @@ abstract class  LocaleKeys {
   static const expiry = 'expiry';
   static const valid_expiry = 'valid_expiry';
   static const rate = 'rate';
+  static const thanks_for_rate = 'thanks_for_rate';
+  static const type_message_here = 'type_message_here';
   static const done_payment = 'done_payment';
   static const go = 'go';
+  static const send = 'send';
   static const tab_to_stop = 'tab_to_stop';
   static const slide_to_cancle = 'slide_to_cancle';
   static const no_notification_yet = 'no_notification_yet';
@@ -229,5 +233,11 @@ abstract class  LocaleKeys {
   static const confirm_delete = 'confirm_delete';
   static const price = 'price';
   static const video = 'video';
+  static const ban = 'ban';
+  static const confirm_ban = 'confirm_ban';
+  static const confirm_delete_user = 'confirm_delete_user';
+  static const del = 'del';
+  static const add_member = 'add_member';
+  static const add = 'add';
 
 }
