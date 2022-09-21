@@ -49,7 +49,7 @@ class ListSessionsView extends StatelessWidget {
                               return Container(
                                 margin: EdgeInsets.symmetric(vertical: AppMargin.m4),
                                 padding: EdgeInsets.symmetric(
-                                    vertical: AppPadding.p10
+                                    vertical: AppPadding.p8
                                 ),
                                 decoration: BoxDecoration(
                                     color: ColorManager.lightGray.withOpacity(
@@ -73,7 +73,7 @@ class ListSessionsView extends StatelessWidget {
                                           value.sessions.sessions[index]
                                               .date)}",
                                     style: getRegularStyle(color: ColorManager.lightGray,
-                                      fontSize: Sizer.getW(context) / 32
+                                      fontSize: Sizer.getW(context) / 30
                                     ),
                                   ),
                                   trailing: InkWell(
