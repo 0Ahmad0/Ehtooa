@@ -460,7 +460,16 @@ class _ChatViewState extends State<ChatView> {
                   ],
                 )
                 ///TODO وضع كونتنر لقد تم حظرك من هذا الغروب
-                :SizedBox(),
+                :Container(
+                  alignment: Alignment.center,
+                  width: double.infinity,
+                  height: Sizer.getW(context) * 0.15,
+                  color: Theme.of(context).cardColor,
+                  child: Text(tr(LocaleKeys.have_ban),style: getRegularStyle(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    fontSize: Sizer.getW(context) / 30
+                  ),),
+                ),
                 //     }),
               ))
         ],

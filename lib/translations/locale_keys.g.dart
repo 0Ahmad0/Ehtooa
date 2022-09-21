@@ -237,6 +237,7 @@ abstract class  LocaleKeys {
   static const unban = 'unban';
   static const confirm_ban = 'confirm_ban';
   static const confirm_unban = 'confirm_unban';
+  static const have_ban = 'have_ban';
   static const confirm_delete_user = 'confirm_delete_user';
   static const del = 'del';
   static const add_member = 'add_member';
