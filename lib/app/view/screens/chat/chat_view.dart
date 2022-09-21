@@ -676,7 +676,7 @@ class _ChatViewState extends State<ChatView> {
                                     videoText: tr(LocaleKeys.video),
                                     galleryText: tr(LocaleKeys.gallery),
                                     photoText: tr(LocaleKeys.camera),
-                                    deletingText: tr(LocaleKeys.delete)),
+                                    deletingText: tr(LocaleKeys.del)),
                                 appTheme: AppTheme(
                                     focusColor: Colors.white,
                                     primaryColor: Colors.black),
@@ -820,63 +820,96 @@ class _ChatViewState extends State<ChatView> {
 
   Widget buildReplay() {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: AppMargin.m10),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Stack(
-            children: [
-              Container(
-                width: Sizer.getW(context) - 79,
-                padding: EdgeInsets.all(AppPadding.p8),
-                height: Sizer.getW(context) * 0.2,
-                decoration: BoxDecoration(
-                  color: ColorManager.lightGray.withOpacity(.2),
-                  borderRadius:
-                      BorderRadius.vertical(top: Radius.circular(AppSize.s8)),
+      height: Sizer.getW(context) * 0.25,
+      decoration: BoxDecoration(
+        color: Theme.of(context).cardColor
+      ),
+      padding: EdgeInsets.all(AppPadding.p8),
+      child: Container(
+        padding: EdgeInsets.all(AppPadding.p4),
+        decoration: BoxDecoration(
+          color: ColorManager.lightGray.withOpacity(.2),
+          borderRadius: BorderRadius.circular(AppSize.s8)
+        ),
+        child: Stack(
+          children: [
+            Row(
+              children: [
+                VerticalDivider(
+                  thickness: AppSize.s6,
+                  color: Theme.of(context).primaryColor.withOpacity(.8),
                 ),
-                child: Container(
-                  padding: EdgeInsets.all(AppPadding.p4),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(AppSize.s4),
-                    color: ColorManager.lightGray.withOpacity(.5),
-                  ),
-                  child: Row(
-                    children: [
-                      VerticalDivider(
-                        thickness: AppSize.s4,
-                        color: Theme.of(context).primaryColor.withOpacity(.5),
-                      ),
-                      Flexible(child: buildrReplayText()
-                          /** Text(
-                            chatProvider.replayMessage!,
-                            )**/
-                          )
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: 0,
-                left: context.locale == "en"?null:0,
-                right: context.locale == "en"?0:null,
-                child: IconButton(
-                    onPressed: () {
-                      ///chatProvider.replayMessage = null;
-                      chatProvider.replayIdMessage = "";
-                      chatProvider.changeReplayMessage(replayMessage: null);
+                Flexible(child: buildrReplayText())
+              ],
+            ),
+            Positioned(
+              top: 0,
+              left: context.locale == "en"?null:0,
+              right: context.locale == "en"?0:null,
+              child: IconButton(
+                  onPressed: () {
+                    ///chatProvider.replayMessage = null;
+                    chatProvider.replayIdMessage = "";
+                    chatProvider.changeReplayMessage(replayMessage: null);
 
-                      ///  setState(() {});
-                    },
-                    icon: Icon(Icons.close)),
-              ),
-            ],
-          )
-        ],
+                    ///  setState(() {});
+                  },
+                  icon: Icon(Icons.close)),
+            ),
+          ],
+        ),
       ),
     );
   }
+/*
+Stack(
+      children: [
+        Container(
+          padding: EdgeInsets.all(AppPadding.p8),
+          height: Sizer.getW(context) * 0.2,
+          decoration: BoxDecoration(
+            color: ColorManager.lightGray.withOpacity(.2),
+            borderRadius:
+            BorderRadius.vertical(top: Radius.circular(AppSize.s8)),
+          ),
+          child: Container(
+            padding: EdgeInsets.all(AppPadding.p4),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(AppSize.s4),
+              color: ColorManager.lightGray.withOpacity(.5),
+            ),
+            child: Row(
+              children: [
+                VerticalDivider(
+                  thickness: AppSize.s4,
+                  color: Theme.of(context).primaryColor.withOpacity(.5),
+                ),
+                Flexible(child: buildrReplayText()
+                  /** Text(
+                      chatProvider.replayMessage!,
+                      )**/
+                )
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: context.locale == "en"?null:0,
+          right: context.locale == "en"?0:null,
+          child: IconButton(
+              onPressed: () {
+                ///chatProvider.replayMessage = null;
+                chatProvider.replayIdMessage = "";
+                chatProvider.changeReplayMessage(replayMessage: null);
 
+                ///  setState(() {});
+              },
+              icon: Icon(Icons.close)),
+        ),
+      ],
+    )
+ */
   Widget bottomSheet() {
     return Container(
       height: Sizer.getW(context) * 0.55,
@@ -1031,56 +1064,56 @@ class _ChatViewState extends State<ChatView> {
       case "text":
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              style: getBoldStyle(color: Theme.of(context).textTheme.bodyText1!.color),
+            ),
+
+            Text(
+              chatProvider.messageReplay.textMessage,
+              overflow: TextOverflow.ellipsis,
+            )
+          ],
+        );
+      case "image":
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
               ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(
-              height: Sizer.getW(context) * 0.01,
+              width: Sizer.getW(context) * 0.02,
             ),
-            Text(
-              chatProvider.messageReplay.textMessage,
-            )
-          ],
-        );
-      case "image":
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            CachedNetworkImage(
-              fit: BoxFit.fill,
-              width: Sizer.getW(context) * 0.1,
-              height: Sizer.getW(context) * 0.1,
-              imageUrl:
+            Row(
+              children: [
+                CachedNetworkImage(
+                  fit: BoxFit.fill,
+                  width: Sizer.getW(context) * 0.1,
+                  height: Sizer.getW(context) * 0.1,
+                  imageUrl:
                   // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
                   ///"${chatProvider.replayMessage}",
                   "${chatProvider.messageReplay.url}",
-              // "${AppConstants.photoGroup}",
-              imageBuilder: (context, imageProvider) => Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: imageProvider,
-                    fit: BoxFit.cover,
-                    //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                  // "${AppConstants.photoGroup}",
+                  imageBuilder: (context, imageProvider) => Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                        //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                      ),
+                    ),
                   ),
+                  placeholder: (context, url) => CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => FlutterLogo(),
                 ),
-              ),
-              placeholder: (context, url) => CircularProgressIndicator(),
-              errorWidget: (context, url, error) => FlutterLogo(),
-            ),
-            SizedBox(
-              width: Sizer.getW(context) * 0.02,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
+
                 SizedBox(
-                  height: Sizer.getW(context) * 0.01,
+                  width: Sizer.getW(context) * 0.01,
                 ),
                 Text(
                   "photo",
@@ -1090,31 +1123,27 @@ class _ChatViewState extends State<ChatView> {
           ],
         );
       case "file":
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Text(
+              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: Sizer.getW(context) * 0.01,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  "attatchment",
                 ),
                 SizedBox(
-                  height: Sizer.getW(context) * 0.01,
+                  width: Sizer.getW(context) * 0.01,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "attatchment",
-                    ),
-                    SizedBox(
-                      width: Sizer.getW(context) * 0.01,
-                    ),
-                    Icon(Icons.attach_file)
-                  ],
-                )
+                Icon(Icons.attach_file)
               ],
             ),
           ],
@@ -1129,7 +1158,7 @@ class _ChatViewState extends State<ChatView> {
     switch (messageReplay.typeMessage) {
       case "text":
         return Container(
-          height: Sizer.getW(context) * 0.15,
+          height: Sizer.getW(context) * 0.2,
           padding: EdgeInsets.all(AppPadding.p8),
           decoration: BoxDecoration(
             color: ColorManager.lightGray.withOpacity(.5),
@@ -1142,36 +1171,33 @@ class _ChatViewState extends State<ChatView> {
                 thickness: AppSize.s4,
                 color: Theme.of(context).primaryColor.withOpacity(.5),
               ),
-              Flexible(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          ("${receiveReplayname(message: message)}"),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(
-                          height: Sizer.getW(context) * 0.01,
-                        ),
-                        Text(
-                          //"photo",
-                          "${messageReplay.textMessage}",
-                          //"${messageReplay.url}",
-                        )
-                      ],
-                    ),
-                  ],
+          Flexible(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  ("${receiveReplayname(message: message)}"),
+                  style: getBoldStyle(color: Theme.of(context).textTheme.bodyText1!.color),
                 ),
-              )
+                const SizedBox(
+                  height: AppSize.s4,
+                ),
+                Text(
+                  messageReplay.textMessage,
+                  //"gjgjhghnghmjqhvsjvsjdhvjsvdjcvjsvdjcvsjcdvjsdhvjscvjdsvdscjvdcsjcdvsjdcsv",
+                  overflow: TextOverflow.ellipsis,
+                  ///"${messageReplay.url}",
+                )
+              ],
+            ),
+          )
             ],
           ),
         );
       case "image":
         return Container(
-          height: Sizer.getW(context) * 0.15,
+          height: Sizer.getW(context) * 0.25,
           padding: EdgeInsets.all(AppPadding.p8),
           decoration: BoxDecoration(
             color: ColorManager.lightGray.withOpacity(.5),
@@ -1185,44 +1211,45 @@ class _ChatViewState extends State<ChatView> {
                 color: Theme.of(context).primaryColor.withOpacity(.5),
               ),
               Flexible(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    CachedNetworkImage(
-                      fit: BoxFit.fill,
-                      width: Sizer.getW(context) * 0.1,
-                      height: Sizer.getW(context) * 0.1,
-                      imageUrl:
+                    Text(
+                      ("${receiveReplayname(message: message)}"),
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+
+                    SizedBox(
+                      width: Sizer.getW(context) * 0.02,
+                    ),
+                    Row(
+                      children: [
+                        CachedNetworkImage(
+                          fit: BoxFit.fill,
+                          width: Sizer.getW(context) * 0.1,
+                          height: Sizer.getW(context) * 0.1,
+                          imageUrl:
                           // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
                           // "${messageReplay.textMessage}",
                           "${messageReplay.url}",
 
-                      /// "${AppConstants.photoGroup}",
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                            //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                          /// "${AppConstants.photoGroup}",
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                                //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                              ),
+                            ),
                           ),
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => FlutterLogo(),
                         ),
-                      ),
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => FlutterLogo(),
-                    ),
-                    SizedBox(
-                      width: Sizer.getW(context) * 0.02,
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          ("${receiveReplayname(message: message)}"),
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
+
                         SizedBox(
-                          height: Sizer.getW(context) * 0.01,
+                          width: Sizer.getW(context) * 0.01,
                         ),
                         Text(
                           "photo",
@@ -1269,28 +1296,8 @@ class _ChatViewState extends State<ChatView> {
     return SizedBox();
   }
 
-  Widget buildrReplayImage() {
-    switch (chatProvider.messageReplay.typeMessage) {
-      case "text":
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: Sizer.getW(context) * 0.01,
-            ),
-            Text(
-              chatProvider.messageReplay.textMessage,
-            )
-          ],
-        );
-    }
-    return SizedBox();
-  }
-
+///function
+  ///==================================================================
   convertListMessagesToListUsers(Chat chat) async {
     ///print("objectffffffffffffffffffffffffffffffffffff");
     chat.messages.forEach((message) async {
@@ -1325,7 +1332,7 @@ class _ChatViewState extends State<ChatView> {
     });
     list.addAll(tempList);
   }
-
+///==================================================================
   receiveReplay({required Message message}) {
     String textReplay = "delete_message";
     for (Message element in chatProvider.group.chat.messages) {
@@ -1402,17 +1409,14 @@ class _ChatViewState extends State<ChatView> {
           child: BuildMessageShape(
             //  isMe: true,
             message: message,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child:                 Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 buildrReplayMessage(message: message),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(message.textMessage),
-                  //  child: Text(con.text),
-                )
+                Text(message.textMessage)
               ],
             ),
+
           ));
 
       ///setState(() {});
@@ -1434,12 +1438,7 @@ class _ChatViewState extends State<ChatView> {
           child: BuildMessageShape(
             //isMe: false,
             message: message,
-            child: Row(
-              children: [
-                //Text("str".toString()),
-                Text(message.textMessage),
-              ],
-            ),
+            child: Text(message.textMessage),
           ));
     //  );
     return childWidget;
@@ -1826,7 +1825,7 @@ class BuildMessageShape extends StatelessWidget {
                       }
                     },
                   ),
-            child,
+             child,
             const SizedBox(
               height: AppSize.s8,
             ),

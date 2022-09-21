@@ -14,7 +14,8 @@ import 'sizer.dart';
 
 class Const{
   static LOADIG(context){
-    Get.dialog(Center(
+    Get.dialog(
+        Center(
       child: Container(
           alignment: Alignment.center,
           width: Sizer.getW(context) * 0.2,
@@ -25,7 +26,9 @@ class Const{
           child: LoadingAnimationWidget.waveDots(
               color: ColorManager.primary,
               size: Sizer.getW(context) * 0.1)),
-    ));
+    ),
+    barrierDismissible: false
+    );
   }
 
 
