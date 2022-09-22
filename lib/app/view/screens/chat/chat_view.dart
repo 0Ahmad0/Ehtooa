@@ -1269,32 +1269,35 @@ class _ChatViewState extends State<ChatView> {
                 child: Consumer<DownloaderProvider>(
                     builder: (context, value, child) =>
                     (value.checkCompleteDownload[message.id] != true)?
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: Sizer.getW(context) * 0.1,
-                          child: CircleProgressBar(
-                            strokeWidth: AppSize.s4,
-                            value:.2,
-                            foregroundColor: Theme.of(context).primaryColor,
-                            child: IconButton(
-                              icon: Icon(Icons.download_sharp),
-                              onPressed: () {print("ffff");
-                              value.downloadFile(message);
-                              },
+                    BuildMessageShape(
+                      message: message,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          SizedBox(
+                            height: Sizer.getW(context) * 0.1,
+                            child: CircleProgressBar(
+                              strokeWidth: AppSize.s4,
+                              value:.2,
+                              foregroundColor: Theme.of(context).primaryColor,
+                              child: IconButton(
+                                icon: Icon(Icons.download_sharp),
+                                onPressed: () {print("ffff");
+                                value.downloadFile(message);
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                        Text("g ${value.downloadProgress[message.id]} ${value.checkCompleteDownload[message.id]}"),
-                      ],
+                          Text("g ${value.downloadProgress[message.id]} ${value.checkCompleteDownload[message.id]}"),
+                        ],
+                      ),
                     )
-                        :Column(
-                          children: [
-                            VoiceMessage(
+                        :BuildMessageShape(
+                      message: message,
+                          child: VoiceMessage(
                       key: Key( "${value.tempDir.path}/${message.textMessage}" ),
                       audioSrc: "${value.tempDir.path}/${message.textMessage}",
                       me: true,),
-                          ],
                         )
                 )),
 
