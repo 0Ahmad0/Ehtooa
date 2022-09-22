@@ -1274,14 +1274,18 @@ class _ChatViewState extends State<ChatView> {
                         (value.checkCompleteDownload[message.id]!=true)?
                         Column(
                           children: [
-                            CircleProgressBar(
-                              value:value.downloadProgress[message.id]!,
-                              foregroundColor: Colors.red,
-                              child: IconButton(
-                                icon: Icon(Icons.download_sharp),
-                                onPressed: () {print("ffff");
-                                value.downloadFile(message);
-                                },
+                            SizedBox(
+                              height: Sizer.getW(context) * 0.1,
+                              child: CircleProgressBar(
+                                strokeWidth: AppSize.s4,
+                                value:.5,
+                                foregroundColor: Theme.of(context).primaryColor,
+                                child: IconButton(
+                                  icon: Icon(Icons.download_sharp),
+                                  onPressed: () {print("ffff");
+                                  value.downloadFile(message);
+                                  },
+                                ),
                               ),
                             ),
                             Text("g ${value.downloadProgress[message.id]} ${value.checkCompleteDownload[message.id]}"),
