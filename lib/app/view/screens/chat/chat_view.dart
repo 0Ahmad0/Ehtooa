@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:get/get.dart';
@@ -67,7 +68,7 @@ class _ChatViewState extends State<ChatView> {
     profileProvider = Provider.of<ProfileProvider>(context);
     chatProvider = Provider.of<ChatProvider>(context);
     homeProvider = Provider.of<HomeProvider>(context);
-    widthImageChat = Sizer.getW(context) * 0.20;
+    widthImageChat = Sizer.getW(context) * 0.30;
     ///print(chatProvider.group.nameAr);
     return Scaffold(
       appBar: AppBar(
@@ -170,10 +171,10 @@ class _ChatViewState extends State<ChatView> {
                         }, idUser: profileProvider.user.id);
 
                         convertListMessagesToListUsers(chatProvider.group.chat);
-                        convertListMessagesToListWidget(
-                            chatProvider.group.chat);
+
                         return StatefulBuilder(builder: (_, setStateChat) {
                           setState3 = setStateChat;
+                          convertListMessagesToListWidget(chatProvider.group.chat);
                           convertListSendMessagesToListWidget(listSendMessage);
                           // Navigator.of(context).pop();
                           return SingleChildScrollView(
@@ -185,10 +186,9 @@ class _ChatViewState extends State<ChatView> {
                                   AppPadding.p10,
                                 ),
                                 itemCount:
-                                    chatProvider.group.chat.messages.length +
-                                        listSendMessage.length,
+                               ///     chatProvider.group.chat.messages.length + listSendMessage.length,
 
-                                ///list.length,
+                                list.length,
                                 itemBuilder: (_, pos) {
                                   //   chatProvider.group.chat.messages[pos].index = pos;
                                   return
@@ -241,9 +241,6 @@ class _ChatViewState extends State<ChatView> {
                             fontSize: Sizer.getW(context) / 30),
                         controller: con,
                         onReceiveText: (str) async {
-                          //  print("gggg${str}");
-                          ///   setState1(() async {
-                          // print("chat lists : ${list.length}");
                           Message tempMessage = Message(
                               textMessage: str.toString(),
                               replayId: "",
@@ -259,13 +256,10 @@ class _ChatViewState extends State<ChatView> {
                             list.add(SwipeTo(
                                 onRightSwipe: () {
                                   print(str);
-
                                   /// value.replayMessage = str;
                                   foucsNode.requestFocus();
                                   chatProvider.changeReplayMessage(
                                       replayMessage: str);
-
-                                  // setState1(() {});
                                 },
                                 child: BuildMessageShape(
                                   //isMe: true,
@@ -326,11 +320,6 @@ class _ChatViewState extends State<ChatView> {
                                     ],
                                   ),
                                 )));
-
-                            /// value.replayMessage = null;
-                            /// chatProvider.replayIdMessage="";
-                            ///   chatProvider.changeReplayMessage(replayMessage: null);
-                            ///setState1(() {});
                           } else {
                             Message tempMessage = Message(
                                 textMessage: str.toString(),
@@ -343,13 +332,9 @@ class _ChatViewState extends State<ChatView> {
                             list.add(SwipeTo(
                                 onRightSwipe: () {
                                   print(str);
-
-                                  ///value.replayMessage = str;
                                   foucsNode.requestFocus();
                                   chatProvider.changeReplayMessage(
                                       replayMessage: str);
-
-                                  /// setState1(() {});
                                 },
                                 child: BuildMessageShape(
                                   //    isMe: false,
@@ -366,9 +351,15 @@ class _ChatViewState extends State<ChatView> {
 
                           ///toDo هنا لا يختفي الرسالة حتا تتم ارسالها
                           ///في حال اردت التغير قم بوضع السطر الاول في الاخر
+
+                          ///add local message
+                          listSendMessage.add(tempMessage);
+                          setState3(() {});
                           con.text = '';
                           chatProvider.replayIdMessage = "";
                           chatProvider.changeReplayMessage(replayMessage: null);
+                          ///remove local message
+                          listSendMessage.remove(tempMessage);
                           await value.addMessage(context,
                               idGroup: chatProvider.group.id,
                               message: tempMessage);
@@ -478,8 +469,17 @@ class _ChatViewState extends State<ChatView> {
   }
 
   Future<void> displayDetails(SelectedImagesDetails details) async {
+    Message tempMessage = Message(
+        textMessage: chatProvider.findbasename(details.selectedFile.path),
+        url: "",
+        replayId: chatProvider.replayIdMessage,
+        typeMessage: "image",
+        senderId: profileProvider.user.id,
+        deleteUserMessage: [],
+        sendingTime: DateTime.now(),
+        checkSend: false);
     if (details.isThatImage) {
-      Message tempMessage = Message(
+       tempMessage = Message(
           textMessage: chatProvider.findbasename(details.selectedFile.path),
           url: "",
           replayId: chatProvider.replayIdMessage,
@@ -488,89 +488,8 @@ class _ChatViewState extends State<ChatView> {
           deleteUserMessage: [],
           sendingTime: DateTime.now(),
           checkSend: false);
-      if (chatProvider.isReplay) {
-        tempMessage.replayId = chatProvider.replayIdMessage;
-      }
-      list.add(InkWell(
-        onTap: () {
-          showDialog(
-              context: context,
-              builder: (ctx) => Material(
-                    color: Colors.black,
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.file(
-                          File(details.selectedFile.path),
-                          fit: BoxFit.cover,
-                        ),
-                        Positioned(
-                          top: AppSize.s10,
-                          right: AppSize.s10,
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: Icon(
-                                Icons.close,
-                                color: ColorManager.white,
-                              )),
-                        )
-                      ],
-                    ),
-                  ));
-        },
-        child: BuildMessageShape(
-            //  isMe: true,
-            message: Message(
-                textMessage: "",
-                replayId: "",
-                typeMessage: "",
-                senderId: "",
-                deleteUserMessage: [],
-                sendingTime: DateTime.now()),
-            child: DisplayImages(
-                selectedFiles: details.selectedFiles != null
-                    ? details.selectedFiles!
-                    : [details.selectedFile],
-                details: details,
-                aspectRatio: details.aspectRatio)),
-      ));
-
-      ///add local message
-      var tempMessageSemd = Message(
-          textMessage: "",
-
-          ///chatProvider.findbasename(details.selectedFile.path),
-          url: "",
-          replayId: "",
-
-          ///chatProvider.replayIdMessage,
-          typeMessage: "image",
-          senderId: "",
-
-          ///profileProvider.user.id,
-          deleteUserMessage: [],
-          sendingTime: DateTime.now(),
-          checkSend: false);
-      tempMessageSemd.url = details.selectedFile.path;
-      listSendMessage.add(tempMessageSemd);
-      setState3(() {});
-      chatProvider.replayIdMessage = "";
-      chatProvider.changeReplayMessage(replayMessage: null);
-
-      String url = await chatProvider.uploadImage(details.selectedFile.path);
-      tempMessage.url = url;
-      print("${tempMessage.toJson()}");
-
-      ///remove local message
-      listSendMessage.remove(tempMessageSemd);
-      await chatProvider.addMessage(context,
-          idGroup: chatProvider.group.id, message: tempMessage);
-      //chatProvider.notifyListeners();
-
-      //setState1(() {});
-    } else {
+    }
+    else {
       // final video = await VideoThumbnail.thumbnailData(
       //   video: details.selectedFile.path,
       //   imageFormat: ImageFormat.JPEG,
@@ -598,10 +517,37 @@ class _ChatViewState extends State<ChatView> {
       //         context: context));
       // list.add(DisplayVideo(
       //     video: details.selectedFile, aspectRatio: details.aspectRatio));
-      chatProvider.changeReplayMessage(
-          replayMessage: chatProvider.replayMessage);
-      //setState1(() {});
+      Message tempMessage = Message(
+          textMessage: chatProvider.findbasename(details.selectedFile.path),
+          url: "",
+          replayId: chatProvider.replayIdMessage,
+          typeMessage: "video",
+          senderId: profileProvider.user.id,
+          deleteUserMessage: [],
+          sendingTime: DateTime.now(),
+          checkSend: false);
     }
+    if (chatProvider.isReplay) {
+      tempMessage.replayId = chatProvider.replayIdMessage;
+    }
+    ///add local message
+    tempMessage.url = details.selectedFile.path;
+    listSendMessage.add(tempMessage);
+    setState3(() {});
+    chatProvider.replayIdMessage = "";
+    chatProvider.changeReplayMessage(replayMessage: null);
+
+    String url = await chatProvider.uploadFile(filePath:details.selectedFile.path,
+        typePathStorage:(details.isThatImage)?AppConstants.imagesGroup:AppConstants.videosGroup);
+    tempMessage.url = url;
+    print("${tempMessage.toJson()}");
+
+    ///remove local message
+    listSendMessage.remove(tempMessage);
+    await chatProvider.addMessage(context,
+        idGroup: chatProvider.group.id, message: tempMessage);
+    //  chatProvider.changeReplayMessage(replayMessage: chatProvider.replayMessage);
+    //setState1(() {});
   }
 
   Widget buildReplay() {
@@ -622,7 +568,7 @@ class _ChatViewState extends State<ChatView> {
                   thickness: AppSize.s6,
                   color: Theme.of(context).primaryColor.withOpacity(.8),
                 ),
-                Flexible(child: buildrReplayText())
+                Flexible(child: buildrReplayChat())
               ],
             ),
             Positioned(
@@ -668,7 +614,7 @@ Stack(
                   thickness: AppSize.s4,
                   color: Theme.of(context).primaryColor.withOpacity(.5),
                 ),
-                Flexible(child: buildrReplayText()
+                Flexible(child: buildrReplayChat()
                   /** Text(
                       chatProvider.replayMessage!,
                       )**/
@@ -758,14 +704,22 @@ Stack(
                       List<File> files =
                           result.paths.map((path) => File(path!)).toList();
 
-                      chatProvider.replayIdMessage = "";
-                      chatProvider.changeReplayMessage(replayMessage: null);
+
+
                       for (File file in files) {
-                        String url = await chatProvider.uploadFile(file.path);
+                        ///add local message
+                        tempMessage.textMessage =chatProvider.findbasename(file.path);
+                        tempMessage.url = file.path;
+                        listSendMessage.add(tempMessage);
+                        setState3(() {});
+                        chatProvider.replayIdMessage = "";
+                      chatProvider.changeReplayMessage(replayMessage: null);
+                        String url = await chatProvider.uploadFile(filePath:file.path,typePathStorage:AppConstants.filesGroup);
                         tempMessage.url = url;
-                        tempMessage.textMessage =
-                            chatProvider.findbasename(file.path);
                         print("${tempMessage.toJson()}");
+
+                        ///remove local message
+                        listSendMessage.remove(tempMessage);
                         await chatProvider.addMessage(context,
                             idGroup: chatProvider.group.id,
                             message: tempMessage);
@@ -844,7 +798,7 @@ Stack(
     );
   }
 
-  Widget buildrReplayText() {
+  Widget buildrReplayChat() {
     switch (chatProvider.messageReplay.typeMessage) {
       case "text":
         return Column(
@@ -1093,7 +1047,7 @@ Stack(
 
   convertListMessagesToListWidget(Chat chat) async {
     List<Widget> tempList = [];
-
+  //  chat.messages.addAll(listSendMessage);
     ///print("objectffffffffffffffffffffffffffffffffffff");
     chat.messages.forEach((message) async {
       // print(homeProvider.cacheUser);
@@ -1110,7 +1064,7 @@ Stack(
     messages.forEach((message) async {
       // print(homeProvider.cacheUser);
       //  if(!message.deleteUserMessage.contains(profileProvider.user.id)){
-      tempList.add(receiveMessage(message: message));
+      tempList.add(sendMessage(message: message));
       //}
     });
     list.addAll(tempList);
@@ -1154,8 +1108,22 @@ Stack(
     return name;
   }
 
+  onReplay({required Message message}){
+    if(message.checkSend){
+      print("replay : ${message.id} ${message.textMessage}");
+      chatProvider.replayIdMessage = message.id;
+      chatProvider.getReplayMessage();
+      chatProvider.changeReplayMessageId(
+          replayMessage: message.textMessage,
+          replayIdMessage: message.id);
+      foucsNode.requestFocus();
+    }
+
+  }
+  ///----------------------------------------------------------------------------
   receiveMessage({required Message message}) {
     /// print("type  ${message.textMessage} ${message.typeMessage}");
+
     switch (message.typeMessage) {
       case "text":
         return receiveText(
@@ -1176,20 +1144,10 @@ Stack(
 
   Widget receiveText({required bool isReplay, required Message message}) {
     Widget childWidget;
-    String replaytext = receiveReplay(message: message);
+   /// String replaytext = receiveReplay(message: message);
     if (isReplay) {
       childWidget = SwipeTo(
-          onRightSwipe: () {
-            print("replay : ${message.id} ${message.textMessage}");
-            chatProvider.replayIdMessage = message.id;
-            chatProvider.getReplayMessage();
-            chatProvider.changeReplayMessageId(
-                replayMessage: message.textMessage,
-                replayIdMessage: message.id);
-            foucsNode.requestFocus();
-
-            /// setState(() {});
-          },
+          onRightSwipe: ()=> onReplay(message: message),
           child: BuildMessageShape(
             //  isMe: true,
             message: message,
@@ -1204,45 +1162,22 @@ Stack(
 
       ///setState(() {});
     } else
-      //list.add(
       childWidget = SwipeTo(
-          onRightSwipe: () {
-            print("replay : ${message.id} ${message.textMessage}");
-
-            ///  chatProvider.replayMessage = message.textMessage;
-            chatProvider.replayIdMessage = message.id;
-            chatProvider.getReplayMessage();
-            chatProvider.changeReplayMessage(
-                replayMessage: message.textMessage);
-            foucsNode.requestFocus();
-            // setState(() {});
-            //  chatProvider.notifyListeners();
-          },
+          onRightSwipe: ()=> onReplay(message: message),
           child: BuildMessageShape(
             //isMe: false,
             message: message,
             child: Text(message.textMessage),
           ));
-    //  );
     return childWidget;
   }
 
   Widget receiveImage({required bool isReplay, required Message message}) {
     Widget childWidget;
-    String replaytext = receiveReplay(message: message);
+   /// String replaytext = receiveReplay(message: message);
     if (isReplay) {
       childWidget = SwipeTo(
-          onRightSwipe: () {
-            print("replay : ${message.id} ${message.textMessage}");
-            chatProvider.replayIdMessage = message.id;
-            chatProvider.getReplayMessage();
-            chatProvider.changeReplayMessageId(
-                replayMessage: message.textMessage,
-                replayIdMessage: message.id);
-            foucsNode.requestFocus();
-
-            /// setState(() {});
-          },
+          onRightSwipe: () =>onReplay(message: message),
           child: BuildMessageShape(
             //  isMe: true,
             message: message,
@@ -1252,29 +1187,47 @@ Stack(
                 buildrReplayMessage(message: message),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.fill,
-                    width: widthImageChat,
-                    //Sizer.getW(context) * 0.25,
-                    height: widthImageChat,
-                    //Sizer.getW(context) * 0.25,
-                    imageUrl:
-                        // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                        /// "${replaytext}",
-                        /// "${message.textMessage}",
-                        "${message.url}",
-                    imageBuilder: (context, imageProvider) => Container(
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: imageProvider,
-                          fit: BoxFit.cover,
-                          //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
-                        ),
-                      ),
-                    ),
-                    placeholder: (context, url) => CircularProgressIndicator(),
-                    errorWidget: (context, url, error) => FlutterLogo(),
-                  ),
+                  child: BuildMessageImage(message:  message),
+                  //Text(message.textMessage),
+                  //  child: Text(con.text),
+                )
+              ],
+            ),
+          ));
+    } else
+      childWidget = SwipeTo(
+          onRightSwipe: () => onReplay(message: message),
+          child: BuildMessageShape(
+            //isMe: false,
+            message: message,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                BuildMessageImage(message:  message),
+                //Text("str".toString()),
+                //Text(message.textMessage),
+              ],
+            ),
+          ));
+    return childWidget;
+  }
+
+  Widget receiveFile({required bool isReplay, required Message message}) {
+    Widget childWidget;
+    String replaytext = receiveReplay(message: message);
+    if (isReplay) {
+      childWidget = SwipeTo(
+          onRightSwipe: () => onReplay(message: message),
+          child: BuildMessageShape(
+            //  isMe: true,
+            message: message,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                buildrReplayMessage(message: message),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:BuildMessageFile(message: message),
                   //Text(message.textMessage),
                   //  child: Text(con.text),
                 )
@@ -1286,35 +1239,126 @@ Stack(
     } else
       //list.add(
       childWidget = SwipeTo(
-          onRightSwipe: () {
-            print("replay : ${message.id} ${message.textMessage}");
-
-            ///  chatProvider.replayMessage = message.textMessage;
-            chatProvider.replayIdMessage = message.id;
-            chatProvider.getReplayMessage();
-            chatProvider.changeReplayMessage(
-                replayMessage: message.textMessage);
-            foucsNode.requestFocus();
-            // setState(() {});
-            //  chatProvider.notifyListeners();
-          },
+          onRightSwipe: () =>onReplay(message: message),
           child: BuildMessageShape(
             //isMe: false,
+            message: message,
+            child: BuildMessageFile(message: message),
+          ));
+    //  );
+    return childWidget;
+  }
+
+  ///----------------------------------------------------------------------------
+
+  sendMessage({required Message message}) {
+    /// print("type  ${message.textMessage} ${message.typeMessage}");
+
+    switch (message.typeMessage) {
+      case "text":
+        return sendText(
+            isReplay: (message.replayId == "") ? false : true,
+            message: message);
+      case "image":
+        return sendImage(
+            isReplay: (message.replayId == "") ? false : true,
+            message: message);
+      case "file":
+        return sendFile(
+            isReplay: (message.replayId == "") ? false : true,
+            message: message);
+    }
+  }
+
+  Widget sendText({required bool isReplay, required Message message}) {
+    Widget childWidget;
+      childWidget = receiveText(isReplay: isReplay, message: message);
+    return childWidget;
+  }
+
+  Widget sendImage({required bool isReplay, required Message message}) {
+    Widget childWidget;
+    if (isReplay) {
+      childWidget = BuildMessageShape(
+            message: message,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                buildrReplayMessage(message: message),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: BuildMessageImageLocal(message:  message),
+                )
+              ],
+            ),
+          );
+    } else
+      childWidget = BuildMessageShape(
             message: message,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CachedNetworkImage(
-                  fit: BoxFit.fill,
-                  width: widthImageChat,
-                  //Sizer.getW(context) * 0.25,
-                  height: widthImageChat,
-                  //Sizer.getW(context) * 0.25,
+                BuildMessageImageLocal(message:  message),
+              ],
+            ),
+          );
+    return childWidget;
+  }
+
+  Widget sendFile({required bool isReplay, required Message message}) {
+    Widget childWidget;
+    String replaytext = receiveReplay(message: message);
+    if (isReplay) {
+      childWidget = BuildMessageShape(
+            //  isMe: true,
+            message: message,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                buildrReplayMessage(message: message),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:BuildMessageFile(message: message),
+                  //Text(message.textMessage),
+                  //  child: Text(con.text),
+                )
+              ],
+            ),
+          );
+
+      ///setState(() {});
+    } else
+      //list.add(
+      childWidget = BuildMessageShape(
+            //isMe: false,
+            message: message,
+            child: BuildMessageFile(message: message),
+          );
+    //  );
+    return childWidget;
+  }
+
+  ///----------------------------------------------------------------------------
+
+  BuildMessageImage({ required Message message}){
+   return InkWell(
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (ctx) => Material(
+                color: Colors.black,
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                  CachedNetworkImage(
+                  fit:  BoxFit.cover,
+                  height: Sizer.getW(context)*0.8,
+                  width: Sizer.getW(context),
                   imageUrl:
-                      // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                      /// "${replaytext}",
-                      ///"${message.textMessage}",
-                      "${message.url}",
+                  // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                  /// "${replaytext}",
+                  ///"${message.textMessage}",
+                  "${message.url}",
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
                       image: DecorationImage(
@@ -1327,103 +1371,104 @@ Stack(
                   placeholder: (context, url) => CircularProgressIndicator(),
                   errorWidget: (context, url, error) => FlutterLogo(),
                 ),
-                //Text("str".toString()),
-                //Text(message.textMessage),
-              ],
-            ),
-          ));
-    //  );
-    return childWidget;
-  }
-
-  Widget receiveFile({required bool isReplay, required Message message}) {
-    Widget childWidget;
-    String replaytext = receiveReplay(message: message);
-    if (isReplay) {
-      childWidget = SwipeTo(
-          onRightSwipe: () {
-            print("replay : ${message.id} ${message.textMessage}");
-            chatProvider.replayIdMessage = message.id;
-            chatProvider.getReplayMessage();
-            chatProvider.changeReplayMessageId(
-                replayMessage: message.textMessage,
-                replayIdMessage: message.id);
-            foucsNode.requestFocus();
-
-            /// setState(() {});
-          },
-          child: BuildMessageShape(
-            //  isMe: true,
-            message: message,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                buildrReplayMessage(message: message),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                          child: IconButton(
-                              onPressed: () {
-                                OpenFile.open("${message.url}");
-                              },
-                              icon: Icon(Icons.download))),
-                      const SizedBox(
-                        width: AppSize.s8,
-                      ),
-                      Flexible(
-                          child: Text(
-                              "${message.textMessage}" /*result.files[0].name*/)),
-                    ],
-                  ),
-                  //Text(message.textMessage),
-                  //  child: Text(con.text),
-                )
-              ],
-            ),
-          ));
-
-      ///setState(() {});
-    } else
-      //list.add(
-      childWidget = SwipeTo(
-          onRightSwipe: () {
-            print("replay : ${message.id} ${message.textMessage}");
-
-            ///  chatProvider.replayMessage = message.textMessage;
-            chatProvider.replayIdMessage = message.id;
-            chatProvider.getReplayMessage();
-            chatProvider.changeReplayMessage(
-                replayMessage: message.textMessage);
-            foucsNode.requestFocus();
-            // setState(() {});
-            //  chatProvider.notifyListeners();
-          },
-          child: BuildMessageShape(
-            //isMe: false,
-            message: message,
-            child: Row(
-              children: [
-                CircleAvatar(
-                    child: IconButton(
-                        onPressed: () {
-                          OpenFile.open("${message.url}");
-                        },
-                        icon: Icon(Icons.download))),
-                const SizedBox(
-                  width: AppSize.s8,
+                    Positioned(
+                      top: AppSize.s10,
+                      right: AppSize.s10,
+                      child: IconButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(
+                            Icons.close,
+                            color: ColorManager.white,
+                          )),
+                    )
+                  ],
                 ),
-                Flexible(
-                    child: Text(
-                        "${message.textMessage}" /*result.files[0].name*/)),
-              ],
+              ));
+        },
+        child:  CachedNetworkImage(
+          fit: BoxFit.fill,
+          width: widthImageChat,
+          //Sizer.getW(context) * 0.25,
+          height: widthImageChat,
+          //Sizer.getW(context) * 0.25,
+          imageUrl:
+          // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+          /// "${replaytext}",
+          ///"${message.textMessage}",
+          "${message.url}",
+          imageBuilder: (context, imageProvider) => Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: imageProvider,
+                fit: BoxFit.cover,
+                //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+              ),
             ),
+          ),
+          placeholder: (context, url) => CircularProgressIndicator(),
+          errorWidget: (context, url, error) => FlutterLogo(),
           ));
-    //  );
-    return childWidget;
   }
+  BuildMessageImageLocal({ required Message message}){
+   return InkWell(
+     onTap: () {
+       showDialog(
+           context: context,
+           builder: (ctx) => Material(
+             color: Colors.black,
+             child: Stack(
+               alignment: Alignment.center,
+               children: [
+                 Image.file(
+                   File(message.url),
+                   fit: BoxFit.cover,
+                 ),
+                 Positioned(
+                   top: AppSize.s10,
+                   right: AppSize.s10,
+                   child: IconButton(
+                       onPressed: () {
+                         Navigator.pop(context);
+                       },
+                       icon: Icon(
+                         Icons.close,
+                         color: ColorManager.white,
+                       )),
+                 )
+               ],
+             ),
+           ));
+     },
+     child: Image.file(File(message.url),fit: BoxFit.cover,width: widthImageChat,height: widthImageChat,));
+  }
+
+  BuildMessageFile({ required Message message}){
+    return Row(
+      children: [
+        CircleAvatar(
+            child: IconButton(
+                onPressed: () {
+                  OpenFile.open("${message.url}");
+                },
+                icon: Icon(Icons.download))),
+        const SizedBox(
+          width: AppSize.s8,
+        ),
+        Flexible(
+            child: Text(
+                "${message.textMessage}" /*result.files[0].name*/)),
+      ],
+    );
+  }
+
+
 }
+
+
+
+
 
 class DisplayImages extends StatelessWidget {
   final List<File> selectedFiles;
@@ -1670,10 +1715,12 @@ class BuildMessageShape extends StatelessWidget {
                           fontSize: AppSize.s10),
                     )),
                 (isMe)
-                    ? ((message.checkSend)
-                            ? Icon(Icons.check,
+                    ? (
+                    Icon(
+                        (message.checkSend)?
+                        Icons.check:
+                        Icons.radio_button_unchecked,
                                 size: AppSize.s14)
-                            : SizedBox()
                         /**
                         FutureBuilder(
                         future: chatProvider.addMessage(context,

@@ -25,6 +25,10 @@ class AppConstants {
       "https://firebasestorage.googleapis.com/v0/b/ehtooa-266e1.appspot.com/o/const%2Fimages%2FphotoProfileDoctor.png?alt=media&token=4225ba33-d453-4036-afe9-37d3c29ff43d";
   static String photoGroup =
       "https://firebasestorage.googleapis.com/v0/b/ehtooa-266e1.appspot.com/o/const%2Fimages%2FphotoGroup.png?alt=media&token=afd6dcbb-8299-4525-8d44-c9d5b6cbe52e";
+  static String imagesGroup ="Groups/Images/";
+  static String filesGroup ="Groups/Files/";
+  static String audiosGroup ="Groups/Audios/";
+  static String videosGroup ="Groups/Videos/";
 
   //collection
   static String collection = "";

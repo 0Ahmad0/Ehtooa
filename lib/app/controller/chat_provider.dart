@@ -198,52 +198,14 @@ class ChatProvider with ChangeNotifier{
    return result;
  }
 
- Future uploadImage(String imagePath) async {
-   try {
-     String path = basename(imagePath);
-     print(path);
-     File file =File(imagePath);
-
-//FirebaseStorage storage = FirebaseStorage.instance.ref().child(path);
-     Reference storage = FirebaseStorage.instance.ref().child("Groups/${path}");
-     UploadTask storageUploadTask = storage.putFile(file);
-     TaskSnapshot taskSnapshot = await storageUploadTask;
-     //Const.LOADIG(context);
-     String url = await taskSnapshot.ref.getDownloadURL();
-     //Navigator.of(context).pop();
-     print('url $url');
-     return url;
-   } catch (ex) {
-     //Const.TOAST( context,textToast:FirebaseFun.findTextToast("Please, upload the image"));
-   }
- }
- Future uploadAudio(String audioPath) async {
-   try {
-     String path = basename(audioPath);
-     print(path);
-     File file =File(audioPath);
-
-//FirebaseStorage storage = FirebaseStorage.instance.ref().child(path);
-     Reference storage = FirebaseStorage.instance.ref().child("Groups/Audios/${path}");
-     UploadTask storageUploadTask = storage.putFile(file);
-     TaskSnapshot taskSnapshot = await storageUploadTask;
-     //Const.LOADIG(context);
-     String url = await taskSnapshot.ref.getDownloadURL();
-     //Navigator.of(context).pop();
-     print('url $url');
-     return url;
-   } catch (ex) {
-     //Const.TOAST( context,textToast:FirebaseFun.findTextToast("Please, upload the image"));
-   }
- }
- Future uploadFile(String filePath) async {
+ Future uploadFile({required String filePath,required String typePathStorage}) async {
    try {
      String path = basename(filePath);
      print(path);
      File file =File(filePath);
 
 //FirebaseStorage storage = FirebaseStorage.instance.ref().child(path);
-     Reference storage = FirebaseStorage.instance.ref().child("Groups/Files/${path}");
+     Reference storage = FirebaseStorage.instance.ref().child("${typePathStorage}${path}");
      UploadTask storageUploadTask = storage.putFile(file);
      TaskSnapshot taskSnapshot = await storageUploadTask;
      //Const.LOADIG(context);
