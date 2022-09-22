@@ -141,6 +141,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.0.7"
+  circle_progress_bar:
+    dependency: "direct main"
+    description:
+      name: circle_progress_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.2"
   circular_countdown_timer:
     dependency: "direct main"
     description:

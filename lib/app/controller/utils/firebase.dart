@@ -613,9 +613,9 @@ class FirebaseFun{
   }
   static Future uploadImage({required XFile image, required String folder}) async {
     try {
-      String path = basename(image!.path);
-      print(image!.path);
-      File file =File(image!.path);
+      String path = basename(image.path);
+      print(image.path);
+      File file =File(image.path);
 
 //FirebaseStorage storage = FirebaseStorage.instance.ref().child(path);
       Reference storage = FirebaseStorage.instance.ref().child("${folder}/${path}");
