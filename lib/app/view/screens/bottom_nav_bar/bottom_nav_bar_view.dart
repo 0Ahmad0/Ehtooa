@@ -33,18 +33,19 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
 
   @override
   void initState() {
-    super.initState();
-  }
-  filterSecreens(profileProvider){
     screens = [
       {"title": tr(LocaleKeys.profile), "content": ProfileView()},
       {"title": tr(LocaleKeys.home), "content": HomeView()},
+      {"title": tr(LocaleKeys.notification), "content": NotificationView()},
+      {"title": tr(LocaleKeys.groups), "content": GroupsView()},
     ];
-    if(profileProvider.user.typeUser.contains(AppConstants.collectionAdmin)){
-      screens.add({"title": tr(LocaleKeys.notification), "content": NotificationView()});
-    }
-    else if(!profileProvider.user.typeUser.contains(AppConstants.collectionDoctor)){
-      screens.add({"title": tr(LocaleKeys.groups), "content": GroupsView()});
+    super.initState();
+  }
+  filterSecreens(profileProvider){
+    if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor)){
+      screens.removeAt(3);
+    }else if(profileProvider.user.typeUser.contains(AppConstants.collectionAdmin)){
+      screens.removeAt(2);
     }
   }
   @override

@@ -7,6 +7,7 @@ import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/view/screens/global_member/global_member.dart';
 import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
@@ -23,6 +24,7 @@ import 'package:video_player/video_player.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:custom_gallery_display/custom_gallery_display.dart';
+import '../../../controller/downloder_provider.dart';
 import '../../../controller/groups_provider.dart';
 import '../../../controller/profile_provider.dart';
 import '../../../controller/chat_provider.dart';
@@ -56,15 +58,20 @@ class _ChatViewState extends State<ChatView> {
   late ChatProvider chatProvider;
   late HomeProvider homeProvider;
   late ProfileProvider profileProvider;
+  late DownloaderProvider downloaderProvider;
   Function? setStateChat;
   double? widthImageChat;
-
+  fetchTempDir() async {
+    downloaderProvider.tempDir= await getTemporaryDirectory();
+  }
   @override
   Widget build(BuildContext context) {
     foucsNode.requestFocus();
     profileProvider = Provider.of<ProfileProvider>(context);
     chatProvider = Provider.of<ChatProvider>(context);
     homeProvider = Provider.of<HomeProvider>(context);
+    downloaderProvider = Provider.of<DownloaderProvider>(context);
+    fetchTempDir();
     widthImageChat = Sizer.getW(context) * 0.30;
     return Scaffold(
       appBar: AppBar(
@@ -611,55 +618,6 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-/*
-Stack(
-      children: [
-        Container(
-          padding: EdgeInsets.all(AppPadding.p8),
-          height: Sizer.getW(context) * 0.2,
-          decoration: BoxDecoration(
-            color: ColorManager.lightGray.withOpacity(.2),
-            borderRadius:
-            BorderRadius.vertical(top: Radius.circular(AppSize.s8)),
-          ),
-          child: Container(
-            padding: EdgeInsets.all(AppPadding.p4),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(AppSize.s4),
-              color: ColorManager.lightGray.withOpacity(.5),
-            ),
-            child: Row(
-              children: [
-                VerticalDivider(
-                  thickness: AppSize.s4,
-                  color: Theme.of(context).primaryColor.withOpacity(.5),
-                ),
-                Flexible(child: buildrReplayChat()
-                  /** Text(
-                      chatProvider.replayMessage!,
-                      )**/
-                )
-              ],
-            ),
-          ),
-        ),
-        Positioned(
-          top: 0,
-          left: context.locale == "en"?null:0,
-          right: context.locale == "en"?0:null,
-          child: IconButton(
-              onPressed: () {
-                ///chatProvider.replayMessage = null;
-                chatProvider.replayIdMessage = "";
-                chatProvider.changeReplayMessage(replayMessage: null);
-
-                ///  setState(() {});
-              },
-              icon: Icon(Icons.close)),
-        ),
-      ],
-    )
- */
   Widget bottomSheet() {
     return Container(
       height: Sizer.getW(context) * 0.55,
@@ -1305,14 +1263,37 @@ Stack(
                       top: AppMargin.m4,
                       bottom: AppMargin.m4,
                       //TODO check audio List Sender
-                      left: Sizer.getW(context) / 2 - AppSize.s20),
-                  child: SizedBox()
-                /*
-                   VoiceMessage(
-                     key: Key(path!),
-                     audioSrc: path,
-                     me: true,
-               */
+                  //    left: Sizer.getW(context) / 2 - AppSize.s20
+                  ),
+                  child:
+                      ChangeNotifierProvider<DownloaderProvider>.value(
+    value: downloaderProvider,
+    child: Consumer<DownloaderProvider>(
+    builder: (context, value, child) =>
+    (value.checkCompleteDownload[message.id]!=true)?
+                   Column(
+                     children: [
+                       IconButton(
+                         icon: Icon(Icons.download_sharp),
+                         onPressed: () {print("ffff");
+                         value.downloadFile(message);
+                         },
+                       ),
+                       Text("g ${value.downloadProgress[message.id]} ${value.checkCompleteDownload[message.id]}"),
+                     ],
+                   )
+        :VoiceMessage(
+      key: Key( "${value.tempDir.path}/${message.textMessage}" ),
+      audioSrc: "${value.tempDir.path}/${message.textMessage}",
+      me: true,)
+    )),
+
+                  /** VoiceMessage(
+                     key: Key(message.url),
+                     audioSrc: message.url,
+                     me: true,)
+
+              )**/
               )
           )
       );

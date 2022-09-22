@@ -18,6 +18,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'app/controller/add_doctor_provider.dart';
 import 'app/controller/bottom_nav_bar_provider.dart';
 import 'app/controller/create_sessions_provider.dart';
+import 'app/controller/downloder_provider.dart';
 import 'app/controller/global_member_provider.dart';
 import 'app/controller/groups_provider.dart';
 import 'app/controller/home_provider.dart';
@@ -85,6 +86,7 @@ class MyApp extends StatelessWidget {
         Provider<NotificationProvider>(create: (_)=>NotificationProvider()),
         Provider<PaymentProvider>(create: (_)=>PaymentProvider()),
         Provider<GlobalMemberProvider>(create: (_)=>GlobalMemberProvider()),
+        Provider<DownloaderProvider>(create: (_)=>DownloaderProvider()),
    //     Provider<CreateEnvironmentProvider>(create: (_)=>CreateEnvironmentProvider()),
       ],
       child: ChangeNotifierProvider<AppProvider>.value(
