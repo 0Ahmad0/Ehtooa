@@ -1256,54 +1256,54 @@ class _ChatViewState extends State<ChatView> {
     } else
       childWidget = SwipeTo(
           onRightSwipe: () => onReplay(message: message),
-          child: BuildMessageShape(
-            //  isMe: true,
-              message: message,
-              child:  Container(
-                margin: EdgeInsets.only(
-                  top: AppMargin.m4,
-                  bottom: AppMargin.m4,
-                  //TODO check audio List Sender
-                  //    left: Sizer.getW(context) / 2 - AppSize.s20
-                ),
-                child:
-                ChangeNotifierProvider<DownloaderProvider>.value(
-                    value: downloaderProvider,
-                    child: Consumer<DownloaderProvider>(
-                        builder: (context, value, child) =>
-                        (value.checkCompleteDownload[message.id]!=true)?
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: Sizer.getW(context) * 0.1,
-                              child: CircleProgressBar(
-                                strokeWidth: AppSize.s4,
-                                value:.5,
-                                foregroundColor: Theme.of(context).primaryColor,
-                                child: IconButton(
-                                  icon: Icon(Icons.download_sharp),
-                                  onPressed: () {print("ffff");
-                                  value.downloadFile(message);
-                                  },
-                                ),
-                              ),
+          child: Container(
+            margin: EdgeInsets.only(
+              top: AppMargin.m4,
+              bottom: AppMargin.m4,
+              //TODO check audio List Sender
+              //    left: Sizer.getW(context) / 2 - AppSize.s20
+            ),
+            child:
+            ChangeNotifierProvider<DownloaderProvider>.value(
+                value: downloaderProvider,
+                child: Consumer<DownloaderProvider>(
+                    builder: (context, value, child) =>
+                    (value.checkCompleteDownload[message.id] != true)?
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: Sizer.getW(context) * 0.1,
+                          child: CircleProgressBar(
+                            strokeWidth: AppSize.s4,
+                            value:.2,
+                            foregroundColor: Theme.of(context).primaryColor,
+                            child: IconButton(
+                              icon: Icon(Icons.download_sharp),
+                              onPressed: () {print("ffff");
+                              value.downloadFile(message);
+                              },
                             ),
-                            Text("g ${value.downloadProgress[message.id]} ${value.checkCompleteDownload[message.id]}"),
+                          ),
+                        ),
+                        Text("g ${value.downloadProgress[message.id]} ${value.checkCompleteDownload[message.id]}"),
+                      ],
+                    )
+                        :Column(
+                          children: [
+                            VoiceMessage(
+                      key: Key( "${value.tempDir.path}/${message.textMessage}" ),
+                      audioSrc: "${value.tempDir.path}/${message.textMessage}",
+                      me: true,),
                           ],
                         )
-                            :VoiceMessage(
-                          key: Key( "${value.tempDir.path}/${message.textMessage}" ),
-                          audioSrc: "${value.tempDir.path}/${message.textMessage}",
-                          me: true,)
-                    )),
+                )),
 
-                /** VoiceMessage(
-                    key: Key(message.url),
-                    audioSrc: message.url,
-                    me: true,)
+            /** VoiceMessage(
+                key: Key(message.url),
+                audioSrc: message.url,
+                me: true,)
 
-                    )**/
-              )
+                )**/
           )
       );
     return childWidget;
@@ -1435,12 +1435,16 @@ class _ChatViewState extends State<ChatView> {
                   top: AppMargin.m4,
                   bottom: AppMargin.m4,
                   //TODO check audio List Sender
-                  left: Sizer.getW(context) / 2 - AppSize.s20),
+                  // left: Sizer.getW(context) / 2 - AppSize.s20
+              ),
               child:
-              VoiceMessage(
-                key: Key(message.url),
-                audioSrc: message.url,
-                me: true,
+              BuildMessageShape(
+                message: message,
+                child: VoiceMessage(
+                  key: Key(message.url),
+                  audioSrc: message.url,
+                  me: true,
+                ),
               )
           )
       );
@@ -1741,8 +1745,9 @@ class BuildMessageShape extends StatelessWidget {
         margin: EdgeInsets.only(
           top: AppMargin.m4,
           bottom: AppMargin.m4,
-          right: isMe ? 0 : Sizer.getW(context) / 2 - AppSize.s20,
-          left: isMe ? Sizer.getW(context) / 2 - AppSize.s20 : 0,
+
+          right: isMe ?message.typeMessage.contains("audio")?0: AppSize.s20 : Sizer.getW(context) / 2 - AppSize.s20,
+          left: isMe ?message.typeMessage.contains("audio")?AppSize.s20: Sizer.getW(context) / 2 - AppSize.s20 : 0,
         ),
         decoration: BoxDecoration(
           // color: Theme.of(context).primaryColor.withOpacity(isMe ? 0.2 : 0.8),
