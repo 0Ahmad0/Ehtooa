@@ -68,6 +68,7 @@ dependencies:
   fluttertoast: ^8.0.9
   dio: ^4.0.6
   gallery_saver: ^2.3.2
+  circle_progress_bar: ^0.1.2
 
 
 
