@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -98,6 +99,7 @@ class _ChatViewState extends State<ChatView> {
                     )));
           },
           leading: CircleAvatar(
+            backgroundColor: Theme.of(context).cardColor,
             radius: AppSize.s24,
             child: CachedNetworkImage(
               fit: BoxFit.fill,
@@ -122,10 +124,14 @@ class _ChatViewState extends State<ChatView> {
             ),
           ),
           title: Text(
-            "${!(context.locale == 'en') ? chatProvider.group.nameAr : chatProvider.group.nameEn}", /*tr(LocaleKeys.anxiety_patients)*/
+            "${!(context.locale == 'en') ? chatProvider.group.nameAr : chatProvider.group.nameEn}",
+            style: getRegularStyle(color: ColorManager.white
+            ),/*tr(LocaleKeys.anxiety_patients)*/
           ),
           subtitle: Text(
-              "${chatProvider.group.listUsers.length + 1} Member" /*"35 Member"*/),
+              "${chatProvider.group.listUsers.length + 1 }${tr(LocaleKeys.member)}" /*"35 Member"*/,
+    style: getLightStyle(color: ColorManager.white)
+    ),
           trailing:
           (profileProvider.user.typeUser.contains(AppConstants.collectionAdmin))?
           IconButton(
@@ -1761,8 +1767,16 @@ class BuildMessageShape extends StatelessWidget {
           top: AppMargin.m4,
           bottom: AppMargin.m4,
 
-          right: isMe ?message.typeMessage.contains("audio")?0: AppSize.s20 : Sizer.getW(context) / 2 - AppSize.s20,
-          left: isMe ?message.typeMessage.contains("audio")?AppSize.s20: Sizer.getW(context) / 2 - AppSize.s20 : 0,
+          right: isMe ?
+          message.typeMessage.contains("audio")
+              ?0
+              : 0
+              : Sizer.getW(context) / 2 - AppSize.s20,
+          left: isMe ?
+          message.typeMessage.contains("audio")
+              ?Sizer.getW(context) /2.5:
+          Sizer.getW(context) / 2 - AppSize.s20
+              : 0,
         ),
         decoration: BoxDecoration(
           // color: Theme.of(context).primaryColor.withOpacity(isMe ? 0.2 : 0.8),
