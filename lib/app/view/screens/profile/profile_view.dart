@@ -74,6 +74,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    profileProvider.serial_number.text=profileProvider.user.serialNumber;
     return ChangeNotifierProvider<ProfileProvider>(
         create: (_) => ProfileProvider(),
         child: Consumer<ProfileProvider>(
@@ -289,7 +290,7 @@ class _ProfileViewState extends State<ProfileView> {
                           prefixIcon: Icons.phone_android,
                           maxLength: null,
                           hintText: tr(LocaleKeys.phone_number)),
-                      if(!profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
+                      if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
                         Column(
                           children: [
                             const SizedBox(
@@ -299,13 +300,15 @@ class _ProfileViewState extends State<ProfileView> {
                                 readOnly: true,
                                 controller: profileProvider.serial_number,
                                 validator: (String? val) {},
-                                onChange: (val) {},
+                                onChange: (val) {
+                                 // profileProvider.user.=value;
+                                },
                                 prefixIcon: Icons.confirmation_number,
                                 maxLength: null,
                                 hintText: tr(LocaleKeys.serial_number)),
                           ],
                         ),
-                      if(!profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
+                      if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
                         Column(
                           children: [
                             const SizedBox(

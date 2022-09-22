@@ -34,6 +34,7 @@ class User {
   String password;
   String typeUser;
   String description;
+  String serialNumber;
   List listUsedQuizzes;
   User(
       {required this.id,
@@ -45,8 +46,10 @@ class User {
         required this.typeUser,
         required this.photoUrl,
          required this.listUsedQuizzes,
-        this.description=""});
+        this.description="",
+        this.serialNumber=""});
   factory User.fromJson( json){
+    String tempSerialNumber="";
     return User(id: json['id'],
                 uid: json["uid"],
                 name: json["name"],
@@ -54,7 +57,8 @@ class User {
                 phoneNumber: json["phoneNumber"],
                 password: json["password"],
                 typeUser: json["typeUser"],
-                photoUrl: json["photoUrl"],
+              photoUrl: json["photoUrl"],
+              serialNumber: json["serialNumber"],
                listUsedQuizzes:json["listUsedQuizzes"],
                description: (json["description"]!=null)?json["description"]:"");
   }
@@ -66,6 +70,7 @@ class User {
     'phoneNumber':phoneNumber,
     'password':password,
     'typeUser':typeUser,
+    'serialNumber':serialNumber,
     'photoUrl':photoUrl,
     'listUsedQuizzes':listUsedQuizzes,
     'description':description,
@@ -160,6 +165,7 @@ class Message {
   int index;
   String textMessage;
   String url;
+  String localUrl;
   String typeMessage;
   String senderId;
   String replayId;
@@ -171,6 +177,7 @@ class Message {
       this.checkSend=true,
       required this.textMessage,
        this.url="",
+       this.localUrl="",
         required this.replayId,
       required this.typeMessage,
       required this.senderId,
@@ -185,8 +192,13 @@ class Message {
     if(!json["typeMessage"].contains(ChatMessageType.text.name)){
       tempUrl=json["url"];
     }
+    String tempLocalUrl="";
+    if(json.data().containsKey("localUrl")){
+      tempLocalUrl=json["localUrl"];
+    }
     return Message(
       url: tempUrl,
+        localUrl: tempLocalUrl,
         textMessage: json["textMessage"],
         typeMessage: json["typeMessage"],
         sendingTime: json["sendingTime"].toDate(),
@@ -207,6 +219,7 @@ class Message {
       'senderId': senderId,
       'replayId': replayId,
       'url': url,
+      'localUrl': localUrl,
     };
   }
 }

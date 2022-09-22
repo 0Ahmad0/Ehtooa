@@ -48,14 +48,11 @@ class ChatView extends StatefulWidget {
 
 class _ChatViewState extends State<ChatView> {
   List<Widget> list = [];
-  List<Widget> listSend = [];
   List<Message> listSendMessage = [];
   TextEditingController con = TextEditingController();
   final foucsNode = FocusNode();
   var setState3;
 
-  //String? replayMessage;
-  String? replayIdMessage = "";
   late ChatProvider chatProvider;
   late HomeProvider homeProvider;
   late ProfileProvider profileProvider;
@@ -69,7 +66,6 @@ class _ChatViewState extends State<ChatView> {
     chatProvider = Provider.of<ChatProvider>(context);
     homeProvider = Provider.of<HomeProvider>(context);
     widthImageChat = Sizer.getW(context) * 0.30;
-    ///print(chatProvider.group.nameAr);
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 1,
@@ -368,7 +364,7 @@ class _ChatViewState extends State<ChatView> {
 
                           ///  });
                         },
-                        onRecordEnd: (path) {
+                        onRecordEnd: (path) async {
                           ///  setState1(() {
                           list.add(Container(
                               margin: EdgeInsets.only(
@@ -385,9 +381,33 @@ class _ChatViewState extends State<ChatView> {
                                         ),
                                         */
                               ));
-                          chatProvider.changeReplayMessage(
-                              replayMessage: chatProvider.replayMessage);
 
+                          Message tempMessage = Message(
+                              textMessage: chatProvider.findbasename(path),
+                              url: "",
+                              replayId: chatProvider.replayIdMessage,
+                              typeMessage: "audio",
+                              senderId: profileProvider.user.id,
+                              deleteUserMessage: [],
+                              sendingTime: DateTime.now(),
+                              checkSend: false);
+                          if (chatProvider.isReplay) {
+                            tempMessage.replayId = chatProvider.replayIdMessage;
+                          }
+                          ///add local message
+                          tempMessage.url = path!;
+                          listSendMessage.add(tempMessage);
+                          setState3(() {});
+                          chatProvider.replayIdMessage = "";
+                          chatProvider.changeReplayMessage(replayMessage: null);
+
+                         String url = await chatProvider.uploadFile(filePath:path, typePathStorage:AppConstants.audiosGroup);
+                          tempMessage.url = url;
+                          print("${tempMessage.toJson()}");
+
+                          ///remove local message
+                          listSendMessage.remove(tempMessage);
+                          await chatProvider.addMessage(context, idGroup: chatProvider.group.id, message: tempMessage);
                           ///});
                         },
                         textPadding: EdgeInsets.zero,
@@ -1139,6 +1159,11 @@ Stack(
         return receiveFile(
             isReplay: (message.replayId == "") ? false : true,
             message: message);
+      case "audio":
+        return receiveAudio(
+            isReplay: (message.replayId == "") ? false : true,
+            message: message);
+
     }
   }
 
@@ -1249,6 +1274,51 @@ Stack(
     return childWidget;
   }
 
+  Widget receiveAudio({required bool isReplay, required Message message}) {
+    Widget childWidget;
+    if (isReplay) {
+      childWidget = SwipeTo(
+          onRightSwipe: () => onReplay(message: message),
+          child: Container(
+              margin: EdgeInsets.only(
+                  top: AppMargin.m4,
+                  bottom: AppMargin.m4,
+                  //TODO check audio List Sender
+                  left: Sizer.getW(context) / 2 - AppSize.s20),
+              child:
+              VoiceMessage(
+                key: Key(message.url),
+                audioSrc: message.url,
+                me: true,
+              )
+          )
+      );
+      ///setState(() {});
+    } else
+      childWidget = SwipeTo(
+          onRightSwipe: () => onReplay(message: message),
+          child: BuildMessageShape(
+            //  isMe: true,
+              message: message,
+              child:  Container(
+                  margin: EdgeInsets.only(
+                      top: AppMargin.m4,
+                      bottom: AppMargin.m4,
+                      //TODO check audio List Sender
+                      left: Sizer.getW(context) / 2 - AppSize.s20),
+                  child: SizedBox()
+                /*
+                   VoiceMessage(
+                     key: Key(path!),
+                     audioSrc: path,
+                     me: true,
+               */
+              )
+          )
+      );
+    return childWidget;
+  }
+
   ///----------------------------------------------------------------------------
 
   sendMessage({required Message message}) {
@@ -1265,6 +1335,10 @@ Stack(
             message: message);
       case "file":
         return sendFile(
+            isReplay: (message.replayId == "") ? false : true,
+            message: message);
+      case "audio":
+        return sendAudio(
             isReplay: (message.replayId == "") ? false : true,
             message: message);
     }
@@ -1335,6 +1409,51 @@ Stack(
             child: BuildMessageFile(message: message),
           );
     //  );
+    return childWidget;
+  }
+
+  Widget sendAudio({required bool isReplay, required Message message}) {
+    Widget childWidget;
+    if (isReplay) {
+      childWidget = SwipeTo(
+          onRightSwipe: () => onReplay(message: message),
+          child: BuildMessageShape(
+            //  isMe: true,
+              message: message,
+              child:  Container(
+                  margin: EdgeInsets.only(
+                      top: AppMargin.m4,
+                      bottom: AppMargin.m4,
+                      //TODO check audio List Sender
+                      left: Sizer.getW(context) / 2 - AppSize.s20),
+                  child: SizedBox()
+                /*
+                   VoiceMessage(
+                     key: Key(path!),
+                     audioSrc: path,
+                     me: true,
+               */
+              )
+          )
+      );
+      ///setState(() {});
+    } else
+      childWidget = SwipeTo(
+          onRightSwipe: () => onReplay(message: message),
+          child:   Container(
+                  margin: EdgeInsets.only(
+                      top: AppMargin.m4,
+                      bottom: AppMargin.m4,
+                      //TODO check audio List Sender
+                      left: Sizer.getW(context) / 2 - AppSize.s20),
+                  child:
+                   VoiceMessage(
+                     key: Key(message.url),
+                     audioSrc: message.url,
+                     me: true,
+                   )
+          )
+      );
     return childWidget;
   }
 
@@ -1586,7 +1705,10 @@ class BuildMessageShape extends StatelessWidget {
               TextButton(
                   style: TextButton.styleFrom(
                       minimumSize: Size(double.infinity, 80)),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    chatProvider.deleteUserMessage(context, message: message, idUser: profileProvider.user.id);
+                  },
                   child: Text(
                     tr(LocaleKeys.dle_for_me),
                     style: getRegularStyle(
@@ -1597,8 +1719,9 @@ class BuildMessageShape extends StatelessWidget {
                   style: TextButton.styleFrom(
                       minimumSize: Size(double.infinity, 80)),
                   onPressed: () async {
-                    await chatProvider.deleteMessage(context,
-                        message: message, idUser: profileProvider.user.id);
+                    Navigator.of(context).pop();
+                    chatProvider.deleteUserMessage(context, message: message, idUser: profileProvider.user.id);
+
                   },
                   child: Text(
                     tr(LocaleKeys.dle_for_all),

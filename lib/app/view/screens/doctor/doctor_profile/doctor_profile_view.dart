@@ -78,7 +78,7 @@ class DoctorProfile extends StatelessWidget {
                       _buildListTile(context,
                           icon: Icons.credit_card,
                           title: tr(LocaleKeys.card_number),
-                          subTitle: "طبيب اخصائي"//doctor.carer
+                          subTitle: doctor.serialNumber//doctor.carer
                       ),
                       const Divider(
                         thickness: AppSize.s1_5,
@@ -86,7 +86,7 @@ class DoctorProfile extends StatelessWidget {
                       _buildListTile(context,
                           icon: Icons.email,
                           title: tr(LocaleKeys.doctor_email),
-                          subTitle: "ahalksmc@gmail.com"//doctor.carer
+                          subTitle: doctor.email//doctor.carer
                       ),
                       const Divider(
                         thickness: AppSize.s1_5,

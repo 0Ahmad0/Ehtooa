@@ -7,6 +7,7 @@ import 'package:ehtooa/app/controller/profile_provider.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
+import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/app/view/screens/doctor/doctor_profile/doctor_profile_view.dart';
@@ -277,9 +278,10 @@ class HomeView extends StatelessWidget {
                       builder: (_, setState3) {
                         return
                         FutureBuilder(
-                          future: homeProvider.fetchSessionsToUser(
+                          future: homeProvider.fetchSessionsIdUser(
                               context, groups: groupsProvider.groups.groups,
-                              paySession: profileProvider.paySession, idUser: profileProvider.user.id),
+                              paySession: profileProvider.paySession, idUser: profileProvider.user.id
+                          ,typeUser: profileProvider.user.typeUser),
                           builder: (context, snapshot,) {
                             //  print(snapshot.error);
                             if (snapshot.connectionState == ConnectionState.waiting) {

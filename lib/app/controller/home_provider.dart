@@ -37,6 +37,17 @@ class HomeProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
+
+  fetchSessionsIdUser(context,{required String typeUser,required List groups,required PaySession paySession,required String idUser}) async {
+    if(typeUser.contains(AppConstants.collectionPatient)){
+      return await fetchSessionsToUser(context, groups: groups, paySession: paySession, idUser: idUser);
+    }else if(typeUser.contains(AppConstants.collectionDoctor)){
+      return await fetchSessionsToDoctor(context, idUser: idUser);
+    }else if(typeUser.contains(AppConstants.collectionAdmin)){
+      return await fetchSessionsToAdmin(context);
+    }else
+      return await fetchSessionsToAdmin(context);
+  }
   fetchSessionsToUser(context,{required List groups,required PaySession paySession,required String idUser}) async {
     List idGroups=[];
     for(models.Group group in groups){
@@ -56,7 +67,36 @@ class HomeProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
+  fetchSessionsToAdmin(context) async {
 
+    var result =await FirebaseFun.fetchSessions();
+    print(result);
+    if(result['status']){
+      sessions=models.Sessions.fromJson(result['body']);
+      if(search!=""){
+        sessions.sessions =await searchListSession(context, search: search, sessions: sessions.sessions);
+      }
+      sessionsToUser=[];
+      await processessionsToDoctorOrAdmin(context);
+    }
+    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
+    return result;
+  }
+  fetchSessionsToDoctor(context,{required String idUser}) async {
+    this.idUser=idUser;
+    var result =await FirebaseFun.fetchSessionsToDoctor(idUser: idUser);
+    print(result);
+    if(result['status']){
+      sessions=models.Sessions.fromJson(result['body']);
+      if(search!=""){
+        sessions.sessions =await searchListSession(context, search: search, sessions: sessions.sessions);
+      }
+      sessionsToUser=[];
+      await processessionsToDoctorOrAdmin(context);
+    }
+    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
+    return result;
+  }
   fetchNameUser(context,{required String idUser}) async{
   //  print("id ${idUser} user ${cacheUser[idUser]}");
     //print("gggggggggggggggggggggggggg${cacheUser.containsKey(idUser)} ${cacheUser[idUser]}");
@@ -97,6 +137,20 @@ class HomeProvider with ChangeNotifier{
           doctorName: session.listDoctor[0],
           price: "${session.price}",
           isSold: isSold
+      ));
+    }
+  }
+  processessionsToDoctorOrAdmin(context){
+    sessionsToUser=[];
+    for(models.Session session in sessions.sessions){
+      /// }
+      sessionsToUser.add( InteractiveSessions(
+          idGroup: session.idGroup,
+          name: session.name,
+          id_link:session.sessionUrl,
+          doctorName: session.listDoctor[0],
+          price: "${session.price}",
+          isSold: true
       ));
     }
   }

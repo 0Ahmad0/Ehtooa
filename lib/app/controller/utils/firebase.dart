@@ -327,6 +327,15 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+  static fetchSessionsToDoctor( {required String idUser})  async {
+
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionSession)
+        .where('listDoctor',arrayContains: idUser)
+        .get()
+        .then((onValuefetchSessionsToUser))
+        .catchError(onError);
+    return result;
+  }
   static fetchPaySession( {required String idUser})  async {
     final result=await FirebaseFirestore.instance.collection(AppConstants.collectionPaySession)
         .where('idUser',isEqualTo: idUser)

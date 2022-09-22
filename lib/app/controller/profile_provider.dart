@@ -37,6 +37,7 @@ class ProfileProvider with ChangeNotifier{
      User tempUser= User.fromJson(user.toJson());
      tempUser.email =email.text;
      tempUser.name=name.text;
+     tempUser.serialNumber=name.text;
      var result =await FirebaseFun.updateUser(user: tempUser);
      if(result['status']){
        updateUser(user:User.fromJson(result['body']));

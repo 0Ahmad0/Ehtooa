@@ -18,6 +18,7 @@ import '../../../controller/profile_provider.dart';
 import '../../../model/models.dart';
 import '../../../model/utils/const.dart';
 import '../../resources/color_manager.dart';
+import '../login/login_view.dart';
 
 class SettingView extends StatelessWidget {
   bool language = false;
@@ -224,6 +225,7 @@ class SettingView extends StatelessWidget {
                   Const.LOADIG(context);
                   await profileProvider.logout(context);
                   Navigator.of(context).pop();
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>LoginView()));
                 },
               ),
             ),

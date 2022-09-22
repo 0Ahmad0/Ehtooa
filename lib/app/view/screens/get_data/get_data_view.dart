@@ -30,6 +30,10 @@ temp(groupsProvider,profileProvider,homeProvider) async {
   homeProvider.groups=Groups(groups: []);
   groupsProvider.groups=Groups(groups: []);
  // groupsProvider.groups.groups=[];
+  var resultGroup= await homeProvider.fetchGroups(context);
+  if(resultGroup['status']){
+    homeProvider.groups=Groups.fromJson(resultGroup['body']);
+  }
   if(!profileProvider.user.typeUser.contains(AppConstants.collectionPatient)){
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(
@@ -39,10 +43,7 @@ temp(groupsProvider,profileProvider,homeProvider) async {
     if(resultPaySession['status']){
       profileProvider.paySession=PaySession.fromJson(resultPaySession['body']);
     }
-    var resultGroup= await homeProvider.fetchGroups(context);
-    if(resultGroup['status']){
-      homeProvider.groups=Groups.fromJson(resultGroup['body']);
-    }
+
     data = await groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id);
     if(data!=null)
       groupsProvider.groups=Groups.fromJson(data['body']);

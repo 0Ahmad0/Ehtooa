@@ -23,13 +23,14 @@ class AddDoctorProvider with ChangeNotifier{
    addDoctor(context) async{
    var result =await FirebaseFun.signup(email: emailDoctor.text, password: passWord.text);
    if(result['status']){
-     user= models.User(id: "",uid:result['body']['uid'], name: name.text, email: emailDoctor.text, phoneNumber: "0000000000", password: passWord.text,photoUrl: AppConstants.photoProfileDoctor,typeUser: AppConstants.collectionDoctor,description: description.text,listUsedQuizzes: [false,false,false,false]);
+     user= models.User(id: "",uid:result['body']['uid'], name: name.text, email: emailDoctor.text, phoneNumber: phoneNumber.text, password: passWord.text,photoUrl: AppConstants.photoProfileDoctor,typeUser: AppConstants.collectionDoctor,description: description.text,listUsedQuizzes: [false,false,false,false],serialNumber: serialNumber.text);
      result = await FirebaseFun.createUser(user: user);
      if(result['status']){
        user= models.User.fromJson(result['body']);
         emailDoctor.clear();
         passWord.clear();
         name.clear();
+        serialNumber.clear();
         description.clear();
 
       // print(result);
