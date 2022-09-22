@@ -1278,7 +1278,7 @@ class _ChatViewState extends State<ChatView> {
                             height: Sizer.getW(context) * 0.1,
                             child: CircleProgressBar(
                               strokeWidth: AppSize.s4,
-                              value:.2,
+                              value: value.downloadProgress[message.id] == null?0:value.downloadProgress[message.id]!,
                               foregroundColor: Theme.of(context).primaryColor,
                               child: IconButton(
                                 icon: Icon(Icons.download_sharp),
