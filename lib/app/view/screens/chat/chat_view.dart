@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:filesize/filesize.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
 import 'package:get/get.dart';
@@ -1379,6 +1381,7 @@ class _ChatViewState extends State<ChatView> {
                       message: message,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.min,
                         children: [
                           Row(
                             children: [
@@ -1400,26 +1403,53 @@ class _ChatViewState extends State<ChatView> {
                                         child: Text("${(value.downloadProgress[message.id]!*100).toStringAsFixed(1)}%",style: getLightStyle(
                                           color: ColorManager.black,
                                           fontSize: AppSize.s8
-                                        ),))
-                                        :IconButton(
-                                      icon: Icon(Icons.download_sharp),
-                                      onPressed: () {print("ffff");
-                                      value.downloadFile(message);
-                                      },
+                                        ),)):GestureDetector(
+                                      onTap: ()=>value.downloadFile(message),
+                                          child: Container(
+                                      padding: EdgeInsets.all(AppPadding.p10),
+                                            child: SvgPicture.asset(
+                                      ImagesAssets.download_audio,
+                                              color: ColorManager.white,
                                     ),
+                                          ),
+                                        )
+                                    //     :IconButton(
+                                    //   icon: Icon(Icons.download_sharp),
+                                    //   onPressed: () {print("ffff");
+                                    //   value.downloadFile(message);
+                                    //   },
+                                    // ),
                                   ),
                                 ),
                               ),
                               const SizedBox(width: AppSize.s10,),
-                              Flexible(
-                                child: Text(
-                                    "g ${value.downloadProgress[message.id]}"
-                                        " ${value.checkCompleteDownload[message.id]}",
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ),
+                              Expanded(child: Row(
+                                children: List.generate(25, (index) => Container(
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: AppSize.s1_5
+                                  ),
+                                  color: ColorManager.black,
+                                  width: AppSize.s1_5,
+                                  height: (index.isEven
+                                      ?(index + 1) * .8
+                                      :(index + 1) * .5
+                                  ),
+                                )),
+                              )),
+                              // Flexible(
+                              //   child: Text(
+                              //       "g ${value.downloadProgress[message.id]}"
+                              //           " ${value.checkCompleteDownload[message.id]}",
+                              //     overflow: TextOverflow.ellipsis,
+                              //   ),
+                              // ),
                             ],
                           ),
+                          Padding(
+                            padding: const EdgeInsets.all(AppPadding.p4),
+                            //Todo الفلاتر عمتك ولاك
+                            child: Text(filesize(664365320)),
+                          )
                         ],
                       ),
                     )

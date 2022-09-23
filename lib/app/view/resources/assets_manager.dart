@@ -10,6 +10,7 @@ class ImagesAssets{
   static const backgroundChat = "$imagePath/background_chat.png";
   static const backgroundAddDoctor = "$imagePath/add_doctor_back.svg";
   static const backgroundSessionInteractive = "$imagePath/session_interactive.svg";
+  static const download_audio = "$imagePath/download_audio.svg";
   static const List<String> imagesInteractiveSessions = [
     "$imagePath/img1.svg",
     "$imagePath/img2.svg",

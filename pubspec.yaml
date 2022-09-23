@@ -69,6 +69,7 @@ dependencies:
   dio: ^4.0.6
   gallery_saver: ^2.3.2
   circle_progress_bar: ^0.1.2
+  filesize: ^2.0.1
 
 
 
