@@ -1280,33 +1280,46 @@ class _ChatViewState extends State<ChatView> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          SizedBox(
-                            height: Sizer.getW(context) * 0.1,
-                            child: CircleProgressBar(
-                              strokeWidth: AppSize.s4,
-                              value: value.downloadProgress[message.id] == null?0:value.downloadProgress[message.id]!,
-                              foregroundColor: Theme.of(context).primaryColor,
-                              child: value.checkClickDownload[message.id] == true?
-                              Container(
-                                alignment: Alignment.center,
-                                padding: EdgeInsets.all(AppPadding.p4),
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).cardColor,
-                                    shape: BoxShape.circle
+                          Row(
+                            children: [
+                              CircleAvatar(
+                                child: SizedBox(
+                                  height: Sizer.getW(context) * 0.1,
+                                  child: CircleProgressBar(
+                                    strokeWidth: AppSize.s4,
+                                    value: value.downloadProgress[message.id] == null?0:value.downloadProgress[message.id]!,
+                                    foregroundColor: Theme.of(context).primaryColor,
+                                    child: value.checkClickDownload[message.id] == true?
+                                    Container(
+                                      alignment: Alignment.center,
+                                      padding: EdgeInsets.all(AppPadding.p4),
+                                        decoration: BoxDecoration(
+                                          color: Theme.of(context).cardColor,
+                                          shape: BoxShape.circle
+                                        ),
+                                        child: Text("${(value.downloadProgress[message.id]!*100).toStringAsFixed(1)}%",style: getLightStyle(
+                                          color: ColorManager.black,
+                                          fontSize: AppSize.s8
+                                        ),))
+                                        :IconButton(
+                                      icon: Icon(Icons.download_sharp),
+                                      onPressed: () {print("ffff");
+                                      value.downloadFile(message);
+                                      },
+                                    ),
                                   ),
-                                  child: Text("${(value.downloadProgress[message.id]!*100).toStringAsFixed(1)}%",style: getLightStyle(
-                                    color: ColorManager.black,
-                                    fontSize: AppSize.s8
-                                  ),))
-                                  :IconButton(
-                                icon: Icon(Icons.download_sharp),
-                                onPressed: () {print("ffff");
-                                value.downloadFile(message);
-                                },
+                                ),
                               ),
-                            ),
+                              const SizedBox(width: AppSize.s10,),
+                              Flexible(
+                                child: Text(
+                                    "g ${value.downloadProgress[message.id]}"
+                                        " ${value.checkCompleteDownload[message.id]}",
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text("g ${value.downloadProgress[message.id]} ${value.checkCompleteDownload[message.id]}"),
                         ],
                       ),
                     )
