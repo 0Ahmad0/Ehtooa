@@ -16,6 +16,7 @@ import '../../../../controller/home_provider.dart';
 import '../../../../controller/profile_provider.dart';
 import '../../../../model/utils/const.dart';
 import '../../../../model/utils/sizer.dart';
+import '../../bottom_nav_bar/bottom_nav_bar_view.dart';
 import '../list_sessions/list_sessions_view.dart';
 
 import 'package:provider/provider.dart';

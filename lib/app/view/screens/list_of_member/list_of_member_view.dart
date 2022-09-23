@@ -110,10 +110,11 @@ class ListOfMemberView extends StatelessWidget {
                 //homeProvider.sessions=Sessions.fromJson(data['body']);
                 return Row(
                   children: [
-                   Text("${snapshot.data}"),
+                   Flexible(child: Text("${snapshot.data}",
+                   )),
                     SizedBox(width: Sizer.getW(context)*0.01,),
                     (typeUser.contains(AppConstants.collectionPatient))?
-                     SizedBox():
+                    SizedBox():
                     Icon(Icons.star),
                     (!checkblock)?
                     SizedBox():

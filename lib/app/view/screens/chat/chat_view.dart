@@ -65,12 +65,13 @@ class _ChatViewState extends State<ChatView> {
   late DownloaderProvider downloaderProvider;
   Function? setStateChat;
   double? widthImageChat;
+
   fetchTempDir() async {
-    downloaderProvider.tempDir= await getTemporaryDirectory();
+    downloaderProvider.tempDir = await getTemporaryDirectory();
   }
+
   @override
   Widget build(BuildContext context) {
-    foucsNode.requestFocus();
     profileProvider = Provider.of<ProfileProvider>(context);
     chatProvider = Provider.of<ChatProvider>(context);
     homeProvider = Provider.of<HomeProvider>(context);
@@ -86,19 +87,19 @@ class _ChatViewState extends State<ChatView> {
                 context,
                 MaterialPageRoute(
                     builder: (ctx) => ListOfMemberView(
-                      users: [
-                        User(
-                            id: "id",
-                            uid: "uid",
-                            name: "Kholod",
-                            email: "Kholod@gmail.com",
-                            phoneNumber: "0522325465",
-                            password: "password",
-                            typeUser: "typeUser",
-                            photoUrl: "photoUrl",
-                            listUsedQuizzes: [false, false, false, false])
-                      ],
-                    )));
+                          users: [
+                            User(
+                                id: "id",
+                                uid: "uid",
+                                name: "Kholod",
+                                email: "Kholod@gmail.com",
+                                phoneNumber: "0522325465",
+                                password: "password",
+                                typeUser: "typeUser",
+                                photoUrl: "photoUrl",
+                                listUsedQuizzes: [false, false, false, false])
+                          ],
+                        )));
           },
           leading: CircleAvatar(
             backgroundColor: Theme.of(context).cardColor,
@@ -108,8 +109,8 @@ class _ChatViewState extends State<ChatView> {
               width: Sizer.getW(context) * 0.1,
               height: Sizer.getW(context) * 0.1,
               imageUrl:
-              // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-              "${chatProvider.group.photoUrl}",
+                  // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                  "${chatProvider.group.photoUrl}",
               imageBuilder: (context, imageProvider) => Container(
                 decoration: BoxDecoration(
                   image: DecorationImage(
@@ -121,32 +122,32 @@ class _ChatViewState extends State<ChatView> {
               ),
               placeholder: (context, url) => CircularProgressIndicator(),
               errorWidget: (context, url, error) =>
-              //FlutterLogo(),
-              SizedBox(),
+                  //FlutterLogo(),
+                  SizedBox(),
             ),
           ),
           title: Text(
             "${!(context.locale == 'en') ? chatProvider.group.nameAr : chatProvider.group.nameEn}",
-            style: getRegularStyle(color: ColorManager.white
-            ),/*tr(LocaleKeys.anxiety_patients)*/
+            style: getRegularStyle(
+                color: ColorManager.white), /*tr(LocaleKeys.anxiety_patients)*/
           ),
           subtitle: Text(
-              "${chatProvider.group.listUsers.length + 1 }${tr(LocaleKeys.member)}" /*"35 Member"*/,
-    style: getLightStyle(color: ColorManager.white)
-    ),
-          trailing:
-          (profileProvider.user.typeUser.contains(AppConstants.collectionAdmin))?
-          IconButton(
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (ctx) => GlobalMemberView()));
-              },
-              icon: Icon(Icons.person_add))
-              :SizedBox(),
+              "${chatProvider.group.listUsers.length + 1}${tr(LocaleKeys.member)}" /*"35 Member"*/,
+              style: getLightStyle(color: ColorManager.white)),
+          trailing: (profileProvider.user.typeUser
+                  .contains(AppConstants.collectionAdmin))
+              ? IconButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (ctx) => GlobalMemberView()));
+                  },
+                  icon: Icon(Icons.person_add))
+              : SizedBox(),
         ),
       ),
-      body:
-      Column(
+      body: Column(
         children: [
           Expanded(
             child: Container(
@@ -157,10 +158,10 @@ class _ChatViewState extends State<ChatView> {
                           Colors.black.withOpacity(.2), BlendMode.darken),
                       image: AssetImage(ImagesAssets.backgroundChat))),
               child: StreamBuilder<QuerySnapshot>(
-                //prints the messages to the screen0
+                  //prints the messages to the screen0
                   stream: FirebaseFirestore.instance
                       .collection(AppConstants.collectionGroup)
-                  // .doc("taoId1xj5dSDNEoaYlFd")
+                      // .doc("taoId1xj5dSDNEoaYlFd")
                       .doc(chatProvider.group.id)
                       .collection(AppConstants.collectionChat)
                       .orderBy("sendingTime")
@@ -178,15 +179,16 @@ class _ChatViewState extends State<ChatView> {
                         print("streame ${snapshot.data!.docs.length}");
                         chatProvider.group.chat =
                             Chat.fromJsonWithFilterIdUser({
-                              'id': chatProvider.group.id,
-                              'messages': snapshot.data!.docs
-                            }, idUser: profileProvider.user.id);
+                          'id': chatProvider.group.id,
+                          'messages': snapshot.data!.docs
+                        }, idUser: profileProvider.user.id);
 
                         convertListMessagesToListUsers(chatProvider.group.chat);
 
                         return StatefulBuilder(builder: (_, setStateChat) {
                           setState3 = setStateChat;
-                          convertListMessagesToListWidget(chatProvider.group.chat);
+                          convertListMessagesToListWidget(
+                              chatProvider.group.chat);
                           convertListSendMessagesToListWidget(listSendMessage);
                           // Navigator.of(context).pop();
                           return SingleChildScrollView(
@@ -198,15 +200,16 @@ class _ChatViewState extends State<ChatView> {
                                   AppPadding.p10,
                                 ),
                                 itemCount:
-                                ///     chatProvider.group.chat.messages.length + listSendMessage.length,
 
-                                list.length,
+                                    ///     chatProvider.group.chat.messages.length + listSendMessage.length,
+
+                                    list.length,
                                 itemBuilder: (_, pos) {
                                   //   chatProvider.group.chat.messages[pos].index = pos;
                                   return
 
-                                    ///BuildMessageShape(isMe: true, child: Text("${chatProvider.group.chat.messages[pos].textMessage}"));
-                                    list[pos];
+                                      ///BuildMessageShape(isMe: true, child: Text("${chatProvider.group.chat.messages[pos].textMessage}"));
+                                      list[pos];
                                   // return ListTile(title: Text(list[pos]));
                                 }),
                           );
@@ -227,276 +230,314 @@ class _ChatViewState extends State<ChatView> {
               child: Consumer<ChatProvider>(
                 builder: (context, value, child) =>
 
-                // print("chat replay massege${value.replayMessage}");
-                //  setStateChat=setState1;
-                (!chatProvider.checkBlockUserInGroup(idUser: profileProvider.user.id))?
-                Column(
-                  children: [
-                    if (value.isReplay) buildReplay(),
-                    Directionality(
-                      textDirection: ui.TextDirection.ltr,
-                      child: ChatComposer(
-                        composerColor: Theme.of(context).cardColor,
-                        backgroundColor: Theme.of(context).cardColor,
-                        borderRadius: value.isReplay
-                            ? BorderRadius.vertical(
-                            bottom: Radius.circular(AppSize.s8))
-                            : BorderRadius.circular(AppSize.s8),
-                        focusNode: foucsNode,
-                        textFieldDecoration: InputDecoration(
-                          border: InputBorder.none,
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                        ),
-                        textStyle: getRegularStyle(
-                            color: Theme.of(context).textTheme.bodyText1!.color,
-                            fontSize: Sizer.getW(context) / 30),
-                        controller: con,
-                        onReceiveText: (str) async {
-                          Message tempMessage = Message(
-                              textMessage: str.toString(),
-                              replayId: "",
-                              typeMessage: "text",
-                              senderId: profileProvider.user.id,
-                              deleteUserMessage: [],
-                              sendingTime: DateTime.now(),
-                              checkSend: false);
-                          value.getReplayMessage();
-                          if (value.isReplay) {
-                            tempMessage.replayId = value.replayIdMessage;
-                            print(value.replayIdMessage);
-                            list.add(SwipeTo(
-                                onRightSwipe: () {
-                                  print(str);
-                                  /// value.replayMessage = str;
-                                  foucsNode.requestFocus();
-                                  chatProvider.changeReplayMessage(
-                                      replayMessage: str);
-                                },
-                                child: BuildMessageShape(
-                                  //isMe: true,
-                                  message: tempMessage,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Container(
-                                        height: Sizer.getW(context) * 0.15,
-                                        padding: EdgeInsets.all(AppPadding.p8),
-                                        decoration: BoxDecoration(
-                                          color: ColorManager.lightGray
-                                              .withOpacity(.5),
-                                          borderRadius:
-                                          BorderRadius.circular(AppSize.s8),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                          children: [
-                                            VerticalDivider(
-                                              thickness: AppSize.s4,
-                                              color: Theme.of(context)
-                                                  .primaryColor
-                                                  .withOpacity(.5),
+                    // print("chat replay massege${value.replayMessage}");
+                    //  setStateChat=setState1;
+                    (!chatProvider.checkBlockUserInGroup(
+                            idUser: profileProvider.user.id))
+                        ? Column(
+                            children: [
+                              if (value.isReplay) buildReplay(),
+                              Directionality(
+                                textDirection: ui.TextDirection.ltr,
+                                child: ChatComposer(
+                                  composerColor: Theme.of(context).cardColor,
+                                  backgroundColor: Theme.of(context).cardColor,
+                                  borderRadius: value.isReplay
+                                      ? BorderRadius.vertical(
+                                          bottom: Radius.circular(AppSize.s8))
+                                      : BorderRadius.circular(AppSize.s8),
+                                  focusNode: foucsNode,
+                                  textFieldDecoration: InputDecoration(
+                                    border: InputBorder.none,
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
+                                  textStyle: getRegularStyle(
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color,
+                                      fontSize: Sizer.getW(context) / 30),
+                                  controller: con,
+                                  onReceiveText: (str) async {
+                                    Message tempMessage = Message(
+                                        textMessage: str.toString(),
+                                        replayId: "",
+                                        typeMessage: "text",
+                                        senderId: profileProvider.user.id,
+                                        deleteUserMessage: [],
+                                        sendingTime: DateTime.now(),
+                                        checkSend: false);
+                                    value.getReplayMessage();
+                                    if (value.isReplay) {
+                                      tempMessage.replayId =
+                                          value.replayIdMessage;
+                                      print(value.replayIdMessage);
+                                      list.add(SwipeTo(
+                                          onRightSwipe: () {
+                                            print(str);
+
+                                            /// value.replayMessage = str;
+                                            foucsNode.requestFocus();
+                                            chatProvider.changeReplayMessage(
+                                                replayMessage: str);
+                                          },
+                                          child: BuildMessageShape(
+                                            //isMe: true,
+                                            message: tempMessage,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  height: Sizer.getW(context) *
+                                                      0.15,
+                                                  padding: EdgeInsets.all(
+                                                      AppPadding.p8),
+                                                  decoration: BoxDecoration(
+                                                    color: ColorManager
+                                                        .lightGray
+                                                        .withOpacity(.5),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            AppSize.s8),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      VerticalDivider(
+                                                        thickness: AppSize.s4,
+                                                        color: Theme.of(context)
+                                                            .primaryColor
+                                                            .withOpacity(.5),
+                                                      ),
+                                                      Flexible(
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              ("${(homeProvider.cacheUser.containsKey(value.messageReplay.senderId) ? homeProvider.cacheUser[value.messageReplay.senderId] : "")}"),
+                                                              style: TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
+                                                            ),
+                                                            SizedBox(
+                                                              height: Sizer.getW(
+                                                                      context) *
+                                                                  0.01,
+                                                            ),
+                                                            Text(
+                                                              value
+                                                                  .messageReplay
+                                                                  .textMessage,
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: Text(con.text),
+                                                )
+                                              ],
                                             ),
-                                            Flexible(
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    ("${(homeProvider.cacheUser.containsKey(value.messageReplay.senderId) ? homeProvider.cacheUser[value.messageReplay.senderId] : "")}"),
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                        FontWeight.bold),
-                                                  ),
-                                                  SizedBox(
-                                                    height:
-                                                    Sizer.getW(context) *
-                                                        0.01,
-                                                  ),
-                                                  Text(
-                                                    value.messageReplay
-                                                        .textMessage,
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(con.text),
-                                      )
-                                    ],
-                                  ),
-                                )));
-                          } else {
-                            Message tempMessage = Message(
-                                textMessage: str.toString(),
-                                replayId: "",
-                                typeMessage: "text",
-                                senderId: profileProvider.user.id,
-                                deleteUserMessage: [],
-                                sendingTime: DateTime.now(),
-                                checkSend: false);
-                            list.add(SwipeTo(
-                                onRightSwipe: () {
-                                  print(str);
-                                  foucsNode.requestFocus();
-                                  chatProvider.changeReplayMessage(
-                                      replayMessage: str);
-                                },
-                                child: BuildMessageShape(
-                                  //    isMe: false,
-                                  message: tempMessage,
+                                          )));
+                                    } else {
+                                      Message tempMessage = Message(
+                                          textMessage: str.toString(),
+                                          replayId: "",
+                                          typeMessage: "text",
+                                          senderId: profileProvider.user.id,
+                                          deleteUserMessage: [],
+                                          sendingTime: DateTime.now(),
+                                          checkSend: false);
+                                      list.add(SwipeTo(
+                                          onRightSwipe: () {
+                                            print(str);
+                                            foucsNode.requestFocus();
+                                            chatProvider.changeReplayMessage(
+                                                replayMessage: str);
+                                          },
+                                          child: BuildMessageShape(
+                                            //    isMe: false,
+                                            message: tempMessage,
 
-                                  child: Row(
-                                    children: [
-                                      Text(str.toString()),
-                                    ],
-                                  ),
-                                )));
-                          }
-                          print("${tempMessage.toJson()}");
+                                            child: Row(
+                                              children: [
+                                                Text(str.toString()),
+                                              ],
+                                            ),
+                                          )));
+                                    }
+                                    print("${tempMessage.toJson()}");
 
-                          ///toDo هنا لا يختفي الرسالة حتا تتم ارسالها
-                          ///في حال اردت التغير قم بوضع السطر الاول في الاخر
+                                    ///toDo هنا لا يختفي الرسالة حتا تتم ارسالها
+                                    ///في حال اردت التغير قم بوضع السطر الاول في الاخر
 
-                          ///add local message
-                          listSendMessage.add(tempMessage);
-                          setState3(() {});
-                          con.text = '';
-                          chatProvider.replayIdMessage = "";
-                          chatProvider.changeReplayMessage(replayMessage: null);
-                          ///remove local message
-                          listSendMessage.remove(tempMessage);
-                          await value.addMessage(context,
-                              idGroup: chatProvider.group.id,
-                              message: tempMessage);
-                          //chatProvider.replayIdMessage = "";
-                          //chatProvider.changeReplayMessage(replayMessage: null);
+                                    ///add local message
+                                    listSendMessage.add(tempMessage);
+                                    setState3(() {});
+                                    con.text = '';
+                                    chatProvider.replayIdMessage = "";
+                                    chatProvider.changeReplayMessage(
+                                        replayMessage: null);
 
-                          ///  });
-                        },
-                        onRecordEnd: (path) async {
-                          ///  setState1(() {
-                          list.add(Container(
-                              margin: EdgeInsets.only(
-                                  top: AppMargin.m4,
-                                  bottom: AppMargin.m4,
-                                  //TODO check audio List Sender
-                                  left: Sizer.getW(context) / 2 - AppSize.s20),
-                              child: SizedBox()
-                            /*
+                                    ///remove local message
+                                    listSendMessage.remove(tempMessage);
+                                    await value.addMessage(context,
+                                        idGroup: chatProvider.group.id,
+                                        message: tempMessage);
+                                    //chatProvider.replayIdMessage = "";
+                                    //chatProvider.changeReplayMessage(replayMessage: null);
+
+                                    ///  });
+                                  },
+                                  onRecordEnd: (path) async {
+                                    ///  setState1(() {
+                                    list.add(Container(
+                                        margin: EdgeInsets.only(
+                                            top: AppMargin.m4,
+                                            bottom: AppMargin.m4,
+                                            //TODO check audio List Sender
+                                            left: Sizer.getW(context) / 2 -
+                                                AppSize.s20),
+                                        child: SizedBox()
+                                        /*
                                         VoiceMessage(
                                           key: Key(path!),
                                           audioSrc: path,
                                           me: true,
                                         ),
                                         */
-                          ));
+                                        ));
 
-                          Message tempMessage = Message(
-                              textMessage: chatProvider.findbasename(path),
-                              url: "",
-                              replayId: chatProvider.replayIdMessage,
-                              typeMessage: "audio",
-                              senderId: profileProvider.user.id,
-                              deleteUserMessage: [],
-                              sendingTime: DateTime.now(),
-                              checkSend: false);
-                          if (chatProvider.isReplay) {
-                            tempMessage.replayId = chatProvider.replayIdMessage;
-                          }
-                          ///add local message
-                          tempMessage.url = path!;
-                          listSendMessage.add(tempMessage);
-                          setState3(() {});
-                          chatProvider.replayIdMessage = "";
-                          chatProvider.changeReplayMessage(replayMessage: null);
+                                    Message tempMessage = Message(
+                                        textMessage:
+                                            chatProvider.findbasename(path),
+                                        url: "",
+                                        replayId: chatProvider.replayIdMessage,
+                                        typeMessage: "audio",
+                                        senderId: profileProvider.user.id,
+                                        deleteUserMessage: [],
+                                        sendingTime: DateTime.now(),
+                                        checkSend: false);
+                                    if (chatProvider.isReplay) {
+                                      tempMessage.replayId =
+                                          chatProvider.replayIdMessage;
+                                    }
 
-                          String url = await chatProvider.uploadFile(filePath:path, typePathStorage:AppConstants.audiosGroup);
-                          tempMessage.url = url;
-                          print("${tempMessage.toJson()}");
+                                    ///add local message
+                                    tempMessage.url = path!;
+                                    listSendMessage.add(tempMessage);
+                                    setState3(() {});
+                                    chatProvider.replayIdMessage = "";
+                                    chatProvider.changeReplayMessage(
+                                        replayMessage: null);
 
-                          ///remove local message
-                          listSendMessage.remove(tempMessage);
-                          await chatProvider.addMessage(context, idGroup: chatProvider.group.id, message: tempMessage);
-                          ///});
-                        },
-                        textPadding: EdgeInsets.zero,
-                        leading: CupertinoButton(
-                          padding: EdgeInsets.zero,
-                          child: const Icon(
-                            Icons.insert_emoticon_outlined,
-                            size: 25,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () {},
-                        ),
-                        actions: [
-                          CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            child: const Icon(
-                              Icons.attach_file_rounded,
-                              size: 25,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  backgroundColor: Colors.transparent,
-                                  context: context,
-                                  builder: (_) => bottomSheet());
-                            },
-                          ),
-                          CupertinoButton(
-                            padding: EdgeInsets.zero,
-                            child: const Icon(
-                              Icons.camera_alt_rounded,
-                              size: 25,
-                              color: Colors.grey,
-                            ),
-                            onPressed: () async {
-                              ImagePickerPlus picker = ImagePickerPlus(context);
-                              SelectedImagesDetails? details =
-                              await picker.pickBoth(
-                                source: ImageSource.both,
-                                multiSelection: false,
-                                galleryDisplaySettings: GalleryDisplaySettings(
-                                  tabsTexts: TabsTexts(
-                                      videoText: tr(LocaleKeys.video),
-                                      galleryText: tr(LocaleKeys.gallery),
-                                      photoText: tr(LocaleKeys.camera),
-                                      deletingText: tr(LocaleKeys.del)),
-                                  appTheme: AppTheme(
-                                      focusColor: Colors.white,
-                                      primaryColor: Colors.black),
-                                  showImagePreview: true,
-                                  cropImage: true,
+                                    String url = await chatProvider.uploadFile(
+                                        filePath: path,
+                                        typePathStorage:
+                                            AppConstants.audiosGroup);
+                                    tempMessage.url = url;
+                                    print("${tempMessage.toJson()}");
+
+                                    ///remove local message
+                                    listSendMessage.remove(tempMessage);
+                                    await chatProvider.addMessage(context,
+                                        idGroup: chatProvider.group.id,
+                                        message: tempMessage);
+
+                                    ///});
+                                  },
+                                  textPadding: EdgeInsets.zero,
+                                  leading: CupertinoButton(
+                                    padding: EdgeInsets.zero,
+                                    child: const Icon(
+                                      Icons.insert_emoticon_outlined,
+                                      size: 25,
+                                      color: Colors.grey,
+                                    ),
+                                    onPressed: () {},
+                                  ),
+                                  actions: [
+                                    CupertinoButton(
+                                      padding: EdgeInsets.zero,
+                                      child: const Icon(
+                                        Icons.attach_file_rounded,
+                                        size: 25,
+                                        color: Colors.grey,
+                                      ),
+                                      onPressed: () {
+                                        showModalBottomSheet(
+                                            backgroundColor: Colors.transparent,
+                                            context: context,
+                                            builder: (_) => bottomSheet());
+                                      },
+                                    ),
+                                    CupertinoButton(
+                                      padding: EdgeInsets.zero,
+                                      child: const Icon(
+                                        Icons.camera_alt_rounded,
+                                        size: 25,
+                                        color: Colors.grey,
+                                      ),
+                                      onPressed: () async {
+                                        ImagePickerPlus picker =
+                                            ImagePickerPlus(context);
+                                        SelectedImagesDetails? details =
+                                            await picker.pickBoth(
+                                          source: ImageSource.both,
+                                          multiSelection: false,
+                                          galleryDisplaySettings:
+                                              GalleryDisplaySettings(
+                                            tabsTexts: TabsTexts(
+                                                videoText: tr(LocaleKeys.video),
+                                                galleryText:
+                                                    tr(LocaleKeys.gallery),
+                                                photoText:
+                                                    tr(LocaleKeys.camera),
+                                                deletingText:
+                                                    tr(LocaleKeys.del)),
+                                            appTheme: AppTheme(
+                                                focusColor: Colors.white,
+                                                primaryColor: Colors.black),
+                                            showImagePreview: true,
+                                            cropImage: true,
+                                          ),
+                                        );
+                                        if (details != null)
+                                          await displayDetails(details);
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              );
-                              if (details != null)
-                                await displayDetails(details);
-                            },
+                              ),
+                            ],
+                          )
+
+                        ///TODO وضع كونتنر لقد تم حظرك من هذا الغروب
+                        : Container(
+                            alignment: Alignment.center,
+                            width: double.infinity,
+                            height: Sizer.getW(context) * 0.15,
+                            color: Theme.of(context).cardColor,
+                            child: Text(
+                              tr(LocaleKeys.have_ban),
+                              style: getRegularStyle(
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .color,
+                                  fontSize: Sizer.getW(context) / 30),
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                  ],
-                )
-                ///TODO وضع كونتنر لقد تم حظرك من هذا الغروب
-                    :Container(
-                  alignment: Alignment.center,
-                  width: double.infinity,
-                  height: Sizer.getW(context) * 0.15,
-                  color: Theme.of(context).cardColor,
-                  child: Text(tr(LocaleKeys.have_ban),style: getRegularStyle(
-                      color: Theme.of(context).textTheme.bodyText1!.color,
-                      fontSize: Sizer.getW(context) / 30
-                  ),),
-                ),
                 //     }),
               ))
         ],
@@ -524,8 +565,14 @@ class _ChatViewState extends State<ChatView> {
           deleteUserMessage: [],
           sendingTime: DateTime.now(),
           checkSend: false);
-    }
-    else {
+    } else {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (ctx) => DisplayVideo(
+                    video: details.selectedFile,
+                    aspectRatio: 16.0,
+                  )));
       // final video = await VideoThumbnail.thumbnailData(
       //   video: details.selectedFile.path,
       //   imageFormat: ImageFormat.JPEG,
@@ -566,6 +613,7 @@ class _ChatViewState extends State<ChatView> {
     if (chatProvider.isReplay) {
       tempMessage.replayId = chatProvider.replayIdMessage;
     }
+
     ///add local message
     tempMessage.url = details.selectedFile.path;
     listSendMessage.add(tempMessage);
@@ -573,8 +621,11 @@ class _ChatViewState extends State<ChatView> {
     chatProvider.replayIdMessage = "";
     chatProvider.changeReplayMessage(replayMessage: null);
 
-    String url = await chatProvider.uploadFile(filePath:details.selectedFile.path,
-        typePathStorage:(details.isThatImage)?AppConstants.imagesGroup:AppConstants.videosGroup);
+    String url = await chatProvider.uploadFile(
+        filePath: details.selectedFile.path,
+        typePathStorage: (details.isThatImage)
+            ? AppConstants.imagesGroup
+            : AppConstants.videosGroup);
     tempMessage.url = url;
     print("${tempMessage.toJson()}");
 
@@ -634,129 +685,130 @@ class _ChatViewState extends State<ChatView> {
       margin: const EdgeInsets.all(AppMargin.m12),
       child: Card(
           child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildItemBottomsheet(
-                      icon: FontAwesomeIcons.file,
-                      text: tr(LocaleKeys.documents),
-                      onTap: () async {
-                        Navigator.pop(context);
-                        FilePickerResult? result = await FilePicker.platform
-                            .pickFiles(allowMultiple: false);
-                        if (result != null) {
-                          Message tempMessage = Message(
-                              textMessage: "",
-                              url: "",
-                              replayId: "",
-                              typeMessage: "file",
-                              senderId: profileProvider.user.id,
-                              deleteUserMessage: [],
-                              sendingTime: DateTime.now(),
-                              checkSend: false);
-                          if (chatProvider.isReplay) {
-                            tempMessage.replayId = chatProvider.replayIdMessage;
-                          }
-                          list.add(Container(
-                            margin: EdgeInsets.only(
-                              top: AppMargin.m4,
-                              bottom: AppMargin.m4,
-                              // right: Sizer.getW(context) /2 -20.0,
-                              left: Sizer.getW(context) / 2 - 20.0,
-                            ),
-                            color: Theme.of(context).primaryColor.withOpacity(.2),
-                            padding: EdgeInsets.all(AppPadding.p8),
-                            child: Container(
-                              padding: EdgeInsets.all(AppPadding.p4),
-                              decoration: BoxDecoration(
-                                  color: ColorManager.blackGray.withOpacity(.5),
-                                  borderRadius: BorderRadius.circular(AppSize.s8)),
-                              child: Row(
-                                children: [
-                                  CircleAvatar(
-                                      child: IconButton(
-                                          onPressed: () {},
-                                          icon: Icon(Icons.download))),
-                                  const SizedBox(
-                                    width: AppSize.s8,
-                                  ),
-                                  Flexible(child: Text(result.files[0].name)),
-                                ],
+              buildItemBottomsheet(
+                  icon: FontAwesomeIcons.file,
+                  text: tr(LocaleKeys.documents),
+                  onTap: () async {
+                    Navigator.pop(context);
+                    FilePickerResult? result = await FilePicker.platform
+                        .pickFiles(allowMultiple: false);
+                    if (result != null) {
+                      Message tempMessage = Message(
+                          textMessage: "",
+                          url: "",
+                          replayId: "",
+                          typeMessage: "file",
+                          senderId: profileProvider.user.id,
+                          deleteUserMessage: [],
+                          sendingTime: DateTime.now(),
+                          checkSend: false);
+                      if (chatProvider.isReplay) {
+                        tempMessage.replayId = chatProvider.replayIdMessage;
+                      }
+                      list.add(Container(
+                        margin: EdgeInsets.only(
+                          top: AppMargin.m4,
+                          bottom: AppMargin.m4,
+                          // right: Sizer.getW(context) /2 -20.0,
+                          left: Sizer.getW(context) / 2 - 20.0,
+                        ),
+                        color: Theme.of(context).primaryColor.withOpacity(.2),
+                        padding: EdgeInsets.all(AppPadding.p8),
+                        child: Container(
+                          padding: EdgeInsets.all(AppPadding.p4),
+                          decoration: BoxDecoration(
+                              color: ColorManager.blackGray.withOpacity(.5),
+                              borderRadius: BorderRadius.circular(AppSize.s8)),
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                  child: IconButton(
+                                      onPressed: () {},
+                                      icon: Icon(Icons.download))),
+                              const SizedBox(
+                                width: AppSize.s8,
                               ),
-                            ),
-                          ));
-                          // Not sure if I should only get file path or complete data (this was in package documentation)
-                          List<File> files =
+                              Flexible(child: Text(result.files[0].name)),
+                            ],
+                          ),
+                        ),
+                      ));
+                      // Not sure if I should only get file path or complete data (this was in package documentation)
+                      List<File> files =
                           result.paths.map((path) => File(path!)).toList();
 
+                      for (File file in files) {
+                        ///add local message
+                        tempMessage.textMessage =
+                            chatProvider.findbasename(file.path);
+                        tempMessage.url = file.path;
+                        listSendMessage.add(tempMessage);
+                        setState3(() {});
+                        chatProvider.replayIdMessage = "";
+                        chatProvider.changeReplayMessage(replayMessage: null);
+                        String url = await chatProvider.uploadFile(
+                            filePath: file.path,
+                            typePathStorage: AppConstants.filesGroup);
+                        tempMessage.url = url;
+                        print("${tempMessage.toJson()}");
 
-
-                          for (File file in files) {
-                            ///add local message
-                            tempMessage.textMessage =chatProvider.findbasename(file.path);
-                            tempMessage.url = file.path;
-                            listSendMessage.add(tempMessage);
-                            setState3(() {});
-                            chatProvider.replayIdMessage = "";
-                            chatProvider.changeReplayMessage(replayMessage: null);
-                            String url = await chatProvider.uploadFile(filePath:file.path,typePathStorage:AppConstants.filesGroup);
-                            tempMessage.url = url;
-                            print("${tempMessage.toJson()}");
-
-                            ///remove local message
-                            listSendMessage.remove(tempMessage);
-                            await chatProvider.addMessage(context,
-                                idGroup: chatProvider.group.id,
-                                message: tempMessage);
-                          }
-                          //setState(() {});
-                        } else {
-                          // User canceled the picker
-                        }
-                      },
-                      color: Colors.blueAccent),
-                  buildItemBottomsheet(
-                      icon: FontAwesomeIcons.camera,
-                      text: tr(LocaleKeys.camera),
-                      onTap: () {},
-                      color: Colors.pinkAccent),
-                  buildItemBottomsheet(
-                      icon: Icons.photo,
-                      text: tr(LocaleKeys.gallery),
-                      onTap: () {},
-                      color: Colors.purpleAccent),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  buildItemBottomsheet(
-                      icon: Icons.audiotrack_sharp,
-                      text: tr(LocaleKeys.audio),
-                      onTap: () {
-                        Const.TOAST(context, textToast: tr(LocaleKeys.no));
-                      },
-                      color: Colors.orange),
-                  buildItemBottomsheet(
-                      icon: FontAwesomeIcons.locationDot,
-                      text: tr(LocaleKeys.location),
-                      onTap: () {
-                        Const.TOAST(context, textToast: tr(LocaleKeys.no));
-                      },
-                      color: Colors.green),
-                  buildItemBottomsheet(
-                      icon: Icons.person,
-                      text: tr(LocaleKeys.contacts),
-                      onTap: () {
-                        Const.TOAST(context, textToast: tr(LocaleKeys.no));
-                      },
-                      color: Colors.blue),
-                ],
-              ),
+                        ///remove local message
+                        listSendMessage.remove(tempMessage);
+                        await chatProvider.addMessage(context,
+                            idGroup: chatProvider.group.id,
+                            message: tempMessage);
+                      }
+                      //setState(() {});
+                    } else {
+                      // User canceled the picker
+                    }
+                  },
+                  color: Colors.blueAccent),
+              buildItemBottomsheet(
+                  icon: FontAwesomeIcons.camera,
+                  text: tr(LocaleKeys.camera),
+                  onTap: () {},
+                  color: Colors.pinkAccent),
+              buildItemBottomsheet(
+                  icon: Icons.photo,
+                  text: tr(LocaleKeys.gallery),
+                  onTap: () {},
+                  color: Colors.purpleAccent),
             ],
-          )),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              buildItemBottomsheet(
+                  icon: Icons.audiotrack_sharp,
+                  text: tr(LocaleKeys.audio),
+                  onTap: () {
+                    Const.TOAST(context, textToast: tr(LocaleKeys.no));
+                  },
+                  color: Colors.orange),
+              buildItemBottomsheet(
+                  icon: FontAwesomeIcons.locationDot,
+                  text: tr(LocaleKeys.location),
+                  onTap: () {
+                    Const.TOAST(context, textToast: tr(LocaleKeys.no));
+                  },
+                  color: Colors.green),
+              buildItemBottomsheet(
+                  icon: Icons.person,
+                  text: tr(LocaleKeys.contacts),
+                  onTap: () {
+                    Const.TOAST(context, textToast: tr(LocaleKeys.no));
+                  },
+                  color: Colors.blue),
+            ],
+          ),
+        ],
+      )),
     );
   }
 
@@ -821,9 +873,9 @@ class _ChatViewState extends State<ChatView> {
                   width: Sizer.getW(context) * 0.1,
                   height: Sizer.getW(context) * 0.1,
                   imageUrl:
-                  // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                  ///"${chatProvider.replayMessage}",
-                  "${chatProvider.messageReplay.url}",
+                      // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                      ///"${chatProvider.replayMessage}",
+                      "${chatProvider.messageReplay.url}",
                   // "${AppConstants.photoGroup}",
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
@@ -928,7 +980,7 @@ class _ChatViewState extends State<ChatView> {
 
   Widget buildrReplayMessage({required Message message}) {
     Message messageReplay =
-    chatProvider.findReplayMessage(repIdMessage: message.replayId);
+        chatProvider.findReplayMessage(repIdMessage: message.replayId);
     switch (messageReplay.typeMessage) {
       case "text":
         return Container(
@@ -952,8 +1004,7 @@ class _ChatViewState extends State<ChatView> {
                   children: [
                     Text(
                       ("${receiveReplayname(message: message)}"),
-                      style: getBoldStyle(
-                          color: ColorManager.blackGray),
+                      style: getBoldStyle(color: ColorManager.blackGray),
                     ),
                     const SizedBox(
                       height: AppSize.s4,
@@ -1004,9 +1055,9 @@ class _ChatViewState extends State<ChatView> {
                           width: Sizer.getW(context) * 0.1,
                           height: Sizer.getW(context) * 0.1,
                           imageUrl:
-                          // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                          // "${messageReplay.textMessage}",
-                          "${messageReplay.url}",
+                              // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                              // "${messageReplay.textMessage}",
+                              "${messageReplay.url}",
 
                           /// "${AppConstants.photoGroup}",
                           imageBuilder: (context, imageProvider) => Container(
@@ -1195,18 +1246,17 @@ class _ChatViewState extends State<ChatView> {
     return name;
   }
 
-  onReplay({required Message message}){
-    if(message.checkSend){
+  onReplay({required Message message}) {
+    if (message.checkSend) {
       print("replay : ${message.id} ${message.textMessage}");
       chatProvider.replayIdMessage = message.id;
       chatProvider.getReplayMessage();
       chatProvider.changeReplayMessageId(
-          replayMessage: message.textMessage,
-          replayIdMessage: message.id);
+          replayMessage: message.textMessage, replayIdMessage: message.id);
       foucsNode.requestFocus();
     }
-
   }
+
   ///----------------------------------------------------------------------------
   receiveMessage({required Message message}) {
     /// print("type  ${message.textMessage} ${message.typeMessage}");
@@ -1217,12 +1267,12 @@ class _ChatViewState extends State<ChatView> {
             isReplay: (message.replayId == "") ? false : true,
             message: message);
       case "image":
-      // print("type  ${message.textMessage} ${message.typeMessage}");
+        // print("type  ${message.textMessage} ${message.typeMessage}");
         return receiveImage(
             isReplay: (message.replayId == "") ? false : true,
             message: message);
       case "file":
-      // print("type  ${message.textMessage} ${message.typeMessage}");
+        // print("type  ${message.textMessage} ${message.typeMessage}");
         return receiveFile(
             isReplay: (message.replayId == "") ? false : true,
             message: message);
@@ -1230,16 +1280,16 @@ class _ChatViewState extends State<ChatView> {
         return receiveAudio(
             isReplay: (message.replayId == "") ? false : true,
             message: message);
-
     }
   }
 
   Widget receiveText({required bool isReplay, required Message message}) {
     Widget childWidget;
+
     /// String replaytext = receiveReplay(message: message);
     if (isReplay) {
       childWidget = SwipeTo(
-          onRightSwipe: ()=> onReplay(message: message),
+          onRightSwipe: () => onReplay(message: message),
           child: BuildMessageShape(
             //  isMe: true,
             message: message,
@@ -1255,7 +1305,7 @@ class _ChatViewState extends State<ChatView> {
       ///setState(() {});
     } else
       childWidget = SwipeTo(
-          onRightSwipe: ()=> onReplay(message: message),
+          onRightSwipe: () => onReplay(message: message),
           child: BuildMessageShape(
             //isMe: false,
             message: message,
@@ -1266,10 +1316,11 @@ class _ChatViewState extends State<ChatView> {
 
   Widget receiveImage({required bool isReplay, required Message message}) {
     Widget childWidget;
+
     /// String replaytext = receiveReplay(message: message);
     if (isReplay) {
       childWidget = SwipeTo(
-          onRightSwipe: () =>onReplay(message: message),
+          onRightSwipe: () => onReplay(message: message),
           child: BuildMessageShape(
             //  isMe: true,
             message: message,
@@ -1279,7 +1330,7 @@ class _ChatViewState extends State<ChatView> {
                 buildrReplayMessage(message: message),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: BuildMessageImage(message:  message),
+                  child: BuildMessageImage(message: message),
                   //Text(message.textMessage),
                   //  child: Text(con.text),
                 )
@@ -1295,7 +1346,7 @@ class _ChatViewState extends State<ChatView> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                BuildMessageImage(message:  message),
+                BuildMessageImage(message: message),
                 //Text("str".toString()),
                 //Text(message.textMessage),
               ],
@@ -1319,7 +1370,7 @@ class _ChatViewState extends State<ChatView> {
                 buildrReplayMessage(message: message),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child:BuildMessageFile(message: message),
+                  child: BuildMessageFile(message: message),
                   //Text(message.textMessage),
                   //  child: Text(con.text),
                 )
@@ -1331,7 +1382,7 @@ class _ChatViewState extends State<ChatView> {
     } else
       //list.add(
       childWidget = SwipeTo(
-          onRightSwipe: () =>onReplay(message: message),
+          onRightSwipe: () => onReplay(message: message),
           child: BuildMessageShape(
             //isMe: false,
             message: message,
@@ -1348,18 +1399,16 @@ class _ChatViewState extends State<ChatView> {
           onRightSwipe: () => onReplay(message: message),
           child: Container(
               margin: EdgeInsets.only(
-                  top: AppMargin.m4,
-                  bottom: AppMargin.m4,
-                  //TODO check audio List Sender
-                 ),
-              child:
-              VoiceMessage(
+                top: AppMargin.m4,
+                bottom: AppMargin.m4,
+                //TODO check audio List Sender
+              ),
+              child: VoiceMessage(
                 key: Key(message.url),
                 audioSrc: message.url,
                 me: true,
-              )
-          )
-      );
+              )));
+
       ///setState(() {});
     } else
       childWidget = SwipeTo(
@@ -1371,97 +1420,122 @@ class _ChatViewState extends State<ChatView> {
               //TODO check audio List Sender
               //    left: Sizer.getW(context) / 2 - AppSize.s20
             ),
-            child:
-            ChangeNotifierProvider<DownloaderProvider>.value(
+            child: ChangeNotifierProvider<DownloaderProvider>.value(
                 value: downloaderProvider,
                 child: Consumer<DownloaderProvider>(
-                    builder: (context, value, child) =>
-                    (value.checkCompleteDownload[message.id] != true)?
-                    BuildMessageShape(
-                      message: message,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            children: [
-                              CircleAvatar(
-                                child: SizedBox(
-                                  height: Sizer.getW(context) * 0.1,
-                                  child: CircleProgressBar(
-                                    strokeWidth: AppSize.s4,
-                                    value: value.downloadProgress[message.id] == null?0:value.downloadProgress[message.id]!,
-                                    foregroundColor: Theme.of(context).primaryColor,
-                                    child: value.checkClickDownload[message.id] == true?
-                                    Container(
-                                      alignment: Alignment.center,
-                                      padding: EdgeInsets.all(AppPadding.p4),
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context).cardColor,
-                                          shape: BoxShape.circle
-                                        ),
-                                        child: Text("${(value.downloadProgress[message.id]!*100).toStringAsFixed(1)}%",style: getLightStyle(
-                                          color: ColorManager.black,
-                                          fontSize: AppSize.s8
-                                        ),)):GestureDetector(
-                                      onTap: ()=>value.downloadFile(message),
-                                          child: Container(
-                                      padding: EdgeInsets.all(AppPadding.p10),
-                                            child: SvgPicture.asset(
-                                      ImagesAssets.download_audio,
-                                              color: ColorManager.white,
+                    builder: (context, value, child) => (value
+                                .checkCompleteDownload[message.id] !=
+                            true)
+                        ? BuildMessageShape(
+                            message: message,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Row(
+                                  children: [
+                                    CircleAvatar(
+                                      child: SizedBox(
+                                        height: Sizer.getW(context) * 0.1,
+                                        child: CircleProgressBar(
+                                            strokeWidth: AppSize.s4,
+                                            value: value.downloadProgress[message
+                                                        .id] ==
+                                                    null
+                                                ? 0
+                                                : value.downloadProgress[
+                                                    message.id]!,
+                                            foregroundColor:
+                                                Theme.of(context).primaryColor,
+                                            child: value.checkClickDownload[
+                                                        message.id] ==
+                                                    true
+                                                ? Container(
+                                                    alignment: Alignment.center,
+                                                    padding: EdgeInsets.all(
+                                                        AppPadding.p4),
+                                                    decoration: BoxDecoration(
+                                                        color: Theme.of(context)
+                                                            .cardColor,
+                                                        shape: BoxShape.circle),
+                                                    child: Text(
+                                                      "${(value.downloadProgress[message.id]! * 100).toStringAsFixed(1)}%",
+                                                      style: getLightStyle(
+                                                          color: ColorManager
+                                                              .black,
+                                                          fontSize: AppSize.s8),
+                                                    ))
+                                                : GestureDetector(
+                                                    onTap: () => value
+                                                        .downloadFile(message),
+                                                    child: Container(
+                                                      padding: EdgeInsets.all(
+                                                          AppPadding.p10),
+                                                      child: SvgPicture.asset(
+                                                        ImagesAssets
+                                                            .download_audio,
+                                                        color:
+                                                            ColorManager.white,
+                                                      ),
+                                                    ),
+                                                  )
+                                            //     :IconButton(
+                                            //   icon: Icon(Icons.download_sharp),
+                                            //   onPressed: () {print("ffff");
+                                            //   value.downloadFile(message);
+                                            //   },
+                                            // ),
+                                            ),
+                                      ),
                                     ),
-                                          ),
-                                        )
-                                    //     :IconButton(
-                                    //   icon: Icon(Icons.download_sharp),
-                                    //   onPressed: () {print("ffff");
-                                    //   value.downloadFile(message);
-                                    //   },
+                                    const SizedBox(
+                                      width: AppSize.s10,
+                                    ),
+                                    Expanded(
+                                        child: Row(
+                                      children: List.generate(
+                                          25,
+                                          (index) => Container(
+                                                margin: EdgeInsets.symmetric(
+                                                    horizontal: AppSize.s1_5),
+                                                color: ColorManager.black,
+                                                width: AppSize.s1_5,
+                                                height: (index.isEven
+                                                    ? (index + 1) * .8
+                                                    : (index + 1) * .5),
+                                              )),
+                                    )),
+                                    // Flexible(
+                                    //   child: Text(
+                                    //       "g ${value.downloadProgress[message.id]}"
+                                    //           " ${value.checkCompleteDownload[message.id]}",
+                                    //     overflow: TextOverflow.ellipsis,
+                                    //   ),
                                     // ),
-                                  ),
+                                  ],
                                 ),
-                              ),
-                              const SizedBox(width: AppSize.s10,),
-                              Expanded(child: Row(
-                                children: List.generate(25, (index) => Container(
-                                  margin: EdgeInsets.symmetric(
-                                    horizontal: AppSize.s1_5
+                                Padding(
+                                  padding: const EdgeInsets.all(AppPadding.p4),
+                                  //Todo الفلاتر عمتك ولاك
+                                  child: Text(
+                                    filesize(664365320),
+                                    style: getLightStyle(
+                                        color: ColorManager.black),
                                   ),
-                                  color: ColorManager.black,
-                                  width: AppSize.s1_5,
-                                  height: (index.isEven
-                                      ?(index + 1) * .8
-                                      :(index + 1) * .5
-                                  ),
-                                )),
-                              )),
-                              // Flexible(
-                              //   child: Text(
-                              //       "g ${value.downloadProgress[message.id]}"
-                              //           " ${value.checkCompleteDownload[message.id]}",
-                              //     overflow: TextOverflow.ellipsis,
-                              //   ),
-                              // ),
-                            ],
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(AppPadding.p4),
-                            //Todo الفلاتر عمتك ولاك
-                            child: Text(filesize(664365320),style: getLightStyle(
-                                color: ColorManager.black),),
+                                )
+                              ],
+                            ),
                           )
-                        ],
-                      ),
-                    )
-                        :BuildMessageShape(
-                      message: message,
-                          child: VoiceMessage(
-                      key: Key( "${value.tempDir.path}/${message.textMessage}" ),
-                      audioSrc: "${value.tempDir.path}/${message.textMessage}",
-                      me: true,),
-                        )
-                )),
+                        : BuildMessageShape(
+                            message: message,
+                            child: VoiceMessage(
+                              key: Key(
+                                  "${value.tempDir.path}/${message.textMessage}"),
+                              audioSrc:
+                                  "${value.tempDir.path}/${message.textMessage}",
+                              me: true,
+                            ),
+                          ))),
 
             /** VoiceMessage(
                 key: Key(message.url),
@@ -1469,8 +1543,7 @@ class _ChatViewState extends State<ChatView> {
                 me: true,)
 
                 )**/
-          )
-      );
+          ));
     return childWidget;
   }
 
@@ -1516,7 +1589,7 @@ class _ChatViewState extends State<ChatView> {
             buildrReplayMessage(message: message),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: BuildMessageImageLocal(message:  message),
+              child: BuildMessageImageLocal(message: message),
             )
           ],
         ),
@@ -1527,7 +1600,7 @@ class _ChatViewState extends State<ChatView> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            BuildMessageImageLocal(message:  message),
+            BuildMessageImageLocal(message: message),
           ],
         ),
       );
@@ -1547,7 +1620,7 @@ class _ChatViewState extends State<ChatView> {
             buildrReplayMessage(message: message),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child:BuildMessageFile(message: message),
+              child: BuildMessageFile(message: message),
               //Text(message.textMessage),
               //  child: Text(con.text),
             )
@@ -1573,109 +1646,106 @@ class _ChatViewState extends State<ChatView> {
       childWidget = SwipeTo(
           onRightSwipe: () => onReplay(message: message),
           child: BuildMessageShape(
-            //  isMe: true,
+              //  isMe: true,
               message: message,
-              child:  Container(
+              child: Container(
                   margin: EdgeInsets.only(
                       top: AppMargin.m4,
                       bottom: AppMargin.m4,
                       //TODO check audio List Sender
                       left: Sizer.getW(context) / 2 - AppSize.s20),
                   child: SizedBox()
-                /*
+                  /*
                    VoiceMessage(
                      key: Key(path!),
                      audioSrc: path,
                      me: true,
                */
-              )
-          )
-      );
+                  )));
+
       ///setState(() {});
     } else
       childWidget = SwipeTo(
           onRightSwipe: () => onReplay(message: message),
-          child:   Container(
+          child: Container(
               margin: EdgeInsets.only(
-                  top: AppMargin.m4,
-                  bottom: AppMargin.m4,
-                  //TODO check audio List Sender
-                  // left: Sizer.getW(context) / 2 - AppSize.s20
+                top: AppMargin.m4,
+                bottom: AppMargin.m4,
+                //TODO check audio List Sender
+                // left: Sizer.getW(context) / 2 - AppSize.s20
               ),
-              child:
-              BuildMessageShape(
+              child: BuildMessageShape(
                 message: message,
                 child: VoiceMessage(
                   key: Key(message.url),
                   audioSrc: message.url,
                   me: true,
                 ),
-              )
-          )
-      );
+              )));
     return childWidget;
   }
 
   ///----------------------------------------------------------------------------
 
-  BuildMessageImage({ required Message message}){
+  BuildMessageImage({required Message message}) {
     return InkWell(
         onTap: () {
           showDialog(
               context: context,
               builder: (ctx) => Material(
-                color: Colors.black,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    CachedNetworkImage(
-                      fit:  BoxFit.cover,
-                      height: Sizer.getW(context)*0.8,
-                      width: Sizer.getW(context),
-                      imageUrl:
-                      // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                      /// "${replaytext}",
-                      ///"${message.textMessage}",
-                      "${message.url}",
-                      imageBuilder: (context, imageProvider) => Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: imageProvider,
-                            fit: BoxFit.cover,
-                            //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                    color: Colors.black,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        CachedNetworkImage(
+                          fit: BoxFit.cover,
+                          height: Sizer.getW(context) * 0.8,
+                          width: Sizer.getW(context),
+                          imageUrl:
+                              // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                              /// "${replaytext}",
+                              ///"${message.textMessage}",
+                              "${message.url}",
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                                //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                              ),
+                            ),
                           ),
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) => FlutterLogo(),
                         ),
-                      ),
-                      placeholder: (context, url) => CircularProgressIndicator(),
-                      errorWidget: (context, url, error) => FlutterLogo(),
+                        Positioned(
+                          top: AppSize.s10,
+                          right: AppSize.s10,
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(
+                                Icons.close,
+                                color: ColorManager.white,
+                              )),
+                        )
+                      ],
                     ),
-                    Positioned(
-                      top: AppSize.s10,
-                      right: AppSize.s10,
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            color: ColorManager.white,
-                          )),
-                    )
-                  ],
-                ),
-              ));
+                  ));
         },
-        child:  CachedNetworkImage(
+        child: CachedNetworkImage(
           fit: BoxFit.fill,
           width: widthImageChat,
           //Sizer.getW(context) * 0.25,
           height: widthImageChat,
           //Sizer.getW(context) * 0.25,
           imageUrl:
-          // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-          /// "${replaytext}",
-          ///"${message.textMessage}",
-          "${message.url}",
+              // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+              /// "${replaytext}",
+              ///"${message.textMessage}",
+              "${message.url}",
           imageBuilder: (context, imageProvider) => Container(
             decoration: BoxDecoration(
               image: DecorationImage(
@@ -1689,40 +1759,46 @@ class _ChatViewState extends State<ChatView> {
           errorWidget: (context, url, error) => FlutterLogo(),
         ));
   }
-  BuildMessageImageLocal({ required Message message}){
+
+  BuildMessageImageLocal({required Message message}) {
     return InkWell(
         onTap: () {
           showDialog(
               context: context,
               builder: (ctx) => Material(
-                color: Colors.black,
-                child: Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Image.file(
-                      File(message.url),
-                      fit: BoxFit.cover,
+                    color: Colors.black,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Image.file(
+                          File(message.url),
+                          fit: BoxFit.cover,
+                        ),
+                        Positioned(
+                          top: AppSize.s10,
+                          right: AppSize.s10,
+                          child: IconButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              icon: Icon(
+                                Icons.close,
+                                color: ColorManager.white,
+                              )),
+                        )
+                      ],
                     ),
-                    Positioned(
-                      top: AppSize.s10,
-                      right: AppSize.s10,
-                      child: IconButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          icon: Icon(
-                            Icons.close,
-                            color: ColorManager.white,
-                          )),
-                    )
-                  ],
-                ),
-              ));
+                  ));
         },
-        child: Image.file(File(message.url),fit: BoxFit.cover,width: widthImageChat,height: widthImageChat,));
+        child: Image.file(
+          File(message.url),
+          fit: BoxFit.cover,
+          width: widthImageChat,
+          height: widthImageChat,
+        ));
   }
 
-  BuildMessageFile({ required Message message}){
+  BuildMessageFile({required Message message}) {
     return Row(
       children: [
         CircleAvatar(
@@ -1735,18 +1811,11 @@ class _ChatViewState extends State<ChatView> {
           width: AppSize.s8,
         ),
         Flexible(
-            child: Text(
-                "${message.textMessage}" /*result.files[0].name*/)),
+            child: Text("${message.textMessage}" /*result.files[0].name*/)),
       ],
     );
   }
-
-
 }
-
-
-
-
 
 class DisplayImages extends StatelessWidget {
   final List<File> selectedFiles;
@@ -1803,14 +1872,57 @@ class _DisplayVideoState extends State<DisplayVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Video')),
       body: FutureBuilder(
         future: _initializeVideoPlayerFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
-              child: VideoPlayer(_controller),
+            return SafeArea(
+              child: Center(
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      height: Sizer.getH(context) / 2,
+                      width: double.infinity,
+                      child: AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                    ),
+                    Container(
+                      height: Sizer.getH(context) / 2,
+                      width: double.infinity,
+                      alignment: Alignment.center,
+                      color: ColorManager.lightGray.withOpacity(.8),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircleAvatar(
+                            radius: Sizer.getW(context)*0.08,
+                            child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(
+                                  Icons.play_arrow,
+                                )),
+                          ),
+                          const SizedBox(height: AppSize.s8,),
+                          Container(
+                            padding: const EdgeInsets.all(AppPadding.p4),
+                            decoration: BoxDecoration(
+                              color: ColorManager.white,
+                              borderRadius: BorderRadius.circular(AppSize.s100)
+                            ),
+                            child: Text(
+                              filesize(664365320),
+                              style: getLightStyle(color: ColorManager.black),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             );
           } else {
             return const Center(
@@ -1854,46 +1966,51 @@ class BuildMessageShape extends StatelessWidget {
     //print(homeProvider.cacheUser);
     return InkWell(
       onLongPress: () async {
-        (!chatProvider.checkBlockUserInGroup(idUser: profileProvider.user.id))?
-        Get.defaultDialog(
-          titleStyle: getBoldStyle(
-              color: Theme.of(context).textTheme.bodyText1!.color,
-              fontSize: Sizer.getW(context) / 22),
-          content: Column(
-            children: [
-              TextButton(
-                  style: TextButton.styleFrom(
-                      minimumSize: Size(double.infinity, 80)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    chatProvider.deleteUserMessage(context, message: message, idUser: profileProvider.user.id);
-                  },
-                  child: Text(
-                    tr(LocaleKeys.dle_for_me),
-                    style: getRegularStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                        fontSize: Sizer.getW(context) / 24),
-                  )),
-              TextButton(
-                  style: TextButton.styleFrom(
-                      minimumSize: Size(double.infinity, 80)),
-                  onPressed: () async {
-                    Navigator.of(context).pop();
-                    chatProvider.deleteUserMessage(context, message: message, idUser: profileProvider.user.id);
-
-                  },
-                  child: Text(
-                    tr(LocaleKeys.dle_for_all),
-                    style: getRegularStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                        fontSize: Sizer.getW(context) / 24),
-                  )),
-            ],
-          ),
-          title: tr(LocaleKeys.are_you_sure),
-          radius: AppSize.s14,
-        )
-            :SizedBox();
+        (!chatProvider.checkBlockUserInGroup(idUser: profileProvider.user.id))
+            ? Get.defaultDialog(
+                titleStyle: getBoldStyle(
+                    color: Theme.of(context).textTheme.bodyText1!.color,
+                    fontSize: Sizer.getW(context) / 22),
+                content: Column(
+                  children: [
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            minimumSize: Size(double.infinity, 80)),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          chatProvider.deleteUserMessage(context,
+                              message: message,
+                              idUser: profileProvider.user.id);
+                        },
+                        child: Text(
+                          tr(LocaleKeys.dle_for_me),
+                          style: getRegularStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: Sizer.getW(context) / 24),
+                        )),
+                    TextButton(
+                        style: TextButton.styleFrom(
+                            minimumSize: Size(double.infinity, 80)),
+                        onPressed: () async {
+                          Navigator.of(context).pop();
+                          chatProvider.deleteUserMessage(context,
+                              message: message,
+                              idUser: profileProvider.user.id);
+                        },
+                        child: Text(
+                          tr(LocaleKeys.dle_for_all),
+                          style: getRegularStyle(
+                              color:
+                                  Theme.of(context).textTheme.bodyText1!.color,
+                              fontSize: Sizer.getW(context) / 24),
+                        )),
+                  ],
+                ),
+                title: tr(LocaleKeys.are_you_sure),
+                radius: AppSize.s14,
+              )
+            : SizedBox();
 
         ///TODO add SHOWDELETEDIALOOG
 
@@ -1910,20 +2027,19 @@ class BuildMessageShape extends StatelessWidget {
         margin: EdgeInsets.only(
           top: AppMargin.m4,
           bottom: AppMargin.m4,
-
-          right: isMe ?
-          message.typeMessage.contains("audio")
-              ?0
-              : 0
+          right: isMe
+              ? message.typeMessage.contains("audio")
+                  ? 0
+                  : 0
               : Sizer.getW(context) / 2 - AppSize.s20,
-          left: isMe ?
-          message.typeMessage.contains("audio")
-              ?Sizer.getW(context) /2.5:
-          Sizer.getW(context) / 2 - AppSize.s20
+          left: isMe
+              ? message.typeMessage.contains("audio")
+                  ? Sizer.getW(context) / 2.5
+                  : Sizer.getW(context) / 2 - AppSize.s20
               : 0,
         ),
         decoration: BoxDecoration(
-          // color: Theme.of(context).primaryColor.withOpacity(isMe ? 0.2 : 0.8),
+            // color: Theme.of(context).primaryColor.withOpacity(isMe ? 0.2 : 0.8),
             color: isMe ? Color(0xffdffec5) : Colors.white,
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(AppSize.s10),
@@ -1936,55 +2052,54 @@ class BuildMessageShape extends StatelessWidget {
           children: [
             (homeProvider.cacheUser.containsKey(message.senderId))
                 ? Text(
-              "${homeProvider.cacheUser[message.senderId]}",
-              style: getRegularStyle(
-                  color: ColorManager.black,
-                  fontSize: Sizer.getW(context) / 30
-              ),
-              //TODO
-              // textAlign: TextAlign.left,
-            )
+                    "${homeProvider.cacheUser[message.senderId]}",
+                    style: getRegularStyle(
+                        color: ColorManager.black,
+                        fontSize: Sizer.getW(context) / 30),
+                    //TODO
+                    // textAlign: TextAlign.left,
+                  )
                 : FutureBuilder(
-              future: HomeProvider().fetchNameUser(context,
-                  idUser: message
-                      .senderId //chatProvider.group.listUsers[index]
-              ),
-              builder: (
-                  context,
-                  snapshot,
-                  ) {
-                print(snapshot.error);
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text(
-                      "${FirebaseFun.findTextToast("جاري التحميل ..")}"); // Expanded(child: Const.SHOWLOADINGINDECATOR());
-                  //Const.CIRCLE(context);
-                } else if (snapshot.connectionState ==
-                    ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    return const Text('Error');
-                  } else if (snapshot.hasData) {
-                    // Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
-                    //homeProvider.sessions=Sessions.fromJson(data['body']);
-                    return Row(
-                      children: [
-                        Text("${snapshot.data}"),
-                        /*SizedBox(width: Sizer.getW(context)*0.01,),
+                    future: HomeProvider().fetchNameUser(context,
+                        idUser: message
+                            .senderId //chatProvider.group.listUsers[index]
+                        ),
+                    builder: (
+                      context,
+                      snapshot,
+                    ) {
+                      print(snapshot.error);
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Text(
+                            "${FirebaseFun.findTextToast("جاري التحميل ..")}"); // Expanded(child: Const.SHOWLOADINGINDECATOR());
+                        //Const.CIRCLE(context);
+                      } else if (snapshot.connectionState ==
+                          ConnectionState.done) {
+                        if (snapshot.hasError) {
+                          return const Text('Error');
+                        } else if (snapshot.hasData) {
+                          // Map<String,dynamic> data=snapshot.data as Map<String,dynamic>;
+                          //homeProvider.sessions=Sessions.fromJson(data['body']);
+                          return Row(
+                            children: [
+                              Text("${snapshot.data}"),
+                              /*SizedBox(width: Sizer.getW(context)*0.01,),
                       (typeUser.contains(AppConstants.collectionPatient))?
                       SizedBox():
                       Icon(Icons.star),
                       (!checkblock)?
                       SizedBox():
                       Icon(Icons.block),*/
-                      ],
-                    );
-                  } else {
-                    return const Text('Empty data');
-                  }
-                } else {
-                  return Text('State: ${snapshot.connectionState}');
-                }
-              },
-            ),
+                            ],
+                          );
+                        } else {
+                          return const Text('Empty data');
+                        }
+                      } else {
+                        return Text('State: ${snapshot.connectionState}');
+                      }
+                    },
+                  ),
             child,
             const SizedBox(
               height: AppSize.s8,
@@ -1998,21 +2113,20 @@ class BuildMessageShape extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4.0),
                         color: Colors.green[100]),
                     child:
-                    //   Text("${DateFormat().add_jm().format(DateTime.now())}")),
-                    Text(
+                        //   Text("${DateFormat().add_jm().format(DateTime.now())}")),
+                        Text(
                       "${DateFormat().add_jm().format(message.sendingTime)}",
                       style: getRegularStyle(
                           color: Theme.of(context).textTheme.bodyText1!.color,
                           fontSize: AppSize.s10),
                     )),
                 (isMe)
-                    ? (
-                    Icon(
-                        (message.checkSend)?
-                        Icons.check:
-                        Icons.radio_button_unchecked,
-                        size: AppSize.s14)
-                    /**
+                    ? (Icon(
+                            (message.checkSend)
+                                ? Icons.check
+                                : Icons.radio_button_unchecked,
+                            size: AppSize.s14)
+                        /**
                         FutureBuilder(
                         future: chatProvider.addMessage(context,
                         idGroup: chatProvider.group.id,
@@ -2046,7 +2160,7 @@ class BuildMessageShape extends StatelessWidget {
                         },
                         )
                      **/
-                )
+                        )
                     : SizedBox(),
                 // Icon(Icons.check_circle_outline),
               ],

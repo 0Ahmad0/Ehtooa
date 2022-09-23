@@ -1,6 +1,7 @@
 import 'package:ehtooa/app/controller/add_doctor_provider.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
+import 'package:ehtooa/app/view/screens/bottom_nav_bar/bottom_nav_bar_view.dart';
 import 'package:ehtooa/app/view/widgets/custome_button.dart';
 import 'package:ehtooa/app/view/widgets/custome_textfiled.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
@@ -142,6 +143,7 @@ class AddDoctorView extends StatelessWidget {
                     Navigator.of(context).pop();
                     if(result['status']){
                       Navigator.of(context).pop();
+
                     }
                   }
                 })

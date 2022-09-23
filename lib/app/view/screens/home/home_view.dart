@@ -283,7 +283,7 @@ class HomeView extends StatelessWidget {
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasError) {
                       return Text('${snapshot.error}');
-                    } else if (!snapshot.hasData) {
+                    } else if (snapshot.hasData) {
                       Map<String, dynamic> data =
                           snapshot.data as Map<String, dynamic>;
                       homeProvider.sessions = Sessions.fromJson(data['body']);
