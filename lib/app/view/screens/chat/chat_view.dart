@@ -870,6 +870,56 @@ class _ChatViewState extends State<ChatView> {
             ),
           ],
         );
+      case "audio":
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: Sizer.getW(context) * 0.01,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Voice message",
+                ),
+                SizedBox(
+                  width: Sizer.getW(context) * 0.01,
+                ),
+                Icon(Icons.keyboard_voice_outlined)
+              ],
+            ),
+          ],
+        );
+      case "video":
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: Sizer.getW(context) * 0.01,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Video message",
+                ),
+                SizedBox(
+                  width: Sizer.getW(context) * 0.01,
+                ),
+                Icon(Icons.video_collection_outlined)
+              ],
+            ),
+          ],
+        );
     }
     return SizedBox();
   }
@@ -1010,6 +1060,56 @@ class _ChatViewState extends State<ChatView> {
                     Icon(Icons.attach_file)
                   ],
                 )
+              ],
+            ),
+          ],
+        );
+      case "audio":
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: Sizer.getW(context) * 0.01,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Voice message",
+                ),
+                SizedBox(
+                  width: Sizer.getW(context) * 0.01,
+                ),
+                Icon(Icons.keyboard_voice_outlined)
+              ],
+            ),
+          ],
+        );
+      case "video":
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: Sizer.getW(context) * 0.01,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Video message",
+                ),
+                SizedBox(
+                  width: Sizer.getW(context) * 0.01,
+                ),
+                Icon(Icons.video_collection_outlined)
               ],
             ),
           ],
