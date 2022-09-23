@@ -283,7 +283,7 @@ class HomeView extends StatelessWidget {
                   } else if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasError) {
                       return Text('${snapshot.error}');
-                    } else if (snapshot.hasData) {
+                    } else if (!snapshot.hasData) {
                       Map<String, dynamic> data =
                           snapshot.data as Map<String, dynamic>;
                       homeProvider.sessions = Sessions.fromJson(data['body']);
@@ -706,7 +706,12 @@ class HomeView extends StatelessWidget {
                         },
                       );
                     } else {
-                      return const Text('Empty data');
+                      return Expanded(
+                        flex: 3,
+                        child: SvgPicture.asset(
+                          ImagesAssets.noDataFound,
+                        ),
+                      );
                     }
                   } else {
                     return Text('State: ${snapshot.connectionState}');
@@ -750,7 +755,8 @@ class HomeView extends StatelessWidget {
                 } else if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
                     return const Text('Error');
-                  } else if (snapshot.hasData) {
+                  }
+                  else if (snapshot.hasData) {
                     Map<String, dynamic> data =
                         snapshot.data as Map<String, dynamic>;
                     homeProvider.doctors = Users.fromJson(data['body']);
@@ -840,7 +846,11 @@ class HomeView extends StatelessWidget {
                       },
                     ));
                   } else {
-                    return const Text('Empty data');
+                    return  Expanded(
+                      child: SvgPicture.asset(
+                        ImagesAssets.noDataFound,
+                      ),
+                    );
                   }
                 } else {
                   return Text('State: ${snapshot.connectionState}');

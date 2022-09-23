@@ -1448,7 +1448,8 @@ class _ChatViewState extends State<ChatView> {
                           Padding(
                             padding: const EdgeInsets.all(AppPadding.p4),
                             //Todo الفلاتر عمتك ولاك
-                            child: Text(filesize(664365320)),
+                            child: Text(filesize(664365320),style: getLightStyle(
+                                color: ColorManager.black),),
                           )
                         ],
                       ),
