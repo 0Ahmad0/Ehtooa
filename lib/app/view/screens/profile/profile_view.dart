@@ -135,7 +135,7 @@ class _ProfileViewState extends State<ProfileView> {
                             right: 0,
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: ColorManager.white,
+                                  color: Theme.of(context).cardColor,
                                   border: Border.all(
                                       color: Theme.of(context).primaryColor),
                                   shape: BoxShape.circle),

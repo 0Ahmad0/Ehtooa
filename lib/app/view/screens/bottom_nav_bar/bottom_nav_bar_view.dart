@@ -106,6 +106,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                                     imageBuilder: (context, imageProvider) =>
                                         Container(
                                           decoration: BoxDecoration(
+                                            color: Theme.of(context).primaryColor,
                                             image: DecorationImage(
                                               image: imageProvider,
                                               fit: BoxFit.cover,

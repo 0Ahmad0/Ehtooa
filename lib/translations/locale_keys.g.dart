@@ -15,6 +15,7 @@ abstract class  LocaleKeys {
   static const welcome_signup = 'welcome_signup';
   static const already_have_account = 'already_have_account';
   static const app_name = 'app_name';
+  static const specialist = 'specialist';
   static const specialist_info = 'specialist_info';
   static const welcome = 'welcome';
   static const search = 'search';

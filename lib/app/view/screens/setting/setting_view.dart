@@ -76,14 +76,6 @@ class SettingView extends StatelessWidget {
                   ),
                   children: [
                     ListTile(
-                      onTap: () async {
-                        final _newLocale = Locale('en');
-                        await context.setLocale(_newLocale);
-                        Get.updateLocale(_newLocale);
-                        // setState((){});
-                        // print(context.locale);
-                        // Advance.language = true;
-                      },
                       title: Text(
                         tr(LocaleKeys.english),
                         style: getRegularStyle(
@@ -105,13 +97,6 @@ class SettingView extends StatelessWidget {
                       ),
                     ),
                     ListTile(
-                      onTap: () async {
-                        final _newLocale = Locale('ar');
-                        await context.setLocale(_newLocale);
-                        Get.updateLocale(_newLocale);
-                        // print(context.locale);
-                        Advance.language = false;
-                      },
                       title: Text(
                         tr(LocaleKeys.arabic),
                         style: getRegularStyle(
@@ -171,7 +156,6 @@ class SettingView extends StatelessWidget {
                     },
                     onEndIconPress: () {
                       appModel.darkTheme = !appModel.darkTheme;
-
                       return appModel.darkTheme;
                     },
                   )),
@@ -197,8 +181,8 @@ class SettingView extends StatelessWidget {
                 onTap: () async {
                   launchEmail(
                     toEmail: AppConstants.emailContact,
-                    subject: "Hello",
-                    message: "Hello my name is ahmad"
+                    subject: "",
+                    message: tr(LocaleKeys.type_message_here)
                   ).then((value) => print(value));
                 },
               ),
