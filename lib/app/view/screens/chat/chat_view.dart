@@ -970,7 +970,7 @@ class _ChatViewState extends State<ChatView> {
 
   onReplay({required Message message}) {
     if (message.checkSend) {
-      print("replay : ${message.id} ${message.textMessage}");
+     /// print("replay : ${message.id} ${message.textMessage}");
       chatProvider.replayIdMessage = message.id;
       chatProvider.getReplayMessage();
       chatProvider.changeReplayMessageId(

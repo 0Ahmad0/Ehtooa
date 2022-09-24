@@ -110,14 +110,8 @@ class HomeProvider with ChangeNotifier{
          result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionAdmin);
       }
     }
-
       cacheUser[idUser]=(result['status'])?models.User.fromJson(result['body']).name:"user";
-  //  print("gggggggggggggggggggggggggg ${cacheUser[idUser]} ${cacheUser.containsKey(idUser)}");
       return cacheUser[idUser];
-
-   /* print(result);
-    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
-    return result;*/
   }
   processessionsToUser(context, {required List groupsUser,required PaySession paySession}){
     sessionsToUser=[];
