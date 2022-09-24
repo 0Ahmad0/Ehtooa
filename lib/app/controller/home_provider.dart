@@ -104,8 +104,8 @@ class HomeProvider with ChangeNotifier{
     var result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionPatient);
     if(result['status']&&result['body']==null){
        result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionDoctor);
-       print("result ${result}");
-       print("id ${idUser} user ${cacheUser[idUser]}");
+      // print("result ${result}");
+       //print("id ${idUser} user ${cacheUser[idUser]}");
       if(result['status']&&result['body']==null){
          result =await FirebaseFun.fetchUserId(id: idUser,typeUser: AppConstants.collectionAdmin);
       }

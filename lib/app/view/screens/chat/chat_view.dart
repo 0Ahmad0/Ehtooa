@@ -1083,9 +1083,9 @@ class _ChatViewState extends State<ChatView> {
       childWidget = SwipeTo(
           onRightSwipe: () => onReplay(message: message),
           child: ChangeNotifierProvider<DownloaderProvider>.value(
-          value: downloaderProvider,
-          child: Consumer<DownloaderProvider>(
-          builder: (context, value, child) =>
+              value: downloaderProvider,
+              child: Consumer<DownloaderProvider>(
+              builder: (context, value, child) =>
                       (value.checkCompleteDownload[message.id] != true)?
                       BuildMessageFile(message: message,isReplay: isReplay)
                     : BuildMessageFileLocal(message: message,isReplay: isReplay),
@@ -1360,14 +1360,7 @@ class _ChatViewState extends State<ChatView> {
       BuildMessageShape(
         //  isMe: true,
           message: message,
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                if(isReplay)
-              buildrReplayMessage(message: message),
-          Padding(
-          padding: const EdgeInsets.all(8.0),
-    child:
+          child:
     Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -1397,20 +1390,13 @@ class _ChatViewState extends State<ChatView> {
         )
       ],
     )
-    )]));
+    );
   }
   BuildMessageFileLocal({required Message message,required bool isReplay}) {
     return BuildMessageShape(
       //  isMe: true,
         message: message,
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if(isReplay)
-              buildrReplayMessage(message: message),
-              Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child:
+        child:
       Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisSize: MainAxisSize.min,
@@ -1438,7 +1424,7 @@ class _ChatViewState extends State<ChatView> {
         )
       ],
     )
-    )]));
+    );
   }
 
   BuildMessageAudio(value,{required Message message, bool isReplay=false}) {
