@@ -900,15 +900,13 @@ class _ChatViewState extends State<ChatView> {
     chat.messages.forEach((message) async {
       if (!homeProvider.cacheUser.containsKey(message.senderId)) {
         await homeProvider.fetchNameUser(context, idUser: message.senderId);
-        print(homeProvider.cacheUser);
+        //print(homeProvider.cacheUser);
       }
     });
   }
 
   convertListMessagesToListWidget(Chat chat) async {
     List<Widget> tempList = [];
-    //  chat.messages.addAll(listSendMessage);
-    ///print("objectffffffffffffffffffffffffffffffffffff");
     chat.messages.forEach((message) async {
       // print(homeProvider.cacheUser);
       //  if(!message.deleteUserMessage.contains(profileProvider.user.id)){
@@ -1408,7 +1406,16 @@ class _ChatViewState extends State<ChatView> {
         if(isReplay) buildrReplayMessage(message: message),
         Row(
           children: [
-            Icon(Icons.attach_file),
+            CircleAvatar(
+              child: IconButton(
+                  onPressed:(){
+                    (message.checkSend)
+                    ?OpenFile.open("${downloaderProvider.tempDir.path}/${message.textMessage}")
+                    :OpenFile.open("${message.url}");
+                  }
+                  , icon:Icon(Icons.attach_file)),
+            )
+            ,
             const SizedBox(
               width: AppSize.s10,
             ),
@@ -1416,15 +1423,6 @@ class _ChatViewState extends State<ChatView> {
                 child: Text("${message.textMessage}" /*result.files[0].name*/)),
           ],
         ),
-        Padding(
-          padding: const EdgeInsets.all(AppPadding.p4),
-          //Todo الفلاتر عمتك ولاك
-          child: Text(
-            filesize(message.sizeFile),
-            style: getLightStyle(
-                color: ColorManager.black),
-          ),
-        )
       ],
     )
     );
