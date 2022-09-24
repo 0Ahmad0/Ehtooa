@@ -18,9 +18,25 @@ import '../view/screens/questions/questions_view.dart';
 class GroupsProvider with ChangeNotifier{
   models.Groups groups=models.Groups(groups: []);
   String idUser="";
+
+  fetchGroupsToUserOrAdmin(context,{required String idUser,required String typeUser}) async {
+    if(typeUser.contains(AppConstants.collectionAdmin)){
+      return await fetchGroupsToAdmin(context ,idUser: idUser);
+    }else if(typeUser.contains(AppConstants.collectionPatient)){
+      return await fetchGroupsToUser(context ,idUser: idUser);
+    }else
+      return await fetchGroupsToUser(context ,idUser: idUser);
+  }
   fetchGroupsToUser(context,{required String idUser}) async {
     this.idUser=idUser;
     var result =await FirebaseFun.fetchGroupsToUser(idUser: idUser);
+    print(result);
+    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
+    return result;
+  }
+  fetchGroupsToAdmin(context,{required String idUser}) async {
+    this.idUser=idUser;
+    var result =await FirebaseFun.fetchGroupsToAdmin(idUser: idUser);
     print(result);
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;

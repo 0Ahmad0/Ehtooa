@@ -185,6 +185,15 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+  static fetchGroupsToAdmin( {required String idUser})  async {
+    final result=await FirebaseFirestore.instance.collection(AppConstants.collectionGroup)
+        .where('idAmin',isEqualTo: idUser)
+    //  .orderBy('sort')
+        .get()
+        .then((onValueFetchGroupToUser))
+        .catchError(onError);
+    return result;
+  }
   static updateGroup( {required model.Group group,required String id,model.UpdateGroupType updateGroupType=model.UpdateGroupType.update}) async {
     var result =await FirebaseFirestore.instance
         .collection(AppConstants.collectionGroup)

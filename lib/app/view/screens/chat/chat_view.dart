@@ -129,9 +129,15 @@ class _ChatViewState extends State<ChatView> {
             style: getRegularStyle(
                 color: ColorManager.white), /*tr(LocaleKeys.anxiety_patients)*/
           ),
-          subtitle: Text(
-              "${chatProvider.group.listUsers.length + 1}${tr(LocaleKeys.member)}" /*"35 Member"*/,
-              style: getLightStyle(color: ColorManager.white)),
+          subtitle:
+          ChangeNotifierProvider<ChatProvider>.value(
+              value: chatProvider,
+              child: Consumer<ChatProvider>(
+                builder: (context, value, child) =>
+                    Text(
+                        "${value.group.listUsers.length + 1}${tr(LocaleKeys.member)}" /*"35 Member"*/,
+                        style: getLightStyle(color: ColorManager.white)),
+              )),
           trailing: (profileProvider.user.typeUser
                   .contains(AppConstants.collectionAdmin))
               ? IconButton(
@@ -144,7 +150,8 @@ class _ChatViewState extends State<ChatView> {
                   icon: Icon(Icons.person_add))
               : SizedBox(),
         ),
-      ),
+      )
+      ,
       body: Column(
         children: [
           Expanded(
@@ -1678,9 +1685,9 @@ class BuildMessageShape extends StatelessWidget {
                             minimumSize: Size(double.infinity, 80)),
                         onPressed: () async {
                           Navigator.of(context).pop();
-                          chatProvider.deleteUserMessage(context,
+                          chatProvider.deleteAllMessage(context,
                               message: message,
-                              idUser: profileProvider.user.id);
+                          );
                         },
                         child: Text(
                           tr(LocaleKeys.dle_for_all),

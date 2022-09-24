@@ -26,7 +26,7 @@ class GroupsView extends StatelessWidget {
     final chatProvider = Provider.of<ChatProvider>(context);
 
     return   FutureBuilder(
-      future: groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id),
+      future: groupsProvider.fetchGroupsToUserOrAdmin(context, idUser: profileProvider.user.id,typeUser: profileProvider.user.typeUser),
       builder: (
           context, snapshot,) {
         //  print(snapshot.error);

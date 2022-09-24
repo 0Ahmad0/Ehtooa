@@ -41,6 +41,7 @@ class GlobalMemberProvider with ChangeNotifier{
     print(result);
     Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
     notifyListeners();
+    chatProvider.notifyListeners();
     Navigator.of(context).pop();
     return result;
   }
