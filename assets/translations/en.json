@@ -247,5 +247,9 @@
   "add": "Add",
   "member": "Members",
   "dle_for_me": "Delete for me",
-  "dle_for_all": "Delete for all"
+  "dle_for_all": "Delete for all",
+  "video_message":"Video",
+  "photo": "Photo",
+  "attatchment": "Attatcmnet",
+  "voice_message": "Voice message"
 }

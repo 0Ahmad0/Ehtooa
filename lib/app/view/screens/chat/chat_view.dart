@@ -523,8 +523,8 @@ class _ChatViewState extends State<ChatView> {
             ),
             Positioned(
               top: 0,
-              left: context.locale == "en" ? null : 0,
-              right: context.locale == "en" ? 0 : null,
+              left: Advance.language? null : 0,
+              right: Advance.language ? 0 : null,
               child: IconButton(
                   onPressed: () {
                     ///chatProvider.replayMessage = null;
@@ -704,7 +704,7 @@ class _ChatViewState extends State<ChatView> {
   Widget buildrReplayChat({required Message messageReplay}) {
     if(receiveReplay(message: messageReplay).contains("delete_message")){
       return Text(
-        "delete message",
+        tr(LocaleKeys.del),
         overflow: TextOverflow.ellipsis,
       );
     }
@@ -764,7 +764,8 @@ class _ChatViewState extends State<ChatView> {
                     width: Sizer.getW(context) * 0.01,
                   ),
                   Text(
-                    "photo",
+                    tr(LocaleKeys.photo),
+
                   )
                 ],
               ),
@@ -786,7 +787,7 @@ class _ChatViewState extends State<ChatView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "attatchment",
+                  tr(LocaleKeys.attatchment),
                 ),
                 SizedBox(
                   width: Sizer.getW(context) * 0.01,
@@ -811,7 +812,8 @@ class _ChatViewState extends State<ChatView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Voice message",
+
+                  tr(LocaleKeys.voice_message),
                 ),
                 SizedBox(
                   width: Sizer.getW(context) * 0.01,
@@ -836,7 +838,7 @@ class _ChatViewState extends State<ChatView> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  "Video message",
+                    tr(LocaleKeys.video_message),
                 ),
                 SizedBox(
                   width: Sizer.getW(context) * 0.01,
@@ -1134,9 +1136,9 @@ class _ChatViewState extends State<ChatView> {
               child: Consumer<DownloaderProvider>(
                 builder: (context, value, child) =>
                 (value.checkCompleteDownload[message.id] != true)
-                     ?BuildMessageVideo(value,message: message,isReplay: isReplay)
+                    ?BuildMessageVideo(value,message: message,isReplay: isReplay)
                     : BuildMessageVideoLocal(value,message: message,isReplay: isReplay),
-                
+
               )),
         ));
 
@@ -1514,9 +1516,9 @@ class _ChatViewState extends State<ChatView> {
         children: [
           if(isReplay) buildrReplayMessage(message: message),
           VoiceMessage(
-            meBgColor: ColorManager.success,
+            meBgColor: Colors.deepOrangeAccent,
             contactFgColor: Colors.black,
-            contactBgColor: ColorManager.lightGray,
+            contactBgColor: Colors.greenAccent,
             contactPlayIconColor: ColorManager.white,
             key: Key(
                 "${value.tempDir.path}/${message.textMessage}"),
@@ -1536,7 +1538,7 @@ class _ChatViewState extends State<ChatView> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           if(isReplay)
-          buildrReplayMessage(message: message),
+            buildrReplayMessage(message: message),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Stack(
@@ -1547,7 +1549,7 @@ class _ChatViewState extends State<ChatView> {
                   width: double.infinity,
                   child: CachedNetworkImage(
                     fit: BoxFit.fill,
-                  //  width: widthImageChat,
+                    //  width: widthImageChat,
                     //Sizer.getW(context) * 0.25,
                     //height: widthImageChat,
                     //Sizer.getW(context) * 0.25,

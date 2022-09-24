@@ -260,7 +260,11 @@ class CodegenLoader extends AssetLoader{
   "add": "إضافة",
   "member": "الأعضاء",
   "dle_for_me": "الحذف لدي",
-  "dle_for_all": "الحذف لدى الجميع"
+  "dle_for_all": "الحذف لدى الجميع",
+  "video_message": "فيديو",
+  "photo": "صورة",
+  "attatchment": "ملف",
+  "voice_message": "رسالة صوتية"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Specialist name",
@@ -507,7 +511,11 @@ static const Map<String,dynamic> en = {
   "add": "Add",
   "member": "Members",
   "dle_for_me": "Delete for me",
-  "dle_for_all": "Delete for all"
+  "dle_for_all": "Delete for all",
+  "video_message": "Video",
+  "photo": "Photo",
+  "attatchment": "Attatcmnet",
+  "voice_message": "Voice message"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

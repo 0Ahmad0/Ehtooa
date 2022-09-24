@@ -247,5 +247,9 @@ abstract class  LocaleKeys {
   static const member = 'member';
   static const dle_for_me = 'dle_for_me';
   static const dle_for_all = 'dle_for_all';
+  static const video_message = 'video_message';
+  static const photo = 'photo';
+  static const attatchment = 'attatchment';
+  static const voice_message = 'voice_message';
 
 }

@@ -251,7 +251,12 @@
   "add": "إضافة",
   "member": "الأعضاء",
   "dle_for_me": "الحذف لدي",
-  "dle_for_all": "الحذف لدى الجميع"
+  "dle_for_all": "الحذف لدى الجميع",
+  "video_message":"فيديو",
+  "photo": "صورة",
+  "attatchment": "ملف",
+  "voice_message": "رسالة صوتية"
+
 }
 
 
