@@ -1363,6 +1363,7 @@ class _ChatViewState extends State<ChatView> {
           child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                if(isReplay)
               buildrReplayMessage(message: message),
           Padding(
           padding: const EdgeInsets.all(8.0),
@@ -1405,6 +1406,7 @@ class _ChatViewState extends State<ChatView> {
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              if(isReplay)
               buildrReplayMessage(message: message),
               Padding(
                   padding: const EdgeInsets.all(8.0),
