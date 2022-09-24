@@ -126,7 +126,7 @@ class _ChatViewState extends State<ChatView> {
             ),
           ),
           title: Text(
-            "${(Advance.language) ? chatProvider.group.nameAr : chatProvider.group.nameEn}",
+            "${!(Advance.language) ? chatProvider.group.nameAr : chatProvider.group.nameEn}",
             style: getRegularStyle(
                 color: ColorManager.white), /*tr(LocaleKeys.anxiety_patients)*/
           ),
@@ -136,7 +136,7 @@ class _ChatViewState extends State<ChatView> {
               child: Consumer<ChatProvider>(
                 builder: (context, value, child) =>
                     Text(
-                        "${value.group.listUsers.length + 1}${tr(LocaleKeys.member)}" /*"35 Member"*/,
+                        "${value.group.listUsers.length + 1} - ${tr(LocaleKeys.member)}" /*"35 Member"*/,
                         style: getLightStyle(color: ColorManager.white)),
               )),
           trailing: (profileProvider.user.typeUser
@@ -1657,8 +1657,8 @@ class _ChatViewState extends State<ChatView> {
                       CircleAvatar(
                         radius: AppSize.s20,
                         child: IconButton(
-                            onPressed: () {
-                              OpenFile.open(message.url);
+                            onPressed: () async{
+                              await OpenFile.open(message.url);
                             },
                             icon: Icon(
                               Icons.play_arrow,
