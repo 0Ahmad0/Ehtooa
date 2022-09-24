@@ -25,6 +25,7 @@ abstract class  LocaleKeys {
   static const login = 'login';
   static const signup = 'signup';
   static const language = 'language';
+  static const loading = 'loading';
   static const arabic = 'arabic';
   static const english = 'english';
   static const theme = 'theme';

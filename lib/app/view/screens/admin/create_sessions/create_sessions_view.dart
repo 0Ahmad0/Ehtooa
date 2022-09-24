@@ -151,7 +151,7 @@ class CreateSessionsView extends StatelessWidget {
                                   prefixIcon: Icon(Icons.groups)
                               ),
                               items: List.generate(homeProvider.groups.groups.length, (index) => DropdownMenuItem(
-                                child: Text(!(context.locale == 'en')?homeProvider.groups.groups[index].nameAr:homeProvider.groups.groups[index].nameEn),
+                                child: Text((Advance.language)?homeProvider.groups.groups[index].nameAr:homeProvider.groups.groups[index].nameEn),
                                 value: index,
                               )),
                               onChanged: (val){

@@ -10,6 +10,7 @@ import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
 
 import '../../resources/color_manager.dart';
+import '../../resources/consts_manager.dart';
 import '../../resources/values_manager.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -49,7 +50,7 @@ class GroupsView extends StatelessWidget {
               ListView.builder(
               itemCount: groupsProvider.groups.groups.length,
               itemBuilder: (_, index) {
-                return                                Container(
+                return  Container(
                   decoration: BoxDecoration(
                       color: ColorManager.lightGray.withOpacity(.2),
                       border: Border(
@@ -66,10 +67,10 @@ class GroupsView extends StatelessWidget {
                       ///(value.groups.groups[index].listBlockUsers.contains(profileProvider.user.id))?
                          /// Const.TOAST(context,textToast: "لقد تم حظرك من هذه المجموعة"):
                       Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatView()));
-                      groupsProvider.notifyListeners();
+                 //     groupsProvider.notifyListeners();
                     },
                     onLongPress: (){
-                      Const.LOADIG(context);
+                      //Const.LOADIG(context);
                     },
                     leading: Transform.scale(
                       scale: 1.5,
@@ -100,27 +101,64 @@ class GroupsView extends StatelessWidget {
                     ),
                     title: Text(
 
-                       "${!Advance.language?groupsProvider.groups.groups[index].nameAr:groupsProvider.groups.groups[index].nameEn}",
+                       "${(Advance.language)?groupsProvider.groups.groups[index].nameAr:groupsProvider.groups.groups[index].nameEn}",
                       //tr(LocaleKeys.anxiety_patients),
                       style: getRegularStyle(
                           color: Theme.of(context).textTheme.bodyText1!.color,
                           fontSize: Sizer.getW(context)/26
                       ),),
                     subtitle:
-                    Text(
-                      (value.groups.groups[index].listBlockUsers.contains(profileProvider.user.id))?
+                      StreamBuilder<QuerySnapshot>(
+                          stream: FirebaseFirestore.instance
+                              .collection(AppConstants.collectionGroup)
+                              .doc(groupsProvider.groups.groups[index].id)
+                              .collection(AppConstants.collectionChat)
+                              .orderBy("sendingTime")
+                          .limitToLast(2)
+                              .snapshots(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState == ConnectionState.waiting) {
+                              return  Text("${tr(LocaleKeys.loading)}");
+                              //Const.CIRCLE(context);
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.active) {
+                              if (snapshot.hasError) {
+                                return const Text('Error');
+                              } else if (snapshot.hasData) {
+                                Text("${tr(LocaleKeys.loading)}");
+                                print("streame ${snapshot.data!.docs.length}");
+                                Chat chat =
+                                    Chat.fromJsonWithFilterIdUser({
+                                      'id': chatProvider.group.id,
+                                      'messages': snapshot.data!.docs
+                                    }, idUser: profileProvider.user.id);
+                                if(chat.messages.length>0){
+                                  Message message = chat.messages.first;
+                                  return groupsProvider.getTextMessageType(message);
+                                }else
+                                  return Text("لا يوجد رسائل");
+
+
+                                /// }));
+                              } else {
+                                return const Text('Empty data');
+                              }
+                            } else {
+                              return Text('State: ${snapshot.connectionState}');
+                            }
+                          }),
+                      /**(value.groups.groups[index].listBlockUsers.contains(profileProvider.user.id))?
                           "لقد تم حظرك من هذه المجموعة":
                       ((value.groups.groups[index].chat.id=="")
-                          ?"جاري التحميل .."
+                          ?"${tr(LocaleKeys.loading)}"
                       ///ToDo mriwed
                           :"${(value.groups.groups[index].chat.messages.length>0)?
                       value.groups.groups[index].chat.messages.last.typeMessage:""
-                      }"),
+                      }"
+
+                      ),**/
                      // "السلام عليكم ورحمة الله",
-                      style: getLightStyle(
-                          color: Theme.of(context).textTheme.bodyText1!.color,
-                          fontSize: Sizer.getW(context)/32
-                      ),),
+
                   ),
                 )
                 ;

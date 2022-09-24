@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:ehtooa/app/controller/utils/firebase.dart';
 import 'package:ehtooa/app/model/utils/local/storage.dart';
+import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -41,7 +42,47 @@ class GroupsProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
-
+  getTextMessageType(models.Message message){
+    switch(message.typeMessage){
+      case "text":
+        return Text("${message.textMessage}");
+      case "image":
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+        Text("photo"),
+            SizedBox(width: AppSize.s4,),
+            Icon(Icons.image)
+        ],);
+      case "video":
+       return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text("video"),
+            SizedBox(width: AppSize.s4,),
+            Icon(Icons.video_collection)
+          ],);
+        break;
+      case "audio":
+        return Row(
+         // crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text("voice"),
+            SizedBox(width: AppSize.s4,),
+            Icon(Icons.keyboard_voice_outlined)
+          ],);
+      case "file":
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text("file"),
+            SizedBox(width: AppSize.s4,),
+            Icon(Icons.attach_file)
+          ],);
+    }
+    return
+        Text("${message.textMessage}");
+  }
   onError(error){
     print(false);
     print(error);
