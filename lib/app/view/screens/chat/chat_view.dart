@@ -749,36 +749,38 @@ class _ChatViewState extends State<ChatView> {
             SizedBox(
               width: Sizer.getW(context) * 0.02,
             ),
-            Row(
-              children: [
-                CachedNetworkImage(
-                  fit: BoxFit.fill,
-                  width: Sizer.getW(context) * 0.1,
-                  height: Sizer.getW(context) * 0.1,
-                  imageUrl:
-                      // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                      ///"${chatProvider.replayMessage}",
-                      "${messageReplay.url}",
-                  // "${AppConstants.photoGroup}",
-                  imageBuilder: (context, imageProvider) => Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: imageProvider,
-                        fit: BoxFit.cover,
-                        //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+            Expanded(
+              child: Row(
+                children: [
+                  CachedNetworkImage(
+                    fit: BoxFit.fill,
+                    width: Sizer.getW(context) * 0.1,
+                    height: Sizer.getW(context) * 0.1,
+                    imageUrl:
+                        // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                        ///"${chatProvider.replayMessage}",
+                        "${messageReplay.url}",
+                    // "${AppConstants.photoGroup}",
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                        ),
                       ),
                     ),
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => FlutterLogo(),
                   ),
-                  placeholder: (context, url) => CircularProgressIndicator(),
-                  errorWidget: (context, url, error) => FlutterLogo(),
-                ),
-                SizedBox(
-                  width: Sizer.getW(context) * 0.01,
-                ),
-                Text(
-                  "photo",
-                )
-              ],
+                  SizedBox(
+                    width: Sizer.getW(context) * 0.01,
+                  ),
+                  Text(
+                    "photo",
+                  )
+                ],
+              ),
             ),
           ],
         );

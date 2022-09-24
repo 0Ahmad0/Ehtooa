@@ -48,7 +48,16 @@ android {
         multiDexEnabled true
 
     }
-
+    subprojects {
+        project.configurations.all {
+            resolutionStrategy.eachDependency { details ->
+                if (details.requested.group == 'com.android.support'
+                        && !details.requested.name.contains('multidex') ) {
+                    details.useVersion "27.1.1"
+                }
+            }
+        }
+    }
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
@@ -70,4 +79,5 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:20.1.0'
 
 }
+
 
