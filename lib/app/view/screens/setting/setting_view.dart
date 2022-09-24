@@ -10,6 +10,7 @@ import 'package:ehtooa/app/view/resources/values_manager.dart';
 import 'package:ehtooa/app/view/widgets/custome_button.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -89,9 +90,9 @@ class SettingView extends StatelessWidget {
                         value: Advance.language,
                         onChanged: (val) async {
                           //
-                          final _newLocale = Locale('en');
-                          await context.setLocale(_newLocale);
-                          Get.updateLocale(_newLocale);
+                          await context.setLocale(Locale('en'));
+                          Phoenix.rebirth(context);
+                          // Get.updateLocale(_newLocale);
                           Advance.language = true;
                         },
                       ),
@@ -109,9 +110,10 @@ class SettingView extends StatelessWidget {
                         activeColor: Theme.of(context).primaryColor,
                         value: !Advance.language,
                         onChanged: (val) async {
-                          final _newLocale = Locale('ar');
-                          await context.setLocale(_newLocale);
-                          Get.updateLocale(_newLocale);
+                          await context.setLocale(Locale('ar'));
+                          Phoenix.rebirth(context);
+                          // context.findAncestorStateOfType<_RestartWidgetState>().restartApp();
+                          // Get.updateLocale(_newLocale);
                           // //
                           Advance.language = false;
                         },

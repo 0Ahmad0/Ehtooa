@@ -6,6 +6,7 @@ import 'package:ehtooa/app/model/utils/local/change_theme.dart';
 import 'package:ehtooa/app/view/resources/globals.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'app/controller/add_doctor_provider.dart';
 import 'app/controller/bottom_nav_bar_provider.dart';
 import 'app/controller/create_sessions_provider.dart';
@@ -68,15 +69,17 @@ Future<void> main() async{
   await Globals.init();
   Provider.debugCheckInvalidValueType = null;
   runApp(
-    EasyLocalization(
-      path: 'assets/translations',
-      supportedLocales: [
-        Locale("en"),
-        Locale("ar"),
-      ],
-      fallbackLocale: Locale("ar"),
-      assetLoader: CodegenLoader(),
-      child: MyApp(),
+    Phoenix(
+      child: EasyLocalization(
+        path: 'assets/translations',
+        supportedLocales: [
+          Locale("en"),
+          Locale("ar"),
+        ],
+        fallbackLocale: Locale("ar"),
+        assetLoader: CodegenLoader(),
+        child: MyApp(),
+      ),
     ),
   );
 }
