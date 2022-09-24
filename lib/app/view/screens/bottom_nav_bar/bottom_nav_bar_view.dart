@@ -34,12 +34,6 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
   @override
   void initState() {
     super.initState();
-    screens = [
-      {"title": tr(LocaleKeys.profile), "content": ProfileView()},
-      {"title": tr(LocaleKeys.home), "content": HomeView()},
-      {"title": tr(LocaleKeys.notification), "content": NotificationView()},
-      {"title": tr(LocaleKeys.groups), "content": GroupsView()},
-    ];
   }
   filterSecreens(profileProvider){
     if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor)&& screens.length == 4){
@@ -50,6 +44,12 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
   }
   @override
   Widget build(BuildContext context) {
+    screens = [
+      {"title": tr(LocaleKeys.profile), "content": ProfileView()},
+      {"title": tr(LocaleKeys.home), "content": HomeView()},
+      {"title": tr(LocaleKeys.notification), "content": NotificationView()},
+      {"title": tr(LocaleKeys.groups), "content": GroupsView()},
+    ];
     final profileProvider = Provider.of<ProfileProvider>(context);
     filterSecreens(profileProvider);
     return ChangeNotifierProvider<BottomNavBarProvider>(

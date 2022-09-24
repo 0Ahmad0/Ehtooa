@@ -89,13 +89,10 @@ class SettingView extends StatelessWidget {
                         activeColor: Theme.of(context).primaryColor,
                         value: Advance.language,
                         onChanged: (val) async {
-                          //
                           await context.setLocale(Locale('en'));
-
                            Get.updateLocale(context.locale);
                           AppStorage.storageWrite(key: AppConstants.languageKEY, value: true);
                           Advance.language = true;
-                          Phoenix.rebirth(context);
                         },
                       ),
                     ),
@@ -113,13 +110,11 @@ class SettingView extends StatelessWidget {
                         value: !Advance.language,
                         onChanged: (val) async {
                           await context.setLocale(Locale('ar'));
-
                           // context.findAncestorStateOfType<_RestartWidgetState>().restartApp();
                            Get.updateLocale(context.locale);
                           // //
                           AppStorage.storageWrite(key: AppConstants.languageKEY, value: false);
                           Advance.language = false;
-                          Phoenix.rebirth(context);
                         },
                       ),
                     ),

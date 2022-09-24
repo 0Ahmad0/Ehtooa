@@ -100,7 +100,7 @@ class GroupsView extends StatelessWidget {
                     ),
                     title: Text(
 
-                       "${!(context.locale == 'en')?groupsProvider.groups.groups[index].nameAr:groupsProvider.groups.groups[index].nameEn}",
+                       "${!Advance.language?groupsProvider.groups.groups[index].nameAr:groupsProvider.groups.groups[index].nameEn}",
                       //tr(LocaleKeys.anxiety_patients),
                       style: getRegularStyle(
                           color: Theme.of(context).textTheme.bodyText1!.color,
