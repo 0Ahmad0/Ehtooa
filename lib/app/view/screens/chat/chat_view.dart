@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:filesize/filesize.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:circle_progress_bar/circle_progress_bar.dart';
@@ -456,33 +457,6 @@ class _ChatViewState extends State<ChatView> {
                 video: details.selectedFile,
                 aspectRatio: 16.0,
               )));
-      // final video = await VideoThumbnail.thumbnailData(
-      //   video: details.selectedFile.path,
-      //   imageFormat: ImageFormat.JPEG,
-      //   maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-      //   quality: 25,
-      // );
-      // print("hhhhhh");
-      // print(video);
-
-      // list.add(BuildMessageShape(
-      //     isMe: true, child: DisplayImages(
-      //     selectedFiles: details.selectedFiles != null
-      //         ? details.selectedFiles!
-      //         : [details.selectedFile],
-      //     details: details,
-      //     aspectRatio: details.aspectRatio)));
-      // Navigator.push(
-      //     context,
-      //     CupertinoDialogRoute(
-      //         builder: (_) {
-      //           return DisplayVideo(
-      //               video: details.selectedFile,
-      //               aspectRatio: details.aspectRatio);
-      //         },
-      //         context: context));
-      // list.add(DisplayVideo(
-      //     video: details.selectedFile, aspectRatio: details.aspectRatio));
       Message tempMessage = Message(
           textMessage: chatProvider.findbasename(details.selectedFile.path),
           url: "",
@@ -492,6 +466,7 @@ class _ChatViewState extends State<ChatView> {
           deleteUserMessage: [],
           sendingTime: DateTime.now(),
           checkSend: false);
+      tempMessage.urlTempPhoto=await chatProvider.getFileImageFromVideo(videoFile: details.selectedFile, id: tempMessage.textMessage).path;
     }
     if (chatProvider.isReplay) {
       tempMessage.replayId = chatProvider.replayIdMessage;
@@ -503,7 +478,12 @@ class _ChatViewState extends State<ChatView> {
     setState3(() {});
     chatProvider.replayIdMessage = "";
     chatProvider.changeReplayMessage(replayMessage: null);
-
+    String urlTempPhoto;
+    if(tempMessage.typeMessage.contains("video")){
+      String urlTempPhoto = await chatProvider.uploadFile(
+          filePath: tempMessage.urlTempPhoto,
+          typePathStorage: (AppConstants.imagesGroup));
+    }
     String url = await chatProvider.uploadFile(
         filePath: details.selectedFile.path,
         typePathStorage: (details.isThatImage)
@@ -1009,6 +989,10 @@ class _ChatViewState extends State<ChatView> {
         return receiveAudio(
             isReplay: (message.replayId == "") ? false : true,
             message: message);
+      case "video":
+        return receiveVideo(
+            isReplay: (message.replayId == "") ? false : true,
+            message: message);
     }
   }
 
@@ -1134,6 +1118,30 @@ class _ChatViewState extends State<ChatView> {
 
     return childWidget;
   }
+  Widget receiveVideo({required bool isReplay, required Message message}) {
+    Widget childWidget;
+    childWidget = SwipeTo(
+        onRightSwipe: () => onReplay(message: message),
+        child: Container(
+          margin: EdgeInsets.only(
+            top: AppMargin.m4,
+            bottom: AppMargin.m4,
+            //TODO check audio List Sender
+            //    left: Sizer.getW(context) / 2 - AppSize.s20
+          ),
+          child: ChangeNotifierProvider<DownloaderProvider>.value(
+              value: downloaderProvider,
+              child: Consumer<DownloaderProvider>(
+                builder: (context, value, child) =>
+                (value.checkCompleteDownload[message.id] != true)
+                     ?BuildMessageVideo(value,message: message,isReplay: isReplay)
+                    : BuildMessageVideoLocal(value,message: message,isReplay: isReplay),
+                
+              )),
+        ));
+
+    return childWidget;
+  }
 
   ///----------------------------------------------------------------------------
 
@@ -1155,6 +1163,10 @@ class _ChatViewState extends State<ChatView> {
             message: message);
       case "audio":
         return sendAudio(
+            isReplay: (message.replayId == "") ? false : true,
+            message: message);
+      case "video":
+        return sendVideo(
             isReplay: (message.replayId == "") ? false : true,
             message: message);
     }
@@ -1208,6 +1220,13 @@ class _ChatViewState extends State<ChatView> {
     childWidget = BuildMessageAudioLocal(downloaderProvider,message: message,isReplay: isReplay);
     return childWidget;
   }
+
+  Widget sendVideo({required bool isReplay, required Message message}) {
+    Widget childWidget;
+    childWidget = BuildMessageVideoLocal(downloaderProvider,message: message,isReplay: isReplay);
+    return childWidget;
+  }
+
 
   ///----------------------------------------------------------------------------
 
@@ -1509,6 +1528,155 @@ class _ChatViewState extends State<ChatView> {
       ),
     );
   }
+
+  BuildMessageVideo(value,{required Message message, bool isReplay=false}) {
+    return BuildMessageShape(
+      message: message,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if(isReplay)
+          buildrReplayMessage(message: message),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: widthImageChat,
+                  width: double.infinity,
+                  child: CachedNetworkImage(
+                    fit: BoxFit.fill,
+                  //  width: widthImageChat,
+                    //Sizer.getW(context) * 0.25,
+                    //height: widthImageChat,
+                    //Sizer.getW(context) * 0.25,
+                    imageUrl:
+                    // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                    /// "${replaytext}",
+                    ///"${message.textMessage}",
+                    "${message.urlTempPhoto}",
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => FlutterLogo(),
+                  ),
+                ),
+                Container(
+                  height: widthImageChat,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  color: ColorManager.lightGray.withOpacity(.8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatarDownload(downloaderProvider ,message: message,
+                          iconDownload: Icon(Icons.download_sharp)
+                      ),
+                      const SizedBox(height: AppSize.s8,),
+                      Container(
+                        padding: const EdgeInsets.all(AppPadding.p4),
+                        decoration: BoxDecoration(
+                            color: ColorManager.white,
+                            borderRadius: BorderRadius.circular(AppSize.s100)
+                        ),
+                        child: Text(
+                          filesize(message.sizeFile),
+                          style: getLightStyle(color: ColorManager.black),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            //Text(message.textMessage),
+            //  child: Text(con.text),
+          )
+        ],
+      ),
+    );
+  }
+  BuildMessageVideoLocal(value,{required Message message, bool isReplay=false}) {
+    return BuildMessageShape(
+      message: message,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          if(isReplay)
+            buildrReplayMessage(message: message),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  height: widthImageChat,
+                  width: double.infinity,
+                  child: CachedNetworkImage(
+                    fit: BoxFit.fill,
+                    //  width: widthImageChat,
+                    //Sizer.getW(context) * 0.25,
+                    //height: widthImageChat,
+                    //Sizer.getW(context) * 0.25,
+                    imageUrl:
+                    // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
+                    /// "${replaytext}",
+                    ///"${message.textMessage}",
+                    "${message.urlTempPhoto}",
+                    imageBuilder: (context, imageProvider) => Container(
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: imageProvider,
+                          fit: BoxFit.cover,
+                          //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
+                        ),
+                      ),
+                    ),
+                    placeholder: (context, url) => CircularProgressIndicator(),
+                    errorWidget: (context, url, error) => FlutterLogo(),
+                  ),
+                ),
+                Container(
+                  height: widthImageChat,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  color: ColorManager.lightGray.withOpacity(.8),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: AppSize.s20,
+                        child: IconButton(
+                            onPressed: () {
+                              OpenFile.open(message.url);
+                            },
+                            icon: Icon(
+                              Icons.play_arrow,
+                            )),
+                      ),
+                      const SizedBox(height: AppSize.s8,),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            //Text(message.textMessage),
+            //  child: Text(con.text),
+          )
+        ],
+      ),
+    );
+  }
+
+
 }
 
 class DisplayImages extends StatelessWidget {

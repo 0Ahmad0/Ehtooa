@@ -20,6 +20,14 @@ class NotificationProvider with ChangeNotifier{
   models.Sessions sessions=models.Sessions(sessions: []);
   List<InteractiveSessions> sessionsToUser=[];
   String idUser="";
+  fetchSessionsIdUser(context,{required String typeUser,required List groups,required PaySession paySession,required String idUser}) async {
+    if(typeUser.contains(AppConstants.collectionPatient)){
+      return await fetchSessionsToUser(context, groups: groups, paySession: paySession, idUser: idUser);
+    }else if(typeUser.contains(AppConstants.collectionDoctor)){
+      return await fetchSessionsToDoctor(context, idUser: idUser);
+    }else
+      return await fetchSessionsToAdmin(context);
+  }
   fetchSessionsToUser(context,{required List groups,required PaySession paySession,required idUser}) async {
     List idGroups=[];
     for(models.Group group in groups){
@@ -36,7 +44,44 @@ class NotificationProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
-  
+  fetchSessionsToDoctor(context,{required String idUser}) async {
+    this.idUser=idUser;
+    var result =await FirebaseFun.fetchSessionsToDoctor(idUser: idUser);
+    print(result);
+    if(result['status']){
+      sessions=models.Sessions.fromJson(result['body']);
+      sessionsToUser=[];
+      await processessionsToDoctorOrAdmin(context);
+    }
+    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
+    return result;
+  }
+  fetchSessionsToAdmin(context) async {
+
+    var result =await FirebaseFun.fetchSessions();
+    print(result);
+    if(result['status']){
+      sessions=models.Sessions.fromJson(result['body']);
+      sessionsToUser=[];
+      await processessionsToDoctorOrAdmin(context);
+    }
+    (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
+    return result;
+  }
+  processessionsToDoctorOrAdmin(context){
+    sessionsToUser=[];
+    for(models.Session session in sessions.sessions){
+      /// }
+      sessionsToUser.add( InteractiveSessions(
+          idGroup: session.idGroup,
+          name: session.name,
+          id_link:session.sessionUrl,
+          doctorName: session.listDoctor[0],
+          price: "${session.price}",
+          isSold: true
+      ));
+    }
+  }
   processessionsToUser(context, {required PaySession paySession,required List groupsUser}){
     for(models.Session session in sessions.sessions){
       int indexListPaySession=fetchIndexFromListPaySession(idGroup: session.idGroup);

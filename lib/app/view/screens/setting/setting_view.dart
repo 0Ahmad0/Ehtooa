@@ -93,6 +93,7 @@ class SettingView extends StatelessWidget {
                           await context.setLocale(Locale('en'));
                           Phoenix.rebirth(context);
                           // Get.updateLocale(_newLocale);
+                          AppStorage.storageWrite(key: AppConstants.languageKEY, value: true);
                           Advance.language = true;
                         },
                       ),
@@ -115,6 +116,7 @@ class SettingView extends StatelessWidget {
                           // context.findAncestorStateOfType<_RestartWidgetState>().restartApp();
                           // Get.updateLocale(_newLocale);
                           // //
+                          AppStorage.storageWrite(key: AppConstants.languageKEY, value: false);
                           Advance.language = false;
                         },
                       ),

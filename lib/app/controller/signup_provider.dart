@@ -26,6 +26,9 @@ class SignupProvider with ChangeNotifier{
      if(result['status']){
 
        await AppStorage.storageWrite(key: AppConstants.isLoginedKEY, value: true);
+       await AppStorage.storageWrite(key: AppConstants.idKEY, value: user.uid);
+       await AppStorage.storageWrite(key: AppConstants.uidKEY, value: user.uid);
+       await AppStorage.storageWrite(key: AppConstants.tokenKEY, value: "resultUser['token']");
        Advance.isLogined = true;
        user= models.User.fromJson(result['body']);
       // print(result);

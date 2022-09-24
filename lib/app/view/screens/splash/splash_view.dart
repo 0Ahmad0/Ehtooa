@@ -24,8 +24,8 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
-  final profileProvider = Provider.of<ProfileProvider>;
-  final loginProvider = Provider.of<LoginProvider>;
+ // final profileProvider = Provider.of<ProfileProvider>;
+ // final loginProvider = Provider.of<LoginProvider>;
   Timer? _timer;
 
   startDelay() async {
@@ -42,7 +42,7 @@ class _SplashViewState extends State<SplashView> {
              // LoginView()
 
              ));**/
-    init(loginProvider, profileProvider);
+   // init(context,loginProvider, profileProvider);
     //print("Advance==> ${Advance.isLogined}" );
     // Navigator.pushReplacementNamed(context, Routes.registerRoot);
     // bool isLoginedKEY =
@@ -64,31 +64,22 @@ class _SplashViewState extends State<SplashView> {
     // }
     // // Get.changeTheme(getApplicationTheme(isDark:Advance.theme ));
   }
-  init(loginProvider,profileProvider) async {
-  //  await AppStorage.init();
-    print("f ${Advance.token}");
-    if(Advance.isLogined&&Advance.token!=""&&false){
-      Const.LOADIG(context);
-      final result =await loginProvider.loginUid();
-      Navigator.of(context).pop();
+  init(context,loginProvider,profileProvider) async {
+   await AppStorage.init();
+    //print("f ${Advance.uid}");
+    if(Advance.isLogined&&Advance.token!=""){
+      final result = await loginProvider.fetchUser(uid: Advance.uid);
       if(result['status']){
         profileProvider.updateUser(user:User.fromJson(result['body']));
-        Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(builder: (context) => GetDataView()
-              //HomeView()
-              // LoginView()
-
-            ));
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+                builder: (ctx) => GetDataView()/*QuestionsView(indexTaken: [],)*/));
       }else{
-        Navigator.pushReplacement(
-            context,
-            CupertinoPageRoute(builder: (context) => LoginView()
-              //HomeView()
-              // LoginView()
-
-            ));
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+            builder: (ctx) => LoginView()));
       }
+
     }else{
       Navigator.pushReplacement(
           context,
@@ -106,6 +97,9 @@ class _SplashViewState extends State<SplashView> {
   }
   @override
   Widget build(BuildContext context) {
+    final profileProvider = Provider.of<ProfileProvider>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
+    init(context,loginProvider,profileProvider);
     return Scaffold(
       body: Center(
         child: ZoomIn(

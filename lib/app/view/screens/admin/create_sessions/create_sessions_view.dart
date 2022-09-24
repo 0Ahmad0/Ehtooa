@@ -311,6 +311,7 @@ class CreateSessionsView extends StatelessWidget {
                     Navigator.of(context).pop();
                     if(result['status']){
                       createSessionsProvider.clean();
+                      homeProvider.setState3((){});
                       Navigator.of(context).pop();
                     }
                   }

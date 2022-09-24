@@ -33,6 +33,18 @@ class AppStorage {
       //print("a${Advance.theme}");
     }
 
+    if (!_storage.hasData(AppConstants.uidKEY)) {
+      storageWrite(key: AppConstants.uidKEY, value: "");
+    } else {
+      Advance.uid = await storageRead(key: AppConstants.uidKEY);
+    }
+    if (!_storage.hasData(AppConstants.tokenKEY)) {
+      storageWrite(key: AppConstants.tokenKEY, value: "");
+    } else {
+      Advance.token = await storageRead(key: AppConstants.tokenKEY);
+     // print("ffffffffffffffffffff${Advance.token}");
+    }
+
   }
 
   static Future<void> storageWrite({key, value}) async =>
@@ -43,6 +55,8 @@ class AppStorage {
   static Future<void> storageDelete({key}) async => await _storage.remove(key).then((value) => print("delete key successful"));
 static depose() async {
   await _storage.remove(AppConstants.idKEY);
+  await _storage.remove(AppConstants.uidKEY);
+  await _storage.remove(AppConstants.tokenKEY);
   //await _storage.remove(AppConstants.phoneNumberKEY);
   await _storage.write(AppConstants.isLoginedKEY, false);
 }

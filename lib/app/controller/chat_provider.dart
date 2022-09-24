@@ -6,6 +6,8 @@ import 'package:ehtooa/app/controller/utils/test.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../model/models.dart' as models;
 import '../model/models.dart';
@@ -147,6 +149,20 @@ class ChatProvider with ChangeNotifier{
  }
  findbasename(filePath){
    return basename(filePath);
+ }
+ getFileImageFromVideo({required File videoFile, required String id}) async {
+   final uint8list = await VideoThumbnail.thumbnailData(
+     video: videoFile.path,
+     imageFormat: ImageFormat.JPEG,
+     maxWidth: 128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+     quality: 25,
+   );
+
+   final tempDir = await getTemporaryDirectory();
+   final file = await new File('${tempDir.path}/${id}.jpg').create();
+   file.writeAsBytesSync(uint8list!);
+   return file;
+
  }
 
 

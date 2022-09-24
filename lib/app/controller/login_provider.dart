@@ -26,6 +26,8 @@ class LoginProvider with ChangeNotifier{
        Advance.isLogined = true;
        user= models.User.fromJson(result['body']);
        await AppStorage.storageWrite(key: AppConstants.idKEY, value: user.uid);
+       await AppStorage.storageWrite(key: AppConstants.uidKEY, value: user.uid);
+       await AppStorage.storageWrite(key: AppConstants.tokenKEY, value: "resultUser['token']");
        Advance.token = user.uid;
         email.clear();
         password.clear();

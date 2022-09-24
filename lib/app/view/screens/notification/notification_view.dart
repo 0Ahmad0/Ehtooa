@@ -27,10 +27,11 @@ class NotificationView extends StatelessWidget {
     final notificationProvider = Provider.of<NotificationProvider>(context);
     return Container(
         child: FutureBuilder(
-          future: notificationProvider.fetchSessionsToUser(
+          future: notificationProvider.fetchSessionsIdUser(
               context, groups: groupsProvider.groups.groups,
               paySession: profileProvider.paySession,
-          idUser: profileProvider.user.id),
+          idUser: profileProvider.user.id, typeUser: profileProvider.user.typeUser
+          ),
           builder: (context, snapshot,) {
             //  print(snapshot.error);
             if (snapshot.connectionState == ConnectionState.waiting) {

@@ -24,6 +24,7 @@ class HomeProvider with ChangeNotifier{
   List<InteractiveSessions> sessionsToUser=[];
   String idUser="";
   String search="";
+  var setState3;
   fetchDoctors(context) async {
     var result =await FirebaseFun.fetchDoctors();
     print(result);

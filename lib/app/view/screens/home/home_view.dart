@@ -264,6 +264,7 @@ class HomeView extends StatelessWidget {
               ),
             ),
             StatefulBuilder(builder: (_, setState3) {
+              homeProvider.setState3=setState3;
               return FutureBuilder(
                 future: homeProvider.fetchSessionsIdUser(context,
                     groups: groupsProvider.groups.groups,
@@ -287,6 +288,13 @@ class HomeView extends StatelessWidget {
                       Map<String, dynamic> data =
                           snapshot.data as Map<String, dynamic>;
                       homeProvider.sessions = Sessions.fromJson(data['body']);
+                      if(homeProvider.sessionsToUser.length<=0){
+                        return Expanded(
+                            flex: 3,
+                            child: SvgPicture.asset(
+                              ImagesAssets.noDataFound,
+                            ));
+                      }else
                       return StatefulBuilder(
                         builder: (_, setState1) {
                           return CarouselSlider(
@@ -309,10 +317,7 @@ class HomeView extends StatelessWidget {
                                       vertical: AppPadding.p12),
                                   child: GestureDetector(
                                     onTap: () {
-                                      if (homeProvider
-                                          .sessionsToUser[homeProvider
-                                              .sessionsToUser
-                                              .indexOf(e)]
+                                      if (homeProvider.sessionsToUser[homeProvider.sessionsToUser.indexOf(e)]
                                           .isSold) {
                                         setState1(() {
                                           if (_selectedIndex == e) {
@@ -767,6 +772,13 @@ class HomeView extends StatelessWidget {
                               search: homeProvider.search,
                               users: homeProvider.doctors.users);
                     }
+                    if(homeProvider.doctors.users.length<=0){
+                      return Expanded(
+                          flex: 3,
+                          child: SvgPicture.asset(
+                            ImagesAssets.noDataFound,
+                          ));
+                    }else
                     return Expanded(
                         child: ListView.builder(
                       scrollDirection: Axis.horizontal,
