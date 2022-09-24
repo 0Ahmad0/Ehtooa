@@ -13,6 +13,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 
 import '../../../controller/profile_provider.dart';
+import '../../../model/utils/const.dart';
 import '../../resources/color_manager.dart';
 import 'package:provider/provider.dart';
 
@@ -124,7 +125,10 @@ class _QuestionsViewState extends State<QuestionsView> {
         appBar: AppBar(
           title: Text(tr(LocaleKeys.mental_health)),
           leading: IconButton(
-            onPressed: (){
+            onPressed: () async {
+              Const.LOADIG(context);
+              await profileProvider.logout(context);
+              Navigator.of(context).pop();
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (ctx)=>LoginView()));
             },
             icon: Icon(Icons.logout),
