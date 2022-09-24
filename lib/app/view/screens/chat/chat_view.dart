@@ -1212,7 +1212,7 @@ class _ChatViewState extends State<ChatView> {
             strokeWidth: AppSize.s4,
             value: value.downloadProgress[message.id] == null
                 ? 0
-                : value.downloadProgress[message.id]!,
+                : value.downloadProgress[message.id],
             foregroundColor:
             Theme.of(context).primaryColor,
             child: value.checkClickDownload[message.id] ==
@@ -1237,7 +1237,7 @@ class _ChatViewState extends State<ChatView> {
                   .downloadFile(message),
               child: Container(
                 padding: EdgeInsets.all(
-                    AppPadding.p10),
+                   message.typeMessage.contains("audio")? AppPadding.p10:0),
                 child: iconDownload,
               ),
             )
@@ -1379,9 +1379,8 @@ class _ChatViewState extends State<ChatView> {
             const SizedBox(
               width: AppSize.s10,
             ),
-            Expanded(
-                child: Flexible(
-                    child: Text("${message.textMessage}" /*result.files[0].name*/)),),
+            Flexible(
+                child: Text("${message.textMessage}" /*result.files[0].name*/)),
           ],
         ),
         Padding(
@@ -1413,9 +1412,8 @@ class _ChatViewState extends State<ChatView> {
             const SizedBox(
               width: AppSize.s10,
             ),
-            Expanded(
-              child: Flexible(
-                  child: Text("${message.textMessage}" /*result.files[0].name*/)),),
+            Flexible(
+                child: Text("${message.textMessage}" /*result.files[0].name*/)),
           ],
         ),
         Padding(
