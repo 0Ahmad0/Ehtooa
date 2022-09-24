@@ -257,6 +257,7 @@ class _ChatViewState extends State<ChatView> {
                           border: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           focusedBorder: InputBorder.none,
+                          hintText: tr(LocaleKeys.message)
                         ),
                         textStyle: getRegularStyle(
                             color: Theme.of(context)

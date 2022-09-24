@@ -255,7 +255,8 @@
   "video_message":"فيديو",
   "photo": "صورة",
   "attatchment": "ملف",
-  "voice_message": "رسالة صوتية"
+  "voice_message": "رسالة صوتية",
+  "message": "رسالتك"
 
 }
 

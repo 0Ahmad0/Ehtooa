@@ -264,7 +264,8 @@ class CodegenLoader extends AssetLoader{
   "video_message": "فيديو",
   "photo": "صورة",
   "attatchment": "ملف",
-  "voice_message": "رسالة صوتية"
+  "voice_message": "رسالة صوتية",
+  "message": "رسالتك"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Specialist name",
@@ -515,7 +516,8 @@ static const Map<String,dynamic> en = {
   "video_message": "Video",
   "photo": "Photo",
   "attatchment": "Attatcmnet",
-  "voice_message": "Voice message"
+  "voice_message": "Voice message",
+  "message": "Message"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

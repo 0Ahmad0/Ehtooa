@@ -251,5 +251,6 @@ abstract class  LocaleKeys {
   static const photo = 'photo';
   static const attatchment = 'attatchment';
   static const voice_message = 'voice_message';
+  static const message = 'message';
 
 }

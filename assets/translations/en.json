@@ -251,5 +251,6 @@
   "video_message":"Video",
   "photo": "Photo",
   "attatchment": "Attatcmnet",
-  "voice_message": "Voice message"
+  "voice_message": "Voice message",
+  "message": "Message"
 }
