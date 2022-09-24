@@ -1084,16 +1084,21 @@ class _ChatViewState extends State<ChatView> {
           onRightSwipe: () => onReplay(message: message),
           child: ChangeNotifierProvider<DownloaderProvider>.value(
               value: downloaderProvider,
-              child: Consumer<DownloaderProvider>(
-              builder: (context, value, child) =>
-                      (value.checkCompleteDownload[message.id] != true)?
-                      BuildMessageFile(message: message,isReplay: isReplay)
-                    : BuildMessageFileLocal(message: message,isReplay: isReplay),
-
-                  //Text(message.textMessage),
-                  //  child: Text(con.text),
-                )
-
+              child: Container(
+                  margin: EdgeInsets.only(
+                    top: AppMargin.m4,
+                    bottom: AppMargin.m4,
+                    //TODO check audio List Sender
+                    //    left: Sizer.getW(context) / 2 - AppSize.s20
+                  ),
+                  child:
+                  Consumer<DownloaderProvider>(
+                    builder: (context, value, child) =>
+                    (value.checkCompleteDownload[message.id] != true)?
+                    BuildMessageFile(message: message,isReplay: isReplay)
+                        : BuildMessageFileLocal(message: message,isReplay: isReplay),
+                  )
+              )
           ));
 
     return childWidget;
