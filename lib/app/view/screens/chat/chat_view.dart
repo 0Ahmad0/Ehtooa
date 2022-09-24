@@ -126,7 +126,7 @@ class _ChatViewState extends State<ChatView> {
             ),
           ),
           title: Text(
-            "${!(context.locale == 'en') ? chatProvider.group.nameAr : chatProvider.group.nameEn}",
+            "${(Advance.language) ? chatProvider.group.nameAr : chatProvider.group.nameEn}",
             style: getRegularStyle(
                 color: ColorManager.white), /*tr(LocaleKeys.anxiety_patients)*/
           ),
