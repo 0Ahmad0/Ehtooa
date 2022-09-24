@@ -65,11 +65,9 @@ class _ChatViewState extends State<ChatView> {
   late DownloaderProvider downloaderProvider;
   Function? setStateChat;
   double? widthImageChat;
-
   fetchTempDir() async {
     downloaderProvider.tempDir = await getTemporaryDirectory();
   }
-
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
@@ -273,108 +271,6 @@ class _ChatViewState extends State<ChatView> {
                                       tempMessage.replayId =
                                           value.replayIdMessage;
                                       print(value.replayIdMessage);
-                                      list.add(SwipeTo(
-                                          onRightSwipe: () {
-                                            print(str);
-
-                                            /// value.replayMessage = str;
-                                            foucsNode.requestFocus();
-                                            chatProvider.changeReplayMessage(
-                                                replayMessage: str);
-                                          },
-                                          child: BuildMessageShape(
-                                            //isMe: true,
-                                            message: tempMessage,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Container(
-                                                  height: Sizer.getW(context) *
-                                                      0.15,
-                                                  padding: EdgeInsets.all(
-                                                      AppPadding.p8),
-                                                  decoration: BoxDecoration(
-                                                    color: ColorManager
-                                                        .lightGray
-                                                        .withOpacity(.5),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            AppSize.s8),
-                                                  ),
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    children: [
-                                                      VerticalDivider(
-                                                        thickness: AppSize.s4,
-                                                        color: Theme.of(context)
-                                                            .primaryColor
-                                                            .withOpacity(.5),
-                                                      ),
-                                                      Flexible(
-                                                        child: Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Text(
-                                                              ("${(homeProvider.cacheUser.containsKey(value.messageReplay.senderId) ? homeProvider.cacheUser[value.messageReplay.senderId] : "")}"),
-                                                              style: TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
-                                                            ),
-                                                            SizedBox(
-                                                              height: Sizer.getW(
-                                                                      context) *
-                                                                  0.01,
-                                                            ),
-                                                            Text(
-                                                              value
-                                                                  .messageReplay
-                                                                  .textMessage,
-                                                            )
-                                                          ],
-                                                        ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                ),
-                                                Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(8.0),
-                                                  child: Text(con.text),
-                                                )
-                                              ],
-                                            ),
-                                          )));
-                                    } else {
-                                      Message tempMessage = Message(
-                                          textMessage: str.toString(),
-                                          replayId: "",
-                                          typeMessage: "text",
-                                          senderId: profileProvider.user.id,
-                                          deleteUserMessage: [],
-                                          sendingTime: DateTime.now(),
-                                          checkSend: false);
-                                      list.add(SwipeTo(
-                                          onRightSwipe: () {
-                                            print(str);
-                                            foucsNode.requestFocus();
-                                            chatProvider.changeReplayMessage(
-                                                replayMessage: str);
-                                          },
-                                          child: BuildMessageShape(
-                                            //    isMe: false,
-                                            message: tempMessage,
-
-                                            child: Row(
-                                              children: [
-                                                Text(str.toString()),
-                                              ],
-                                            ),
-                                          )));
                                     }
                                     print("${tempMessage.toJson()}");
 
@@ -394,34 +290,14 @@ class _ChatViewState extends State<ChatView> {
                                     await value.addMessage(context,
                                         idGroup: chatProvider.group.id,
                                         message: tempMessage);
-                                    //chatProvider.replayIdMessage = "";
-                                    //chatProvider.changeReplayMessage(replayMessage: null);
-
-                                    ///  });
                                   },
                                   onRecordEnd: (path) async {
-                                    ///  setState1(() {
-                                    list.add(Container(
-                                        margin: EdgeInsets.only(
-                                            top: AppMargin.m4,
-                                            bottom: AppMargin.m4,
-                                            //TODO check audio List Sender
-                                            left: Sizer.getW(context) / 2 -
-                                                AppSize.s20),
-                                        child: SizedBox()
-                                        /*
-                                        VoiceMessage(
-                                          key: Key(path!),
-                                          audioSrc: path,
-                                          me: true,
-                                        ),
-                                        */
-                                        ));
 
                                     Message tempMessage = Message(
                                         textMessage:
                                             chatProvider.findbasename(path),
                                         url: "",
+                                        sizeFile: File(path!).lengthSync(),
                                         replayId: chatProvider.replayIdMessage,
                                         typeMessage: "audio",
                                         senderId: profileProvider.user.id,
@@ -432,7 +308,6 @@ class _ChatViewState extends State<ChatView> {
                                       tempMessage.replayId =
                                           chatProvider.replayIdMessage;
                                     }
-
                                     ///add local message
                                     tempMessage.url = path!;
                                     listSendMessage.add(tempMessage);
@@ -655,7 +530,7 @@ class _ChatViewState extends State<ChatView> {
                   thickness: AppSize.s6,
                   color: Theme.of(context).primaryColor.withOpacity(.8),
                 ),
-                Flexible(child: buildrReplayChat())
+                Flexible(child: buildrReplayChat(messageReplay: chatProvider.messageReplay))
               ],
             ),
             Positioned(
@@ -837,20 +712,26 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-  Widget buildrReplayChat() {
-    switch (chatProvider.messageReplay.typeMessage) {
+  Widget buildrReplayChat({required Message messageReplay}) {
+    if(receiveReplay(message: messageReplay).contains("delete_message")){
+      return Text(
+        "delete message",
+        overflow: TextOverflow.ellipsis,
+      );
+    }
+    switch (messageReplay.typeMessage) {
       case "text":
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              ("${(homeProvider.cacheUser.containsKey(messageReplay.senderId) ? homeProvider.cacheUser[messageReplay.senderId] : "")}"),
               style: getBoldStyle(
                   color: Theme.of(context).textTheme.bodyText1!.color),
             ),
             Text(
-              chatProvider.messageReplay.textMessage,
+              messageReplay.textMessage,
               overflow: TextOverflow.ellipsis,
             )
           ],
@@ -860,7 +741,7 @@ class _ChatViewState extends State<ChatView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              ("${(homeProvider.cacheUser.containsKey(messageReplay.senderId) ? homeProvider.cacheUser[messageReplay.senderId] : "")}"),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(
@@ -875,7 +756,7 @@ class _ChatViewState extends State<ChatView> {
                   imageUrl:
                       // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
                       ///"${chatProvider.replayMessage}",
-                      "${chatProvider.messageReplay.url}",
+                      "${messageReplay.url}",
                   // "${AppConstants.photoGroup}",
                   imageBuilder: (context, imageProvider) => Container(
                     decoration: BoxDecoration(
@@ -904,7 +785,7 @@ class _ChatViewState extends State<ChatView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              ("${(homeProvider.cacheUser.containsKey(messageReplay.senderId) ? homeProvider.cacheUser[messageReplay.senderId] : "")}"),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(
@@ -929,7 +810,7 @@ class _ChatViewState extends State<ChatView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              ("${(homeProvider.cacheUser.containsKey(messageReplay.senderId) ? homeProvider.cacheUser[messageReplay.senderId] : "")}"),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(
@@ -954,7 +835,7 @@ class _ChatViewState extends State<ChatView> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Text(
-              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
+              ("${(homeProvider.cacheUser.containsKey(messageReplay.senderId) ? homeProvider.cacheUser[messageReplay.senderId] : "")}"),
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(
@@ -981,9 +862,10 @@ class _ChatViewState extends State<ChatView> {
   Widget buildrReplayMessage({required Message message}) {
     Message messageReplay =
         chatProvider.findReplayMessage(repIdMessage: message.replayId);
-    switch (messageReplay.typeMessage) {
-      case "text":
-        return Container(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Container(
           height: Sizer.getW(context) * 0.2,
           padding: EdgeInsets.all(AppPadding.p8),
           decoration: BoxDecoration(
@@ -998,177 +880,15 @@ class _ChatViewState extends State<ChatView> {
                 color: Theme.of(context).primaryColor.withOpacity(.5),
               ),
               Flexible(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      ("${receiveReplayname(message: message)}"),
-                      style: getBoldStyle(color: ColorManager.blackGray),
-                    ),
-                    const SizedBox(
-                      height: AppSize.s4,
-                    ),
-                    Text(
-                      messageReplay.textMessage,
-                      //"gjgjhghnghmjqhvsjvsjdhvjsvdjcvjsvdjcvsjcdvjsdhvjscvjdsvdscjvdcsjcdvsjdcsv",
-                      overflow: TextOverflow.ellipsis,
-
-                      ///"${messageReplay.url}",
-                    )
-                  ],
-                ),
-              )
-            ],
-          ),
-        );
-      case "image":
-        return Container(
-          height: Sizer.getW(context) * 0.25,
-          padding: EdgeInsets.all(AppPadding.p8),
-          decoration: BoxDecoration(
-            color: ColorManager.lightGray.withOpacity(.5),
-            borderRadius: BorderRadius.circular(AppSize.s8),
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              VerticalDivider(
-                thickness: AppSize.s4,
-                color: Theme.of(context).primaryColor.withOpacity(.5),
+                child: buildrReplayChat(messageReplay: messageReplay),
               ),
-              Flexible(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Text(
-                      ("${receiveReplayname(message: message)}"),
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                    SizedBox(
-                      width: Sizer.getW(context) * 0.02,
-                    ),
-                    Row(
-                      children: [
-                        CachedNetworkImage(
-                          fit: BoxFit.fill,
-                          width: Sizer.getW(context) * 0.1,
-                          height: Sizer.getW(context) * 0.1,
-                          imageUrl:
-                              // "${AppUrl.baseUrlImage}${widget.restaurant.imageLogo!}",
-                              // "${messageReplay.textMessage}",
-                              "${messageReplay.url}",
-
-                          /// "${AppConstants.photoGroup}",
-                          imageBuilder: (context, imageProvider) => Container(
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                image: imageProvider,
-                                fit: BoxFit.cover,
-                                //    colorFilter: ColorFilter.mode(Colors.red, BlendMode.colorBurn)
-                              ),
-                            ),
-                          ),
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) => FlutterLogo(),
-                        ),
-                        SizedBox(
-                          width: Sizer.getW(context) * 0.01,
-                        ),
-                        Text(
-                          "photo",
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              )
             ],
           ),
-        );
-      case "file":
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  ("${receiveReplayname(message: message)}"),
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                SizedBox(
-                  height: Sizer.getW(context) * 0.01,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      "attatchment",
-                    ),
-                    SizedBox(
-                      width: Sizer.getW(context) * 0.01,
-                    ),
-                    Icon(Icons.attach_file)
-                  ],
-                )
-              ],
-            ),
-          ],
-        );
-      case "audio":
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: Sizer.getW(context) * 0.01,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Voice message",
-                ),
-                SizedBox(
-                  width: Sizer.getW(context) * 0.01,
-                ),
-                Icon(Icons.keyboard_voice_outlined)
-              ],
-            ),
-          ],
-        );
-      case "video":
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              ("${(homeProvider.cacheUser.containsKey(chatProvider.messageReplay.senderId) ? homeProvider.cacheUser[chatProvider.messageReplay.senderId] : "")}"),
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: Sizer.getW(context) * 0.01,
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  "Video message",
-                ),
-                SizedBox(
-                  width: Sizer.getW(context) * 0.01,
-                ),
-                Icon(Icons.video_collection_outlined)
-              ],
-            ),
-          ],
-        );
-    }
-    return SizedBox();
+        ),
+        SizedBox(height:AppSize.s8 ,)
+      ],
+    );
+
   }
 
   ///function
@@ -1209,7 +929,7 @@ class _ChatViewState extends State<ChatView> {
   }
 
   ///==================================================================
-  receiveReplay({required Message message}) {
+  String receiveReplay({required Message message}) {
     String textReplay = "delete_message";
     for (Message element in chatProvider.group.chat.messages) {
       if (element.id.contains(message.replayId)) {
@@ -1285,7 +1005,6 @@ class _ChatViewState extends State<ChatView> {
 
   Widget receiveText({required bool isReplay, required Message message}) {
     Widget childWidget;
-
     /// String replaytext = receiveReplay(message: message);
     if (isReplay) {
       childWidget = SwipeTo(
@@ -1358,59 +1077,28 @@ class _ChatViewState extends State<ChatView> {
   Widget receiveFile({required bool isReplay, required Message message}) {
     Widget childWidget;
     String replaytext = receiveReplay(message: message);
-    if (isReplay) {
+
       childWidget = SwipeTo(
           onRightSwipe: () => onReplay(message: message),
-          child: BuildMessageShape(
-            //  isMe: true,
-            message: message,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                buildrReplayMessage(message: message),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: BuildMessageFile(message: message),
+          child: ChangeNotifierProvider<DownloaderProvider>.value(
+          value: downloaderProvider,
+          child: Consumer<DownloaderProvider>(
+          builder: (context, value, child) =>
+                      (value.checkCompleteDownload[message.id] != true)?
+                      BuildMessageFile(message: message,isReplay: isReplay)
+                    : BuildMessageFileLocal(message: message,isReplay: isReplay),
+
                   //Text(message.textMessage),
                   //  child: Text(con.text),
                 )
-              ],
-            ),
+
           ));
 
-      ///setState(() {});
-    } else
-      //list.add(
-      childWidget = SwipeTo(
-          onRightSwipe: () => onReplay(message: message),
-          child: BuildMessageShape(
-            //isMe: false,
-            message: message,
-            child: BuildMessageFile(message: message),
-          ));
-    //  );
     return childWidget;
   }
 
   Widget receiveAudio({required bool isReplay, required Message message}) {
     Widget childWidget;
-    if (isReplay) {
-      childWidget = SwipeTo(
-          onRightSwipe: () => onReplay(message: message),
-          child: Container(
-              margin: EdgeInsets.only(
-                top: AppMargin.m4,
-                bottom: AppMargin.m4,
-                //TODO check audio List Sender
-              ),
-              child: VoiceMessage(
-                key: Key(message.url),
-                audioSrc: message.url,
-                me: true,
-              )));
-
-      ///setState(() {});
-    } else
       childWidget = SwipeTo(
           onRightSwipe: () => onReplay(message: message),
           child: Container(
@@ -1424,126 +1112,12 @@ class _ChatViewState extends State<ChatView> {
                 value: downloaderProvider,
                 child: Consumer<DownloaderProvider>(
                     builder: (context, value, child) => (value
-                                .checkCompleteDownload[message.id] !=
-                            true)
-                        ? BuildMessageShape(
-                            message: message,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Row(
-                                  children: [
-                                    CircleAvatar(
-                                      child: SizedBox(
-                                        height: Sizer.getW(context) * 0.1,
-                                        child: CircleProgressBar(
-                                            strokeWidth: AppSize.s4,
-                                            value: value.downloadProgress[message
-                                                        .id] ==
-                                                    null
-                                                ? 0
-                                                : value.downloadProgress[
-                                                    message.id]!,
-                                            foregroundColor:
-                                                Theme.of(context).primaryColor,
-                                            child: value.checkClickDownload[
-                                                        message.id] ==
-                                                    true
-                                                ? Container(
-                                                    alignment: Alignment.center,
-                                                    padding: EdgeInsets.all(
-                                                        AppPadding.p4),
-                                                    decoration: BoxDecoration(
-                                                        color: Theme.of(context)
-                                                            .cardColor,
-                                                        shape: BoxShape.circle),
-                                                    child: Text(
-                                                      "${(value.downloadProgress[message.id]! * 100).toStringAsFixed(1)}%",
-                                                      style: getLightStyle(
-                                                          color: ColorManager
-                                                              .black,
-                                                          fontSize: AppSize.s8),
-                                                    ))
-                                                : GestureDetector(
-                                                    onTap: () => value
-                                                        .downloadFile(message),
-                                                    child: Container(
-                                                      padding: EdgeInsets.all(
-                                                          AppPadding.p10),
-                                                      child: SvgPicture.asset(
-                                                        ImagesAssets
-                                                            .download_audio,
-                                                        color:
-                                                            ColorManager.white,
-                                                      ),
-                                                    ),
-                                                  )
-                                            //     :IconButton(
-                                            //   icon: Icon(Icons.download_sharp),
-                                            //   onPressed: () {print("ffff");
-                                            //   value.downloadFile(message);
-                                            //   },
-                                            // ),
-                                            ),
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      width: AppSize.s10,
-                                    ),
-                                    Expanded(
-                                        child: Row(
-                                      children: List.generate(
-                                          25,
-                                          (index) => Container(
-                                                margin: EdgeInsets.symmetric(
-                                                    horizontal: AppSize.s1_5),
-                                                color: ColorManager.black,
-                                                width: AppSize.s1_5,
-                                                height: (index.isEven
-                                                    ? (index + 1) * .8
-                                                    : (index + 1) * .5),
-                                              )),
-                                    )),
-                                    // Flexible(
-                                    //   child: Text(
-                                    //       "g ${value.downloadProgress[message.id]}"
-                                    //           " ${value.checkCompleteDownload[message.id]}",
-                                    //     overflow: TextOverflow.ellipsis,
-                                    //   ),
-                                    // ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(AppPadding.p4),
-                                  //Todo الفلاتر عمتك ولاك
-                                  child: Text(
-                                    filesize(664365320),
-                                    style: getLightStyle(
-                                        color: ColorManager.black),
-                                  ),
-                                )
-                              ],
-                            ),
-                          )
-                        : BuildMessageShape(
-                            message: message,
-                            child: VoiceMessage(
-                              key: Key(
-                                  "${value.tempDir.path}/${message.textMessage}"),
-                              audioSrc:
-                                  "${value.tempDir.path}/${message.textMessage}",
-                              me: true,
-                            ),
-                          ))),
-
-            /** VoiceMessage(
-                key: Key(message.url),
-                audioSrc: message.url,
-                me: true,)
-
-                )**/
+                        .checkCompleteDownload[message.id] != true)
+                        ? BuildMessageAudio(value,message: message,isReplay: isReplay)
+                        : BuildMessageAudioLocal(value,message: message,isReplay: isReplay),
+                )),
           ));
+
     return childWidget;
   }
 
@@ -1620,7 +1194,7 @@ class _ChatViewState extends State<ChatView> {
             buildrReplayMessage(message: message),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: BuildMessageFile(message: message),
+              child: BuildMessageFile(message: message,isReplay: isReplay),
               //Text(message.textMessage),
               //  child: Text(con.text),
             )
@@ -1634,7 +1208,7 @@ class _ChatViewState extends State<ChatView> {
       childWidget = BuildMessageShape(
         //isMe: false,
         message: message,
-        child: BuildMessageFile(message: message),
+        child: BuildMessageFile(message: message,isReplay: isReplay),
       );
     //  );
     return childWidget;
@@ -1642,48 +1216,54 @@ class _ChatViewState extends State<ChatView> {
 
   Widget sendAudio({required bool isReplay, required Message message}) {
     Widget childWidget;
-    if (isReplay) {
-      childWidget = SwipeTo(
-          onRightSwipe: () => onReplay(message: message),
-          child: BuildMessageShape(
-              //  isMe: true,
-              message: message,
-              child: Container(
-                  margin: EdgeInsets.only(
-                      top: AppMargin.m4,
-                      bottom: AppMargin.m4,
-                      //TODO check audio List Sender
-                      left: Sizer.getW(context) / 2 - AppSize.s20),
-                  child: SizedBox()
-                  /*
-                   VoiceMessage(
-                     key: Key(path!),
-                     audioSrc: path,
-                     me: true,
-               */
-                  )));
-
-      ///setState(() {});
-    } else
-      childWidget = SwipeTo(
-          onRightSwipe: () => onReplay(message: message),
-          child: Container(
-              margin: EdgeInsets.only(
-                top: AppMargin.m4,
-                bottom: AppMargin.m4,
-                //TODO check audio List Sender
-                // left: Sizer.getW(context) / 2 - AppSize.s20
-              ),
-              child: BuildMessageShape(
-                message: message,
-                child: VoiceMessage(
-                  key: Key(message.url),
-                  audioSrc: message.url,
-                  me: true,
-                ),
-              )));
+      childWidget = BuildMessageAudioLocal(downloaderProvider,message: message,isReplay: isReplay);
     return childWidget;
   }
+
+  ///----------------------------------------------------------------------------
+
+  CircleAvatarDownload(value,{required Message message,required Widget iconDownload}){
+    return CircleAvatar(
+      child: SizedBox(
+        height: Sizer.getW(context) * 0.1,
+        child: CircleProgressBar(
+            strokeWidth: AppSize.s4,
+            value: value.downloadProgress[message.id] == null
+                ? 0
+                : value.downloadProgress[message.id]!,
+            foregroundColor:
+            Theme.of(context).primaryColor,
+            child: value.checkClickDownload[message.id] ==
+                true
+                ? Container(
+                alignment: Alignment.center,
+                padding: EdgeInsets.all(
+                    AppPadding.p4),
+                decoration: BoxDecoration(
+                    color: Theme.of(context)
+                        .cardColor,
+                    shape: BoxShape.circle),
+                child: Text(
+                  "${(value.downloadProgress[message.id]! * 100).toStringAsFixed(1)}%",
+                  style: getLightStyle(
+                      color: ColorManager
+                          .black,
+                      fontSize: AppSize.s8),
+                ))
+                : GestureDetector(
+              onTap: () => value
+                  .downloadFile(message),
+              child: Container(
+                padding: EdgeInsets.all(
+                    AppPadding.p10),
+                child: iconDownload,
+              ),
+            )
+        ),
+      ),
+    );
+  }
+
 
   ///----------------------------------------------------------------------------
 
@@ -1798,21 +1378,156 @@ class _ChatViewState extends State<ChatView> {
         ));
   }
 
-  BuildMessageFile({required Message message}) {
-    return Row(
+  BuildMessageFile({required Message message,required bool isReplay}) {
+    return
+      BuildMessageShape(
+        //  isMe: true,
+          message: message,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+              buildrReplayMessage(message: message),
+          Padding(
+          padding: const EdgeInsets.all(8.0),
+    child:
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
       children: [
-        CircleAvatar(
-            child: IconButton(
-                onPressed: () {
-                  OpenFile.open("${message.url}");
-                },
-                icon: Icon(Icons.download))),
-        const SizedBox(
-          width: AppSize.s8,
+        if(isReplay) buildrReplayMessage(message: message),
+        Row(
+          children: [
+            CircleAvatarDownload(downloaderProvider ,message: message,
+                iconDownload: Icon(Icons.download_sharp)
+            ),
+            const SizedBox(
+              width: AppSize.s10,
+            ),
+            Expanded(
+                child: Flexible(
+                    child: Text("${message.textMessage}" /*result.files[0].name*/)),),
+          ],
         ),
-        Flexible(
-            child: Text("${message.textMessage}" /*result.files[0].name*/)),
+        Padding(
+          padding: const EdgeInsets.all(AppPadding.p4),
+          //Todo الفلاتر عمتك ولاك
+          child: Text(
+            filesize(message.sizeFile),
+            style: getLightStyle(
+                color: ColorManager.black),
+          ),
+        )
       ],
+    )
+    )]));
+  }
+  BuildMessageFileLocal({required Message message,required bool isReplay}) {
+    return BuildMessageShape(
+      //  isMe: true,
+        message: message,
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              buildrReplayMessage(message: message),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child:
+      Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if(isReplay) buildrReplayMessage(message: message),
+        Row(
+          children: [
+            Icon(Icons.attach_file),
+            const SizedBox(
+              width: AppSize.s10,
+            ),
+            Expanded(
+              child: Flexible(
+                  child: Text("${message.textMessage}" /*result.files[0].name*/)),),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.all(AppPadding.p4),
+          //Todo الفلاتر عمتك ولاك
+          child: Text(
+            filesize(message.sizeFile),
+            style: getLightStyle(
+                color: ColorManager.black),
+          ),
+        )
+      ],
+    )
+    )]));
+  }
+
+  BuildMessageAudio(value,{required Message message, bool isReplay=false}) {
+    return BuildMessageShape(
+      message: message,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if(isReplay) buildrReplayMessage(message: message),
+          Row(
+            children: [
+              CircleAvatarDownload(value ,message: message,
+              iconDownload: SvgPicture.asset(
+                ImagesAssets
+                    .download_audio,
+                color:
+                ColorManager.white,
+              )),
+              const SizedBox(
+                width: AppSize.s10,
+              ),
+              Expanded(
+                  child: Row(
+                    children: List.generate(
+                        25,
+                            (index) => Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: AppSize.s1_5),
+                          color: ColorManager.black,
+                          width: AppSize.s1_5,
+                          height: (index.isEven
+                              ? (index + 1) * .8
+                              : (index + 1) * .5),
+                        )),
+                  )),
+            ],
+          ),
+          Padding(
+            padding: const EdgeInsets.all(AppPadding.p4),
+            //Todo الفلاتر عمتك ولاك
+            child: Text(
+              filesize(message.sizeFile),
+              style: getLightStyle(
+                  color: ColorManager.black),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+  BuildMessageAudioLocal(value,{required Message message,bool isReplay=false}) {
+    return BuildMessageShape(
+      message: message,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if(isReplay) buildrReplayMessage(message: message),
+          VoiceMessage(
+            key: Key(
+                "${value.tempDir.path}/${message.textMessage}"),
+            audioSrc:
+            "${value.tempDir.path}/${message.textMessage}",
+            me: true,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -1872,6 +1587,7 @@ class _DisplayVideoState extends State<DisplayVideo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: const Text('Video')),
       body: FutureBuilder(
         future: _initializeVideoPlayerFuture,
         builder: (context, snapshot) {

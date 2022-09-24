@@ -164,7 +164,9 @@ class Message {
   bool checkSend;
   int index;
   String textMessage;
+  int sizeFile;
   String url;
+  String urlTempPhoto;
   String localUrl;
   String typeMessage;
   String senderId;
@@ -174,9 +176,11 @@ class Message {
   Message(
       {this.id="",
       this.index=-1,
+      this.sizeFile=0,
       this.checkSend=true,
       required this.textMessage,
        this.url="",
+       this.urlTempPhoto="",
        this.localUrl="",
         required this.replayId,
       required this.typeMessage,
@@ -196,6 +200,14 @@ class Message {
     if(json.data().containsKey("localUrl")){
       tempLocalUrl=json["localUrl"];
     }
+    int tempSizeFile=0;
+    if(json.data().containsKey("sizeFile")){
+      tempSizeFile=json["sizeFile"];
+    }
+    String tempUrlTempPhoto="";
+    if(json.data().containsKey("urlTempPhoto")){
+      tempUrlTempPhoto=json["urlTempPhoto"];
+    }
     return Message(
       url: tempUrl,
         localUrl: tempLocalUrl,
@@ -204,6 +216,8 @@ class Message {
         sendingTime: json["sendingTime"].toDate(),
         senderId: json["senderId"],
         deleteUserMessage: tempDeleteUserMessage,
+        urlTempPhoto: tempUrlTempPhoto,
+        sizeFile: tempSizeFile,
     replayId: json["replayId"]);
   }
   Map<String,dynamic> toJson() {
@@ -216,6 +230,8 @@ class Message {
       'typeMessage': typeMessage,
       'sendingTime': sendingTime,
       'deleteUserMessage': tempDeleteUserMessage,
+      'urlTempPhoto': urlTempPhoto,
+      'sizeFile': sizeFile,
       'senderId': senderId,
       'replayId': replayId,
       'url': url,

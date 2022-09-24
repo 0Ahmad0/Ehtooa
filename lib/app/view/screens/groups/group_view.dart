@@ -62,7 +62,7 @@ class GroupsView extends StatelessWidget {
                     onTap: (){
                     //  print("${groupsProvider.groups.groups[index].nameAr} ${groupsProvider.groups.groups[index].chat.messages.length}");
                       chatProvider.group=groupsProvider.groups.groups[index];
-                      print("chat : ${groupsProvider.groups.groups[index].chat.id}");
+                     // print("chat : ${groupsProvider.groups.groups[index].chat.id}");
                       ///(value.groups.groups[index].listBlockUsers.contains(profileProvider.user.id))?
                          /// Const.TOAST(context,textToast: "لقد تم حظرك من هذه المجموعة"):
                       Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ChatView()));
