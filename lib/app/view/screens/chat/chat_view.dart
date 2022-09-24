@@ -426,6 +426,7 @@ class _ChatViewState extends State<ChatView> {
         url: "",
         replayId: chatProvider.replayIdMessage,
         typeMessage: "image",
+        sizeFile: details.selectedFile.lengthSync(),
         senderId: profileProvider.user.id,
         deleteUserMessage: [],
         sendingTime: DateTime.now(),
@@ -619,6 +620,7 @@ class _ChatViewState extends State<ChatView> {
 
                       for (File file in files) {
                         ///add local message
+                        tempMessage.sizeFile = file.lengthSync();
                         tempMessage.textMessage =
                             chatProvider.findbasename(file.path);
                         tempMessage.url = file.path;
@@ -1184,32 +1186,7 @@ class _ChatViewState extends State<ChatView> {
   Widget sendFile({required bool isReplay, required Message message}) {
     Widget childWidget;
     String replaytext = receiveReplay(message: message);
-    if (isReplay) {
-      childWidget = BuildMessageShape(
-        //  isMe: true,
-        message: message,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            buildrReplayMessage(message: message),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: BuildMessageFile(message: message,isReplay: isReplay),
-              //Text(message.textMessage),
-              //  child: Text(con.text),
-            )
-          ],
-        ),
-      );
-
-      ///setState(() {});
-    } else
-      //list.add(
-      childWidget = BuildMessageShape(
-        //isMe: false,
-        message: message,
-        child: BuildMessageFile(message: message,isReplay: isReplay),
-      );
+      childWidget = BuildMessageFileLocal(message: message,isReplay: isReplay);
     //  );
     return childWidget;
   }
