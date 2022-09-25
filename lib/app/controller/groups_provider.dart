@@ -15,6 +15,7 @@ import '../model/models.dart';
 import '../model/utils/const.dart';
 import '../view/resources/consts_manager.dart';
 import '../view/screens/questions/questions_view.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class GroupsProvider with ChangeNotifier{
   models.Groups groups=models.Groups(groups: []);
@@ -50,7 +51,7 @@ class GroupsProvider with ChangeNotifier{
         return Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-        Text("photo"),
+        Text("${tr(LocaleKeys.photo)}"),
             SizedBox(width: AppSize.s4,),
             Icon(Icons.image)
         ],);
@@ -58,7 +59,7 @@ class GroupsProvider with ChangeNotifier{
        return Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("video"),
+            Text(tr(LocaleKeys.video)),
             SizedBox(width: AppSize.s4,),
             Icon(Icons.video_collection)
           ],);
@@ -67,15 +68,15 @@ class GroupsProvider with ChangeNotifier{
         return Row(
          // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("voice"),
+            Text(tr(LocaleKeys.voice_message)),
             SizedBox(width: AppSize.s4,),
             Icon(Icons.keyboard_voice_outlined)
           ],);
       case "file":
         return Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+         // crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text("file"),
+            Text(tr(LocaleKeys.attatchment)),
             SizedBox(width: AppSize.s4,),
             Icon(Icons.attach_file)
           ],);

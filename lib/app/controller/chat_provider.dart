@@ -20,7 +20,7 @@ class ChatProvider with ChangeNotifier{
  String replayIdMessage="";
  models.Message messageReplay=models.Message(textMessage: "", replayId: "", typeMessage: "", senderId: "", deleteUserMessage: [], sendingTime: DateTime.now());
  bool isReplay = false;
-
+ static String idGroup="";
 
  changeReplayMessage({required String? replayMessage}){
    this.replayMessage=replayMessage;

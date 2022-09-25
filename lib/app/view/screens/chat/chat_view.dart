@@ -74,19 +74,31 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      chatProvider = Provider.of<ChatProvider>(context, listen: false);
-      getChat = FirebaseFirestore.instance
-          .collection(AppConstants.collectionGroup)
-       .doc("taoId1xj5dSDNEoaYlFd")
-         // .doc(chatProvider.group.id)
-          .collection(AppConstants.collectionChat)
-          .orderBy("sendingTime")
-          .snapshots();
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+    //   chatProvider = Provider.of<ChatProvider>(context, listen: false);
+    //   getChat = FirebaseFirestore.instance
+    //       .collection(AppConstants.collectionGroup)
+    //    .doc("taoId1xj5dSDNEoaYlFd")
+    //   // .doc(ChatProvider.idGroup)
+    //      // .doc(chatProvider.group.id)
+    //       .collection(AppConstants.collectionChat)
+    //       .orderBy("sendingTime")
+    //       .snapshots();
+    // });
+    getChatFuc();
     super.initState();
   }
-
+getChatFuc(){
+  getChat = FirebaseFirestore.instance
+      .collection(AppConstants.collectionGroup)
+  //    .doc("taoId1xj5dSDNEoaYlFd")
+   .doc(ChatProvider.idGroup)
+  // .doc(chatProvider.group.id)
+      .collection(AppConstants.collectionChat)
+      .orderBy("sendingTime")
+      .snapshots();
+  return getChat;
+}
   @override
   Widget build(BuildContext context) {
     profileProvider = Provider.of<ProfileProvider>(context);
