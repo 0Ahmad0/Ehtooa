@@ -12,7 +12,7 @@ class AddDoctorProvider with ChangeNotifier{
   final description = TextEditingController();
   final serialNumber = TextEditingController();
   final phoneNumber = TextEditingController();
-
+  var setState2;
   models.User user= models.User(id: "id",uid: "uid", name: "name", email: "email", phoneNumber: "phoneNumber", password: "password",photoUrl: "photoUrl",typeUser: "typeUser",listUsedQuizzes: [false,false,false,false]);
    addDoctor(context) async{
    var result =await FirebaseFun.signup(email: emailDoctor.text, password: passWord.text);

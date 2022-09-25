@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:animate_do/animate_do.dart';
+import 'package:ehtooa/app/controller/add_doctor_provider.dart';
 import 'package:ehtooa/app/controller/groups_provider.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/controller/payment_provider.dart';
@@ -150,6 +151,7 @@ class HomeView extends StatelessWidget {
     final homeProvider = Provider.of<HomeProvider>(context);
     final groupsProvider = Provider.of<GroupsProvider>(context);
     final paymentProvider = Provider.of<PaymentProvider>(context);
+    final addDoctorProvider = Provider.of<AddDoctorProvider>(context);
     homeProvider.search = "";
     return Container(
       child: StatefulBuilder(builder: (_, setState1) {
@@ -747,7 +749,10 @@ class HomeView extends StatelessWidget {
                 ],
               ),
             ),
-            FutureBuilder(
+            StatefulBuilder(builder: (_, setState2) {
+              addDoctorProvider.setState2 = setState2;
+             // homeProvider.setState2=setState2;
+           return FutureBuilder(
               future: homeProvider.fetchDoctors(context),
               builder: (
                 context,
@@ -779,7 +784,8 @@ class HomeView extends StatelessWidget {
                             ImagesAssets.noDataFound,
                           ));
                     }else
-                    return Expanded(
+                    return
+                      Expanded(
                         child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: homeProvider.doctors.users.length,
@@ -868,7 +874,9 @@ class HomeView extends StatelessWidget {
                   return Text('State: ${snapshot.connectionState}');
                 }
               },
-            ),
+            );
+
+             })
           ],
         );
       }),

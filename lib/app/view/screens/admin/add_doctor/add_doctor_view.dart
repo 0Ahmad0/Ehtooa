@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ehtooa/app/controller/add_doctor_provider.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
@@ -12,6 +14,8 @@ import 'package:get/get.dart';
 import '../../../../model/utils/const.dart';
 import '../../../../model/utils/sizer.dart';
 import 'package:provider/provider.dart';
+
+import '../../../resources/consts_manager.dart';
 class AddDoctorView extends StatelessWidget {
  /* final formKey = GlobalKey<FormState>();
   final emailDoctor = TextEditingController();
@@ -142,6 +146,8 @@ class AddDoctorView extends StatelessWidget {
                     final result =await value.addDoctor(context);
                     Navigator.of(context).pop();
                     if(result['status']){
+
+                      addDoctorProvider.setState2((){});
                       Navigator.of(context).pop();
 
                     }
