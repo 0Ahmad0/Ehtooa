@@ -26,7 +26,7 @@
     <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" tools:node="remove" />
 
    <application
-        android:label="ehtooa"
+        android:label="Ehtooa"
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/ic_launcher">
