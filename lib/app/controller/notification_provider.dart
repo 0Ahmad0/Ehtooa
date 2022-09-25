@@ -25,10 +25,12 @@ class NotificationProvider with ChangeNotifier{
       return await fetchSessionsToUser(context, groups: groups, paySession: paySession, idUser: idUser);
     }else if(typeUser.contains(AppConstants.collectionDoctor)){
       return await fetchSessionsToDoctor(context, idUser: idUser);
+    }else if(typeUser.contains(AppConstants.collectionAdmin)){
+      return await fetchSessionsToAdmin(context);
     }else
       return await fetchSessionsToAdmin(context);
   }
-  fetchSessionsToUser(context,{required List groups,required PaySession paySession,required idUser}) async {
+  fetchSessionsToUser(context,{required List groups,required PaySession paySession,required String idUser}) async {
     List idGroups=[];
     for(models.Group group in groups){
       idGroups.add(group.id);
@@ -39,14 +41,14 @@ class NotificationProvider with ChangeNotifier{
     if(result['status']){
       sessions=models.Sessions.fromJson(result['body']);
       sessionsToUser=[];
-      await processessionsToUser(context,groupsUser:  groups, paySession: paySession);
+      await processessionsToUser(context,groupsUser: groups, paySession: paySession);
     }
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
-  fetchSessionsToDoctor(context,{required String idUser}) async {
-    this.idUser=idUser;
-    var result =await FirebaseFun.fetchSessionsToDoctor(idUser: idUser);
+  fetchSessionsToAdmin(context) async {
+
+    var result =await FirebaseFun.fetchSessions();
     print(result);
     if(result['status']){
       sessions=models.Sessions.fromJson(result['body']);
@@ -56,9 +58,9 @@ class NotificationProvider with ChangeNotifier{
     (!result['status'])?Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString())):"";
     return result;
   }
-  fetchSessionsToAdmin(context) async {
-
-    var result =await FirebaseFun.fetchSessions();
+  fetchSessionsToDoctor(context,{required String idUser}) async {
+    this.idUser=idUser;
+    var result =await FirebaseFun.fetchSessionsToDoctor(idUser: idUser);
     print(result);
     if(result['status']){
       sessions=models.Sessions.fromJson(result['body']);
