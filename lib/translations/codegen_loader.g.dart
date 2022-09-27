@@ -20,7 +20,7 @@ class CodegenLoader extends AssetLoader{
   "session_link": "رابط الجلسة التفاعلية",
   "description": "نبذة عن الأخصائي",
   "valid_session": "أدخل رابط جلسة صالح",
-  "serial_number": "الرقم التسلسلي",
+  "serial_number": "رقم الرخصة الطبية",
   "on_boarding1": "تطبيق احتواء يقدم لك\nالرعاية الكاملة لصحتك العقلية",
   "on_boarding2": "احصل على المساعدة \nفي أي وقت وعندما تحتاج",
   "on_boarding3": "الرعاية الذاتية وصحتك النفسية\nتأتي أولا",
@@ -85,7 +85,7 @@ class CodegenLoader extends AssetLoader{
   "yes": "نعم",
   "no": "لا",
   "payment": "الدفع",
-  "card_number": "رقم البطاقة",
+  "card_number": "رقم الرخصة الطبية",
   "valid_card_number": "أدخل رقم بطاقة صالح",
   "cvv": "رمز الأمان",
   "valid_cvv": "أدخل رمز أمان صالح",
@@ -265,7 +265,8 @@ class CodegenLoader extends AssetLoader{
   "photo": "صورة",
   "attatchment": "ملف",
   "voice_message": "رسالة صوتية",
-  "message": "رسالتك"
+  "message": "رسالتك",
+  "start_session": "قد بدأ"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Specialist name",
@@ -356,6 +357,7 @@ static const Map<String,dynamic> en = {
   "title_intro_questions": "Your answer will help us determine \n the level of your mental health",
   "complete_answer": "All questions answered\nAnd your result is",
   "add_to_group": "Will be added to the allotment\n Which is supervised by a group of specialists and specialists in the field of psychiatry\n And start the therapeutic movement",
+  "start_session": "has started",
   "toast": "",
   "toast_successfully_created": "Account successfully created",
   "toast_Unsuccessfully_created": "Account Unsuccessfully created",

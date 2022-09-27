@@ -97,12 +97,20 @@ class ChatProvider with ChangeNotifier{
        message:message);
    print(result);
    result['status']??Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+   ///if(result['status']){
+   ///  await _saveLocalFile(message.localUrl,result['body']['id']);
+ ///  }
    /*group =models.Group.fromJson(result['body']);
    group.nameAr="اسم5";
    result =await FirebaseFun.updateGroup(group:group,id: "IbflFmPwFv1rETwfbVRK");*/
    return result;
  }
-
+ Future<File> _saveLocalFile(String localUrl,String id) async {
+   final tempDir= await getTemporaryDirectory();
+   final path = "${tempDir.path}/${id}";
+   final file = File('$path');
+   return file.writeAsString(localUrl);
+ }
  deleteMessage(context, {required models.Message message,required String idUser}) async {
    if(message.senderId.contains(idUser)){
      return await deleteAllMessage(context,message: message);

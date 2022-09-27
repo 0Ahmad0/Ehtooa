@@ -76,6 +76,7 @@ class GroupsView extends StatelessWidget {
                     leading: Transform.scale(
                       scale: 1.5,
                       child: CircleAvatar(
+                        backgroundColor: Theme.of(context).cardColor,
                         child: CachedNetworkImage(
                           fit: BoxFit.fill,
                           width: Sizer.getW(context) * 0.1,

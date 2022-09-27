@@ -222,6 +222,7 @@ ThemeData getApplicationTheme({bool isDark = false}){
       ),
     ),
     appBarTheme: AppBarTheme(
+        backgroundColor: Colors.blue[300],
         centerTitle: true,
         elevation: AppSize.s4,
         titleTextStyle: getRegularStyle(
