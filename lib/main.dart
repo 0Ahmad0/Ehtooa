@@ -74,7 +74,7 @@ Future<void> main() async{
         Locale("en"),
         Locale("ar"),
       ],
-      fallbackLocale: Locale("ar"),
+      fallbackLocale: Locale("en"),
       assetLoader: CodegenLoader(),
       child: MyApp(),
     ),

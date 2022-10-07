@@ -25,6 +25,8 @@ class HomeProvider with ChangeNotifier{
   String idUser="";
   String search="";
   var setState3;
+  var setState2;
+ static bool isUpdate=false;
   fetchDoctors(context) async {
     var result =await FirebaseFun.fetchDoctors();
     print(result);

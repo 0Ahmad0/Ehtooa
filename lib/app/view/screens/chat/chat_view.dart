@@ -74,17 +74,6 @@ class _ChatViewState extends State<ChatView> {
 
   @override
   void initState() {
-    // WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-    //   chatProvider = Provider.of<ChatProvider>(context, listen: false);
-    //   getChat = FirebaseFirestore.instance
-    //       .collection(AppConstants.collectionGroup)
-    //    .doc("taoId1xj5dSDNEoaYlFd")
-    //   // .doc(ChatProvider.idGroup)
-    //      // .doc(chatProvider.group.id)
-    //       .collection(AppConstants.collectionChat)
-    //       .orderBy("sendingTime")
-    //       .snapshots();
-    // });
     getChatFuc();
     super.initState();
   }
@@ -108,6 +97,7 @@ getChatFuc(){
     fetchTempDir();
     widthImageChat = Sizer.getW(context) * 0.30;
     return Scaffold(
+
       appBar: AppBar(
         titleSpacing: 1,
         title: ListTile(
@@ -473,13 +463,13 @@ getChatFuc(){
           sendingTime: DateTime.now(),
           checkSend: false);
     } else {
-      Navigator.push(
+      /*Navigator.push(
           context,
           MaterialPageRoute(
               builder: (ctx) => DisplayVideo(
                     video: details.selectedFile,
                     aspectRatio: 16.0,
-                  )));
+                  )));*/
       Message tempMessage = Message(
           textMessage: chatProvider.findbasename(details.selectedFile.path),
           url: "",
@@ -601,34 +591,6 @@ getChatFuc(){
                       if (chatProvider.isReplay) {
                         tempMessage.replayId = chatProvider.replayIdMessage;
                       }
-                      list.add(Container(
-                        margin: EdgeInsets.only(
-                          top: AppMargin.m4,
-                          bottom: AppMargin.m4,
-                          // right: Sizer.getW(context) /2 -20.0,
-                          left: Sizer.getW(context) / 2 - 20.0,
-                        ),
-                        color: Theme.of(context).primaryColor.withOpacity(.2),
-                        padding: EdgeInsets.all(AppPadding.p8),
-                        child: Container(
-                          padding: EdgeInsets.all(AppPadding.p4),
-                          decoration: BoxDecoration(
-                              color: ColorManager.blackGray.withOpacity(.5),
-                              borderRadius: BorderRadius.circular(AppSize.s8)),
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                  child: IconButton(
-                                      onPressed: () {},
-                                      icon: Icon(Icons.download))),
-                              const SizedBox(
-                                width: AppSize.s8,
-                              ),
-                              Flexible(child: Text(result.files[0].name)),
-                            ],
-                          ),
-                        ),
-                      ));
                       // Not sure if I should only get file path or complete data (this was in package documentation)
                       List<File> files =
                           result.paths.map((path) => File(path!)).toList();
@@ -639,6 +601,7 @@ getChatFuc(){
                         tempMessage.textMessage =
                             chatProvider.findbasename(file.path);
                         tempMessage.url = file.path;
+                        tempMessage.localUrl = file.path;
                         listSendMessage.add(tempMessage);
                         setState3(() {});
                         chatProvider.replayIdMessage = "";
@@ -651,7 +614,7 @@ getChatFuc(){
 
                         ///remove local message
                         listSendMessage.remove(tempMessage);
-                        await chatProvider.addMessage(context,
+                        var result= await chatProvider.addMessage(context,
                             idGroup: chatProvider.group.id,
                             message: tempMessage);
                       }
@@ -1146,7 +1109,6 @@ getChatFuc(){
                             message: message, isReplay: isReplay),
               )),
         ));
-
     return childWidget;
   }
 
@@ -1854,8 +1816,9 @@ class BuildMessageShape extends StatelessWidget {
     //print(homeProvider.cacheUser);
     return InkWell(
       onLongPress: () async {
-        (!chatProvider.checkBlockUserInGroup(idUser: profileProvider.user.id))
-            ? Get.defaultDialog(
+        ///double checkKey=MediaQuery.of(context).viewInsets.bottom;
+        if (!chatProvider.checkBlockUserInGroup(idUser: profileProvider.user.id))
+            { Get.defaultDialog(
                 titleStyle: getBoldStyle(
                     color: Theme.of(context).textTheme.bodyText1!.color,
                     fontSize: Sizer.getW(context) / 22),
@@ -1898,8 +1861,9 @@ class BuildMessageShape extends StatelessWidget {
                 ),
                 title: tr(LocaleKeys.are_you_sure),
                 radius: AppSize.s14,
-              )
-            : SizedBox();
+              );
+            }
+           // : SizedBox();
 
         ///TODO add SHOWDELETEDIALOOG
 
