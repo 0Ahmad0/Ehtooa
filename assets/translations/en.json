@@ -51,7 +51,7 @@
   "result": "Result",
   "field_required": "This field is required",
   "enter_valid_email": "Enter valid email",
-  "enter_password": "Enter password length more than 6",
+  "enter_password": "Enter password > 8 and strong",
   "enter_phoneNumber": "Enter valid Phone Number",
   "confirm_password_match": "Password don't match ",
   "mental_health" : "mental health metrics",

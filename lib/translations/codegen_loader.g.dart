@@ -66,7 +66,7 @@ class CodegenLoader extends AssetLoader{
   "result": "النتيجة",
   "field_required": "هذا الحقل مطلوب",
   "enter_valid_email": "ادخل عنوان بريد صالح",
-  "enter_password": "ادخل كلمة مرور أكبر من 6 ",
+  "enter_password": "ادخل كلمة مرور أكبر من 8 وتحوي على حروف وارقام ",
   "enter_phoneNumber": "ادخل رقم هاتف صالح ",
   "confirm_password_match": "كلمة المرور غير متطابقة ",
   "get_started": "بدء الاستخدام",
@@ -265,8 +265,7 @@ class CodegenLoader extends AssetLoader{
   "photo": "صورة",
   "attatchment": "ملف",
   "voice_message": "رسالة صوتية",
-  "message": "رسالتك",
-  "start_session": "قد بدأ"
+  "message": "رسالتك"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Specialist name",
@@ -321,7 +320,7 @@ static const Map<String,dynamic> en = {
   "result": "Result",
   "field_required": "This field is required",
   "enter_valid_email": "Enter valid email",
-  "enter_password": "Enter password length more than 6",
+  "enter_password": "Enter password > 8 and strong",
   "enter_phoneNumber": "Enter valid Phone Number",
   "confirm_password_match": "Password don't match ",
   "mental_health": "mental health metrics",
@@ -357,7 +356,6 @@ static const Map<String,dynamic> en = {
   "title_intro_questions": "Your answer will help us determine \n the level of your mental health",
   "complete_answer": "All questions answered\nAnd your result is",
   "add_to_group": "Will be added to the allotment\n Which is supervised by a group of specialists and specialists in the field of psychiatry\n And start the therapeutic movement",
-  "start_session": "has started",
   "toast": "",
   "toast_successfully_created": "Account successfully created",
   "toast_Unsuccessfully_created": "Account Unsuccessfully created",

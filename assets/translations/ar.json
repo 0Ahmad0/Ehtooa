@@ -50,7 +50,7 @@
   "result": "النتيجة",
   "field_required": "هذا الحقل مطلوب",
   "enter_valid_email": "ادخل عنوان بريد صالح",
-  "enter_password": "ادخل كلمة مرور أكبر من 6 ",
+  "enter_password": "ادخل كلمة مرور أكبر من 8 وتحوي على حروف وارقام ",
   "enter_phoneNumber": "ادخل رقم هاتف صالح ",
   "confirm_password_match": "كلمة المرور غير متطابقة ",
   "get_started": "بدء الاستخدام",

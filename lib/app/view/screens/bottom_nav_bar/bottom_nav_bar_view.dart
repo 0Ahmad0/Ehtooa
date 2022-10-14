@@ -167,6 +167,7 @@ class _BottomNavBarViewState extends State<BottomNavBarView> {
                     thickness: AppSize.s1_5,
                     height: 0.0,
                   ),
+                  if(!(profileProvider.user.typeUser.contains(AppConstants.collectionAdmin)))
                   _buildListTile(
                     text: tr(LocaleKeys.rate),
                     icon: Icons.star_rate,

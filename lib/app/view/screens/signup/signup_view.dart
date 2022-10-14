@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
@@ -14,15 +16,31 @@ import 'package:ehtooa/app/view/widgets/custome_button.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:ehtooa/app/view/widgets/custome_textfiled.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
+import 'package:firebase_auth/firebase_auth.dart' as fa;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:gallery_saver/files.dart';
 import 'package:get/get.dart';
 import '../../../controller/profile_provider.dart';
 import '../../../controller/signup_provider.dart';
 import '../../resources/values_manager.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
 
+// class GoogleAuthApi{
+//   static final _googleSignIn = gs.GoogleSignIn(
+//     scopes: ['https://mail.google.com/']
+//   );
+
+//   static Future<gs.GoogleSignInAccount?> signIn() async{
+//     if(await _googleSignIn.isSignedIn()){
+//       return _googleSignIn.currentUser;
+//     }else{
+//    return await _googleSignIn.signIn(); 
+//     }
+//   }
+// }
 class SignupView extends StatelessWidget {
  /*
   final name = TextEditingController();
@@ -32,6 +50,61 @@ class SignupView extends StatelessWidget {
   final confirmPassword = TextEditingController();
   final keyForm = GlobalKey<FormState>();
 */
+  
+  RegExp regex =
+  RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+  bool validatePassword(String value) {
+      return regex.hasMatch(value);
+  }
+Future sendEmail({
+  required String name,
+  required String to_email,
+  required String email,
+  required String subject,
+  required String message,
+
+}) async{
+  final String serviceId = 'service_1b7n216';
+  final String templateId = 'template_bwbb2gl';
+  final String userId = 'OnQAsiufryEHC1ebv';
+  final String accessToken = 'HrjCURB0usRCgye-S2qZ4';
+
+final url = Uri.parse("https://api.emailjs.com/api/v1.0/email/send");
+Map<String,dynamic> body={
+  
+   'service_id':serviceId.toString(),
+    'template_id': templateId.toString(),
+    'user_id': 'OnQAsiufryEHC1ebv',
+    'template_params':{
+      'user_name': name.toString(),
+      'to_email' :to_email.toString(),
+      'user_email':email.toString(),
+      'user_subject':subject.toString(),
+      'user_message':message.toString()
+    },
+    'accessToken' : accessToken.toString()
+    };
+final response = await http.post(
+  url,
+
+  headers: {
+    "Accept": "Application/json",
+    'origin': 'http://localhost',
+    'Connect-Type':'application/json'
+    },
+  body: json.encode(body)
+  
+);
+print("*******************************************************");
+print("*******************************************************");
+print("*******************************************************");
+print(response.body);
+print("*******************************************************");
+print("*******************************************************");
+print("*******************************************************");
+
+}
+
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
@@ -145,7 +218,7 @@ class SignupView extends StatelessWidget {
                                 validator: (String? val) {
                                   if (val!.trim().isEmpty) {
                                     return tr(LocaleKeys.field_required);
-                                  } else if (val.length < 6) {
+                                  } else if (val.length < 8 || !validatePassword(val)) {
                                     return tr(LocaleKeys.enter_password);
                                   } else {
                                     return null;
@@ -216,7 +289,15 @@ class SignupView extends StatelessWidget {
                               final result =await signupProvider.signup(context);
                               Navigator.of(context).pop();
                               if(result['status']){
+                                await sendEmail(
+                                  name: profileProvider.name.text,
+                                   to_email: profileProvider.email.text,
+                                    email: "ehtooaapp@gmail.com",
+                                    message : "مرحبا بك في تطبيق احتواء \n نتمنى لكم تجربة ممتعة",
+                                      subject: "تطبيق احتواء"
+                                      );
                                 profileProvider.updateUser(user:User.fromJson(result['body']));
+
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (ctx) =>
