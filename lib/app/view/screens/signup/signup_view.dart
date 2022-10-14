@@ -71,10 +71,7 @@ Future sendEmail({
 
 final url = Uri.parse("https://api.emailjs.com/api/v1.0/email/send");
 Map<String,dynamic> body={
-  
-   'service_id':serviceId.toString(),
-    'template_id': templateId.toString(),
-    'user_id': 'OnQAsiufryEHC1ebv',
+    'key': userId.toString(),
     'template_params':{
       'user_name': name.toString(),
       'to_email' :to_email.toString(),
@@ -86,8 +83,9 @@ Map<String,dynamic> body={
     };
 final response = await http.post(
   url,
-
   headers: {
+    'service_id':serviceId.toString(),
+    'template_id': templateId.toString(),
     "Accept": "Application/json",
     'origin': 'http://localhost',
     'Connect-Type':'application/json'
