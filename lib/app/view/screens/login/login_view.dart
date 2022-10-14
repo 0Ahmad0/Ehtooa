@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:ehtooa/app/controller/groups_provider.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/controller/utils/create_environment_provider.dart';
@@ -203,7 +205,21 @@ class LoginView extends StatelessWidget {
                                             :FontConstance.fontFamilyAR
                                     )))
                               ],
-                            )
+                            ),
+                            ButtonApp(
+                              text: "Send", 
+                              onTap: () async{ 
+                                await sendEmail(
+                                  email: 'ehtooaapp@gmail.com', 
+                                  message: 'hello test',
+                                   name: 'Ehtooa App',
+                                    to_email: 'ah774129@gmail.com',
+                                     subject: 'Helllloooo lool ololoo'
+                                  
+                                );
+                               },
+                              
+                              )
                           ],
                         ),
                       )
@@ -217,4 +233,83 @@ class LoginView extends StatelessWidget {
     ),
     ));
   }
+  Future sendEmail({
+  required String name,
+  required String to_email,
+  required String email,
+  required String subject,
+  required String message,
+
+}) async{
+  final String serviceId = 'service_1b7n216';
+  final String templateId = 'template_bwbb2gl';
+  final String userId = 'OnQAsiufryEHC1ebv';
+  final String accessToken = 'HrjCURB0usRCgye-S2qZ4';
+
+final url = Uri.parse("https://api.nylas.com/a/ccpz604e9k0ntml6g1k608kbh/accounts/3wjgn426dnm36ycm8hme2ti2i/downgrade");
+Map<String,dynamic> body1 = {
+  "subject": "From Nylas",
+  "to": [
+    {
+      "email": "ah774129@gmail.com",
+      "name": "0Ahmad0 0Ahmad0"
+    }
+  ],
+  "from": [
+    {
+      "email": "ehtooaapp@gmail.com",
+      "name": "Ehtooa App"
+    }
+  ],
+  "body": "This email was sent using the Nylas email API. Visit https://nylas.com for details."
+};
+Map<String,dynamic> body={
+  'service_id':serviceId.toString(),
+    'template_id': templateId.toString(),
+    'user_id': userId.toString(),
+    'template_params':{
+      'user_name': name.toString(),
+      'to_email' :to_email.toString(),
+      'user_email':email.toString(),
+      'user_subject':subject.toString(),
+      'user_message':message.toString()
+    },
+    'accessToken' : accessToken.toString()
+    };
+    var token = '8SmaXcYnO1JNcMRkrHuaYir184RL7b';
+final response = await http.post(
+  url,
+  headers: {  
+    'Authorization': 'Bearer $token' 
+    },
+  body: json.encode({
+     "subject": "From Nylas",
+  "to": [
+    {
+      "email": "ehtooaapp@gmail.com",
+      "name": "0Ahmad0 0Ahmad0"
+    }
+  ],
+  "from": [
+    {
+      "email": "ehtooaapp@gmail.com",
+      "name": "0Ahmad0 0Ahmad0"
+    }
+  ],
+  "body": "This email was sent using the Nylas email API. Visit https://nylas.com for details."
+})
+  
+);
+print("*******************************************************");
+print("*******************************************************");
+print("*******************************************************");
+print(response.body);
+print(response.statusCode);
+// final r = await http.get(Uri.parse('https://api.nylas.com/messages?limit=100&unread=true'));
+// print(r.body);
+print("*******************************************************");
+print("*******************************************************");
+print("*******************************************************");
+
+}
 }
