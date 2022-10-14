@@ -77,7 +77,7 @@ class NotificationView extends StatelessWidget {
                                     const SizedBox(width: AppSize.s10,),
                                     Text(
                                       //"الجلسة العلاجية رقم ${index}"
-                                     "${tr(LocaleKeys.start_session)} ${notificationProvider.sessionsToUser[index].name}"
+                                     "${notificationProvider.sessionsToUser[index].name}"
                                       ,style: getRegularStyle(
                                         color: ColorManager.white,
                                         fontSize: Sizer.getW(context) / 24

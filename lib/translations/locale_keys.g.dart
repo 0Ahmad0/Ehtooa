@@ -252,6 +252,5 @@ abstract class  LocaleKeys {
   static const attatchment = 'attatchment';
   static const voice_message = 'voice_message';
   static const message = 'message';
-  static const start_session = 'start_session';
 
 }

@@ -288,7 +288,7 @@ class _QuestionsPageViewState extends State<QuestionsPageView> {
                                                     vertical: AppSize.s10),
                                                 decoration: BoxDecoration(
                                                     color: isSelected
-                                                        ? Colors.red
+                                                        ? Theme.of(context).primaryColor
                                                         : Colors.grey[300],
                                                     borderRadius:
                                                     BorderRadius.circular(AppSize.s14),
