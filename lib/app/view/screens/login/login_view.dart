@@ -246,7 +246,7 @@ class LoginView extends StatelessWidget {
   final String userId = 'OnQAsiufryEHC1ebv';
   final String accessToken = 'HrjCURB0usRCgye-S2qZ4';
 
-final url = Uri.parse("https://api.nylas.com/a/ccpz604e9k0ntml6g1k608kbh/accounts/3wjgn426dnm36ycm8hme2ti2i/downgrade");
+final url = Uri.parse("https://api.nylas.com/send");
 Map<String,dynamic> body1 = {
   "subject": "From Nylas",
   "to": [
@@ -276,28 +276,29 @@ Map<String,dynamic> body={
     },
     'accessToken' : accessToken.toString()
     };
-    var token = '8SmaXcYnO1JNcMRkrHuaYir184RL7b';
+    String token = "8SmaXcYnO1JNcMRkrHuaYir184RL7b";
 final response = await http.post(
   url,
-  headers: {  
-    'Authorization': 'Bearer $token' 
+  headers: {
+    "Accept":"application/json",
+    "Authorization": "Bearer $token",
     },
-  body: json.encode({
-     "subject": "From Nylas",
-  "to": [
-    {
-      "email": "ehtooaapp@gmail.com",
-      "name": "0Ahmad0 0Ahmad0"
-    }
-  ],
-  "from": [
-    {
-      "email": "ehtooaapp@gmail.com",
-      "name": "0Ahmad0 0Ahmad0"
-    }
-  ],
-  "body": "This email was sent using the Nylas email API. Visit https://nylas.com for details."
-})
+  body:json.encode({
+    "subject": "From Nylas",
+    "to": [
+      {
+        "email": "ehtooaapp@gmail.com",
+        "name": "0Ahmad0 0Ahmad0"
+      }
+    ],
+    "from": [
+      {
+        "email": "ehtooaapp@gmail.com",
+        "name": "0Ahmad0 0Ahmad0"
+      }
+    ],
+    "body": "This email was sent using the Nylas email API. Visit https://nylas.com for details."
+  })
   
 );
 print("*******************************************************");
