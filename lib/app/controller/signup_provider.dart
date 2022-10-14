@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:ehtooa/app/controller/utils/api_email.dart';
 import 'package:ehtooa/app/controller/utils/firebase.dart';
 import 'package:ehtooa/app/model/utils/local/storage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,12 +25,16 @@ class SignupProvider with ChangeNotifier{
      user= models.User(id: "",uid:result['body']['uid'], name: name.text, email: email.text, phoneNumber: phoneNumber.text, password: password.text,photoUrl: AppConstants.photoProfilePatient,typeUser: AppConstants.collectionPatient,listUsedQuizzes: [false,false,false,false]);
      result = await FirebaseFun.createUser(user: user);
      if(result['status']){
-
        await AppStorage.storageWrite(key: AppConstants.isLoginedKEY, value: true);
        await AppStorage.storageWrite(key: AppConstants.idKEY, value: user.uid);
        await AppStorage.storageWrite(key: AppConstants.uidKEY, value: user.uid);
        await AppStorage.storageWrite(key: AppConstants.tokenKEY, value: "resultUser['token']");
        Advance.isLogined = true;
+       SendEmail.sendEmail(
+        name: user.name,
+         to_email: user.email,
+          message: "مرحبا بك في تطبيق احتواء \n نتمنى لك تجربة ممتعة ❤️👌"
+          );
        user= models.User.fromJson(result['body']);
       // print(result);
 

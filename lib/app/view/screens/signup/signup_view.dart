@@ -56,52 +56,7 @@ class SignupView extends StatelessWidget {
   bool validatePassword(String value) {
       return regex.hasMatch(value);
   }
-Future sendEmail({
-  required String name,
-  required String to_email,
-  required String email,
-  required String subject,
-  required String message,
 
-}) async{
-  final String serviceId = 'service_1b7n216';
-  final String templateId = 'template_bwbb2gl';
-  final String userId = 'OnQAsiufryEHC1ebv';
-  final String accessToken = 'HrjCURB0usRCgye-S2qZ4';
-
-final url = Uri.parse("https://api.emailjs.com/api/v1.0/email/send");
-Map<String,dynamic> body={
-    'key': userId.toString(),
-    'template_params':{
-      'user_name': name.toString(),
-      'to_email' :to_email.toString(),
-      'user_email':email.toString(),
-      'user_subject':subject.toString(),
-      'user_message':message.toString()
-    },
-    'accessToken' : accessToken.toString()
-    };
-final response = await http.post(
-  url,
-  headers: {
-    'service_id':serviceId.toString(),
-    'template_id': templateId.toString(),
-    "Accept": "Application/json",
-    'origin': 'http://localhost',
-    'Connect-Type':'application/json'
-    },
-  body: json.encode(body)
-  
-);
-print("*******************************************************");
-print("*******************************************************");
-print("*******************************************************");
-print(response.body);
-print("*******************************************************");
-print("*******************************************************");
-print("*******************************************************");
-
-}
 
   @override
   Widget build(BuildContext context) {
@@ -287,15 +242,7 @@ print("*******************************************************");
                               final result =await signupProvider.signup(context);
                               Navigator.of(context).pop();
                               if(result['status']){
-                                await sendEmail(
-                                  name: profileProvider.name.text,
-                                   to_email: profileProvider.email.text,
-                                    email: "ehtooaapp@gmail.com",
-                                    message : "مرحبا بك في تطبيق احتواء \n نتمنى لكم تجربة ممتعة",
-                                      subject: "تطبيق احتواء"
-                                      );
                                 profileProvider.updateUser(user:User.fromJson(result['body']));
-
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (ctx) =>
