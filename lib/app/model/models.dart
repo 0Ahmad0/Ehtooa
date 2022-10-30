@@ -233,7 +233,6 @@ class Message {
       'deleteUserMessage': tempDeleteUserMessage,
       'urlTempPhoto': urlTempPhoto,
       'sizeFile': sizeFile,
-      'senderId': senderId,
       'replayId': replayId,
       'url': url,
       'localUrl': localUrl,

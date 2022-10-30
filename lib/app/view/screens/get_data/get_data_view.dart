@@ -66,8 +66,12 @@ temp(groupsProvider,profileProvider,homeProvider) async {
     final profileProvider = Provider.of<ProfileProvider>(context);
     final groupsProvider = Provider.of<GroupsProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
-
-    temp(groupsProvider,profileProvider,homeProvider);
+    Timer(Duration(milliseconds: 1), () async {
+      if(!profileProvider.isEmailUserVerified())
+       profileProvider.emailUserVerified(context);
+      else
+      temp(groupsProvider,profileProvider,homeProvider);
+    });
     return
         Scaffold(
         body: Center(

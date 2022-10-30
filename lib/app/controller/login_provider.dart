@@ -83,6 +83,20 @@ class LoginProvider with ChangeNotifier{
     }
     return result;
   }
+  ///To check is User is logged in
+  bool isEmailUserVerified()  {
+     final user=  FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      return false;
+    }
+    return user.emailVerified;
+  }
+  emailUserVerified() async {
+     print('isEmailVerified  ${isEmailUserVerified()}');
+     print('emdil  ${FirebaseAuth.instance.currentUser!.email}');
+     await FirebaseAuth.instance.currentUser!.sendEmailVerification();
+     print("code is send");
+  }
   onError(error){
     print(false);
     print(error);

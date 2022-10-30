@@ -76,6 +76,28 @@ class FirebaseFun{
       }
       return result;
    }
+   static emailUserVerified() async {
+     if(FirebaseAuth.instance.currentUser!.emailVerified){
+       return {
+         'status':true,
+         'message':'User Email Verified',
+         'body': ''
+       };
+     }else{
+       final result =await FirebaseAuth.instance.currentUser!.sendEmailVerification().then(onValueUpdateUser)
+           .catchError(onError);
+       if(result['status']){
+         print(true);
+         // print(user.id);
+         return {
+           'status':true,
+           'message':'User Email Verified',
+           'body':''
+         };
+     } return result;
+      }
+
+   }
   static login( {required String email,required String password})  async {
     final result=await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,///"temp@gmail.com",
