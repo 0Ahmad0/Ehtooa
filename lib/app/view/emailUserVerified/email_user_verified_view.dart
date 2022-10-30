@@ -40,6 +40,18 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
 
   var getIsEmailUserVerified;
   ProfileProvider profileProvider = ProfileProvider();
+  var acs = ActionCodeSettings(
+    // URL you want to redirect back to. The domain (www.example.com) for this
+    // URL must be whitelisted in the Firebase Console.
+      url: 'https://www.example.com/finishSignUp?cartId=1234',
+      // This must be true
+      handleCodeInApp: true,
+      iOSBundleId: 'com.example.ehtooa',
+      androidPackageName: 'com.example.ehtooa',
+      // installIfNotAvailable
+      androidInstallApp: true,
+      // minimumVersion
+      androidMinimumVersion: '12');
 
   @override
   void initState() {
@@ -101,7 +113,7 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                                                 fontSize: Sizer.getW(context) / 22),
                                           ),
                                           Text(
-                                            '${snapshot.data!.displayName}',
+                                            '${snapshot.data!.displayName} ${snapshot.data!.emailVerified}',
                                             //   tr(LocaleKeys.app_name),
                                             style: getRegularStyle(
                                                 color: Theme.of(context).primaryColor,
@@ -116,7 +128,8 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                                     ButtonApp(
                                         text: tr(LocaleKeys.signup),
                                         onTap: () async {
-                                          FirebaseAuth.instance.currentUser?.updateDisplayName("displayName");
+                                          FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => print('sendEmailVerification'));
+                                          //FirebaseAuth.instance.currentUser?.updateDisplayName("displayName");
                                         }),
                                     SizedBox(
                                       height: AppSize.s10,
