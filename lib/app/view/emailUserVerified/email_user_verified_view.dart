@@ -46,17 +46,19 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
     getIsEmailUserVerifiedFuc();
     super.initState();
   }
-
+  temp() async {
+    return await FirebaseAuth.instance.currentUser;
+  }
   getIsEmailUserVerifiedFuc() {
 
-    getIsEmailUserVerified = FirebaseAuth.instance.currentUser?.emailVerified;
-    FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => print("sendEmailVerification "));
+    getIsEmailUserVerified = FirebaseAuth.instance.userChanges();
+  //  FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => print("sendEmailVerification "));
     return getIsEmailUserVerified;
   }
   @override
   Widget build(BuildContext context) {
      profileProvider = Provider.of<ProfileProvider>(context);
-     FirebaseAuth.instance.sendPasswordResetEmail(email: profileProvider.user.email).then((value) => print("sendPasswordResetEmail"));
+    // FirebaseAuth.instance.sendPasswordResetEmail(email: profileProvider.user.email).then((value) => print("sendPasswordResetEmail"));
      //profileProvider
     return
       Scaffold(
@@ -66,66 +68,101 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
               Expanded(child:Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppSize.s20, vertical: AppSize.s10),
-                      child:  Column(
-              children: [
-              ZoomIn(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    tr(LocaleKeys.welcome_signup),
-                    style: getRegularStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                        fontSize: Sizer.getW(context) / 22),
-                  ),
-                  Text(
-                    tr(LocaleKeys.app_name),
-                    style: getRegularStyle(
-                        color: Theme.of(context).primaryColor,
-                        fontSize: Sizer.getW(context) / 16),
-                  ),
-                ],
-              ),
-              ),
-              SizedBox(
-                height: AppSize.s20,
-              ),
-              ButtonApp(
-                  text: tr(LocaleKeys.signup),
-                  onTap: () async {
-                  }),
-              SizedBox(
-                height: AppSize.s10,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(tr(LocaleKeys.already_have_account)
-                    ,style: getMediumStyle(
-                        color: Theme.of(context).textTheme.bodyText1!.color,
-                        fontSize: Sizer.getW(context) / 24
-                    ),),
-                  TextButton(
-                      style: TextButton.styleFrom(
-                          padding: EdgeInsets.zero
-                      ),
-                      onPressed: (){
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (ctx)=>LoginView()));
-                      }, child: Text(
-                      tr(LocaleKeys.login),
-                      style: TextStyle(
-                          decoration: TextDecoration.underline,
-                          color: Theme.of(context).primaryColor,
-                          fontSize: Sizer.getW(context) / 22,
-                          fontFamily:context.locale == "en"
-                              ?FontConstance.fontFamilyEN
-                              :FontConstance.fontFamilyAR
-                      )))
-                ],
-              )
-            ],
-          ),
+                      child:  StreamBuilder<User?>(
+                        //prints the messages to the screen0
+                          stream: getIsEmailUserVerified,
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return SizedBox();
+                                //Const.LOADIG(context);
+                              /// Const.SHOWLOADINGINDECATOR();
+                            }
+                            else if (snapshot.connectionState ==
+                                ConnectionState.active) {
+                              if (snapshot.hasError) {
+                                return const Text('Error');
+                              } else if (snapshot.hasData) {
+                                /// Const.SHOWLOADINGINDECATOR();
+                               // Const.LOADIG(context);
+                              //  print("d");
+                                var dataUser=snapshot.data;
+                                print(dataUser!.displayName);
+                                return Column(
+                                  children: [
+                                    ZoomIn(
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            tr(LocaleKeys.welcome_signup),
+                                            style: getRegularStyle(
+                                                color: Theme.of(context).textTheme.bodyText1!.color,
+                                                fontSize: Sizer.getW(context) / 22),
+                                          ),
+                                          Text(
+                                            '${snapshot.data!.displayName}',
+                                            //   tr(LocaleKeys.app_name),
+                                            style: getRegularStyle(
+                                                color: Theme.of(context).primaryColor,
+                                                fontSize: Sizer.getW(context) / 16),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: AppSize.s20,
+                                    ),
+                                    ButtonApp(
+                                        text: tr(LocaleKeys.signup),
+                                        onTap: () async {
+                                          FirebaseAuth.instance.currentUser?.updateDisplayName("displayName");
+                                        }),
+                                    SizedBox(
+                                      height: AppSize.s10,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(tr(LocaleKeys.already_have_account)
+                                          ,style: getMediumStyle(
+                                              color: Theme.of(context).textTheme.bodyText1!.color,
+                                              fontSize: Sizer.getW(context) / 24
+                                          ),),
+                                        TextButton(
+                                            style: TextButton.styleFrom(
+                                                padding: EdgeInsets.zero
+                                            ),
+                                            onPressed: (){
+                                              setState(() {
+
+                                              });
+                                              // Navigator.pushReplacement(context,
+                                              //       MaterialPageRoute(builder: (ctx)=>LoginView()));
+                                            }, child: Text(
+                                            tr(LocaleKeys.login),
+                                            style: TextStyle(
+                                                decoration: TextDecoration.underline,
+                                                color: Theme.of(context).primaryColor,
+                                                fontSize: Sizer.getW(context) / 22,
+                                                fontFamily:context.locale == "en"
+                                                    ?FontConstance.fontFamilyEN
+                                                    :FontConstance.fontFamilyAR
+                                            )))
+                                      ],
+                                    )
+                                  ],
+                                );
+
+                                /// }));
+                              } else {
+                                return const Text('Empty data');
+                              }
+                            }
+                            else {
+                              return Text('State: ${snapshot.connectionState}');
+                            }
+                          }),
 
                 ),
               ),
