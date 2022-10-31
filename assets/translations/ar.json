@@ -257,7 +257,9 @@
   "attatchment": "ملف",
   "voice_message": "رسالة صوتية",
   "message": "رسالتك",
-  "start_session": "قد بدأ"
+  "start_session": "قد بدأ",
+  "forget_password": "نسيت كلمة المرور؟"
+
 }
 
 

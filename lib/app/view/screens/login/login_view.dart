@@ -1,18 +1,12 @@
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:ehtooa/app/controller/groups_provider.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
-import 'package:ehtooa/app/controller/utils/create_environment_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
-import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/font_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
-import 'package:ehtooa/app/view/screens/groups/group_view.dart';
-import 'package:ehtooa/app/view/screens/questions/questions_view.dart';
 import 'package:ehtooa/app/view/screens/signup/signup_view.dart';
 import 'package:ehtooa/app/view/widgets/custome_button.dart';
 import 'package:ehtooa/app/view/widgets/custome_textfiled.dart';
@@ -142,6 +136,17 @@ class LoginView extends StatelessWidget {
                             ),
                             SizedBox(
                               height: AppSize.s20,
+                            ),
+                            Row(
+                              children:[
+                                TextButton(
+                                  onPressed:(){},
+                                  child:Text(tr(LocaleKeys.forget_password))
+                                )
+                              ]
+                            ),
+                            SizedBox(
+                              height: AppSize.s10,
                             ),
                             ButtonApp(
                                 text: tr(LocaleKeys.login),

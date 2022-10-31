@@ -8,7 +8,6 @@ buildscript {
     dependencies {
         classpath 'com.google.gms:google-services:4.3.13'
         classpath 'com.android.tools.build:gradle:7.1.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         implementation 'com.google.android.gms:play-services-auth:20.3.0'
         implementation 'com.google.firebase:firebase-auth'
         implementation platform('com.google.firebase:firebase-bom:31.0.2')
