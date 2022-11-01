@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:ehtooa/app/controller/utils/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'package:ehtooa/app/controller/groups_provider.dart';
@@ -128,7 +129,9 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                                     ButtonApp(
                                         text: tr(LocaleKeys.signup),
                                         onTap: () async {
-                                          FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => print('sendEmailVerification'));
+                                          print('email : ${FirebaseAuth.instance.currentUser!.email}');
+                                           final resulte =await FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => 'sendEmailVerification').catchError(FirebaseFun.onError);
+                                           print(resulte);
                                           //FirebaseAuth.instance.currentUser?.updateDisplayName("displayName");
                                         }),
                                     SizedBox(
@@ -147,11 +150,9 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                                                 padding: EdgeInsets.zero
                                             ),
                                             onPressed: (){
-                                              setState(() {
 
-                                              });
-                                              // Navigator.pushReplacement(context,
-                                              //       MaterialPageRoute(builder: (ctx)=>LoginView()));
+                                               Navigator.pushReplacement(context,
+                                                     MaterialPageRoute(builder: (ctx)=>LoginView()));
                                             }, child: Text(
                                             tr(LocaleKeys.login),
                                             style: TextStyle(

@@ -265,7 +265,9 @@ class CodegenLoader extends AssetLoader{
   "photo": "صورة",
   "attatchment": "ملف",
   "voice_message": "رسالة صوتية",
-  "message": "رسالتك"
+  "message": "رسالتك",
+  "start_session": "قد بدأ",
+  "forget_password": "نسيت كلمة المرور؟"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Specialist name",
@@ -356,6 +358,7 @@ static const Map<String,dynamic> en = {
   "title_intro_questions": "Your answer will help us determine \n the level of your mental health",
   "complete_answer": "All questions answered\nAnd your result is",
   "add_to_group": "Will be added to the allotment\n Which is supervised by a group of specialists and specialists in the field of psychiatry\n And start the therapeutic movement",
+  "start_session": "has started",
   "toast": "",
   "toast_successfully_created": "Account successfully created",
   "toast_Unsuccessfully_created": "Account Unsuccessfully created",
@@ -517,7 +520,8 @@ static const Map<String,dynamic> en = {
   "photo": "Photo",
   "attatchment": "Attatcmnet",
   "voice_message": "Voice message",
-  "message": "Message"
+  "message": "Message",
+  "forget_password": "Forget Password?"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

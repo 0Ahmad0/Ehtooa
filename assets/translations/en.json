@@ -254,5 +254,6 @@
   "attatchment": "Attatcmnet",
   "voice_message": "Voice message",
   "message": "Message",
-  "start_session": "has started"
+  "start_session": "has started",
+  "forget_password": "Forget Password?"
 }
