@@ -258,7 +258,8 @@
   "voice_message": "رسالة صوتية",
   "message": "رسالتك",
   "start_session": "قد بدأ",
-  "forget_password": "نسيت كلمة المرور؟"
+  "forget_password": "نسيت كلمة المرور؟",
+  "valid_serial_doctor" : "أدخل 10 أرقام فقط"
 
 }
 

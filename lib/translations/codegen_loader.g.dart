@@ -267,7 +267,8 @@ class CodegenLoader extends AssetLoader{
   "voice_message": "رسالة صوتية",
   "message": "رسالتك",
   "start_session": "قد بدأ",
-  "forget_password": "نسيت كلمة المرور؟"
+  "forget_password": "نسيت كلمة المرور؟",
+  "valid_serial_doctor": "أدخل 10 أرقام فقط"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Specialist name",
@@ -308,7 +309,7 @@ static const Map<String,dynamic> en = {
   "depressed_patients": "Depressed patients",
   "anxiety_patients": "Anxiety patients",
   "obsessive_compulsive_disorder_patients": "Obsessive compulsive disorder patients",
-  "eating_disorder_patients": "Eating disorder patients",
+  "eating_disorder_patients": "Sleep disorder patients",
   "contact": "Connect with us",
   "logout": "Logout",
   "name": "Name",
@@ -521,7 +522,8 @@ static const Map<String,dynamic> en = {
   "attatchment": "Attatcmnet",
   "voice_message": "Voice message",
   "message": "Message",
-  "forget_password": "Forget Password?"
+  "forget_password": "Forget Password?",
+  "valid_serial_doctor": "Enter 10 numbers"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

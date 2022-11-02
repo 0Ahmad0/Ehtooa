@@ -254,5 +254,6 @@ abstract class  LocaleKeys {
   static const message = 'message';
   static const start_session = 'start_session';
   static const forget_password = 'forget_password';
+  static const valid_serial_doctor = 'valid_serial_doctor';
 
 }

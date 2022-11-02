@@ -255,5 +255,6 @@
   "voice_message": "Voice message",
   "message": "Message",
   "start_session": "has started",
-  "forget_password": "Forget Password?"
+  "forget_password": "Forget Password?",
+  "valid_serial_doctor" : "Enter 10 numbers"
 }

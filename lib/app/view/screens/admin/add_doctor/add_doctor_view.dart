@@ -88,6 +88,9 @@ class AddDoctorView extends StatelessWidget {
                       if(val!.isEmpty){
                         return tr(LocaleKeys.field_required);
                       }
+                      if(val.length != 10){
+                        return tr(LocaleKeys.valid_serial_doctor);
+                      }
                       else{
                         return null;
                       }
