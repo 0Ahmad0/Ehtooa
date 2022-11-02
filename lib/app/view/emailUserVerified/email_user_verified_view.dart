@@ -25,6 +25,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:get/get.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:path/path.dart';
 import '../../controller/profile_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -56,14 +57,25 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
 
   @override
   void initState() {
+    sendEmailVerification();
     getIsEmailUserVerifiedFuc();
     super.initState();
   }
-  temp() async {
-    return await FirebaseAuth.instance.currentUser;
+  Future<bool> sendEmailVerification() async {
+    final auth = FirebaseAuth.instance;
+        final user= auth.currentUser;
+        if(user!= null){
+          await user?.reload();
+          print('email : ${user?.email}');
+          print('emailVerified : ${user?.emailVerified}');
+           final resulte =await user?.sendEmailVerification().then((value) => 'sendEmailVerification').catchError(FirebaseFun.onError);
+          //  final resulte =await FirebaseAuth.instance.sendPasswordResetEmail(email: profileProvider.user.email).then((value) => 'sendPasswordResetEmail').catchError(FirebaseFun.onError);
+          print(resulte);
+          return true;
+        }
+        return false;
   }
-  getIsEmailUserVerifiedFuc() {
-
+  getIsEmailUserVerifiedFuc() async {
     getIsEmailUserVerified = FirebaseAuth.instance.userChanges();
   //  FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => print("sendEmailVerification "));
     return getIsEmailUserVerified;
@@ -87,7 +99,8 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return SizedBox();
+                              return
+                                  widgetWaitIsVerifiedFromEmail();
                                 //Const.LOADIG(context);
                               /// Const.SHOWLOADINGINDECATOR();
                             }
@@ -126,12 +139,68 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                                     SizedBox(
                                       height: AppSize.s20,
                                     ),
-                                    ButtonApp(
+    if(!dataUser!.emailVerified)
+                                   widgetDoneSendVerifiedEmail()
+                                    else
+                                      widgetDoneVerifiedEmail()
+                                  ],
+                                );
+
+                                /// }));
+                              } else {
+                                return const Text('Empty data');
+                              }
+                            }
+                            else {
+                              return Text('State: ${snapshot.connectionState}');
+                            }
+                          }),
+
+                ),
+              ),
+            ],
+          ));
+  }
+  buildEmailUserVerifiedView(context){
+
+  }
+  widgetWaitIsVerifiedFromEmail(){
+    return Column(
+      children: [
+        Text('Authentication is being checked ..'),
+        SizedBox(height: AppSize.s10,),
+      ],
+    );
+  }
+  widgetVerifiedFromEmail(){
+
+  }
+  widgetDoneSendVerifiedEmail(){
+    return Column(
+      children: [
+        Text('A verification link has been sent to your email'),
+        Text('${profileProvider.user.email}',style: TextStyle(color: Colors.blue),),
+        SizedBox(height: AppSize.s10,),
+      ],
+    );
+  }
+  widgetDoneVerifiedEmail(){
+    return Column(
+      children: [
+        Text('Email Verified'),
+        SizedBox(height: AppSize.s10,),
+      ],
+    );
+  }
+}
+/*
+   ButtonApp(
                                         text: tr(LocaleKeys.signup),
                                         onTap: () async {
-                                          print('email : ${FirebaseAuth.instance.currentUser!.email}');
-                                           final resulte =await FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => 'sendEmailVerification').catchError(FirebaseFun.onError);
-                                           print(resulte);
+                                          await temp();
+                                         /// print('email : ${FirebaseAuth.instance.currentUser!.email}');
+                                           ///final resulte =await FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => 'sendEmailVerification').catchError(FirebaseFun.onError);
+                                           ///print(resulte);
                                           //FirebaseAuth.instance.currentUser?.updateDisplayName("displayName");
                                         }),
                                     SizedBox(
@@ -165,25 +234,4 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                                             )))
                                       ],
                                     )
-                                  ],
-                                );
-
-                                /// }));
-                              } else {
-                                return const Text('Empty data');
-                              }
-                            }
-                            else {
-                              return Text('State: ${snapshot.connectionState}');
-                            }
-                          }),
-
-                ),
-              ),
-            ],
-          ));
-  }
-  buildEmailUserVerifiedView(context){
-
-  }
-}
+    */
