@@ -37,7 +37,7 @@ class _QuestionsViewState extends State<QuestionsView> {
   void initState() {
     widget.indexTaken = [0,2,3];
     descriptionDisease = [
-      LocaleKeys.ocd_description,
+      LocaleKeys.depression_description,
       LocaleKeys.ocd_description,
       LocaleKeys.sleep_description,
       LocaleKeys.anixiet_description
