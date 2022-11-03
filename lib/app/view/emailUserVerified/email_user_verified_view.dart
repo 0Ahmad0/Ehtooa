@@ -53,7 +53,6 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
     super.initState();
   }
   Future<bool> sendEmailVerification() async {
-    //user= auth.currentUser;
         if(user!= null){
           await user?.reload();
           print('email : ${user?.email}');
@@ -65,33 +64,15 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
         }else
         return false;
   }
-   getIsEmailUserVerifiedFuc() async {
-    final user=FirebaseAuth.instance.currentUser;
-    await user?.reload();
-    getIsEmailUserVerified = user;
+   getIsEmailUserVerifiedFuc() {
+    getIsEmailUserVerified = FirebaseAuth.instance.userChanges();
   //  FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => print("sendEmailVerification "));
     return getIsEmailUserVerified;
   }
   @override
   Widget build(BuildContext context) {
      profileProvider = Provider.of<ProfileProvider>(context);
-     Timer.periodic(Duration(seconds: 10), (timer) async {
-       await auth!.signInWithEmailAndPassword(email: profileProvider.user.email, password: profileProvider.user.password);
-      user=auth.currentUser;
-       print('emailVerified:${user!.emailVerified}');
-       print('emailVerified:${user!.email}');
-       if(user!.emailVerified){
-         timer.cancel();
-         Navigator.of(context).pushReplacement(
-             MaterialPageRoute(
-                 builder: (ctx) =>
-                     GetDataView()
-             ));
-       }
-
-     });
-    // FirebaseAuth.instance.sendPasswordResetEmail(email: profileProvider.user.email).then((value) => print("sendPasswordResetEmail"));
-     //profileProvider
+     auth.currentUser!.reload();
     return
       Scaffold(
           body: Column(
@@ -100,75 +81,95 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
               Expanded(child:Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: AppSize.s20, vertical: AppSize.s40),
-                      child:  FutureBuilder(
-                        //prints the messages to the screen0
-                          future:  sendEmailVerification(),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return
-                                  widgetWaitIsVerifiedFromEmail(context);
-                                //Const.LOADIG(context);
-                              /// Const.SHOWLOADINGINDECATOR();
-                            }
-                            else if (snapshot.connectionState ==
-                                ConnectionState.active) {
-                              if (snapshot.hasError) {
-                                return const Text('Error');
-                              } else if (snapshot.hasData) {
-                                /// Const.SHOWLOADINGINDECATOR();
-                               // Const.LOADIG(context);
-                              //  print("d");
-                                print('displayName:${user!.displayName}');
-                                print('emailVerified:${user!.emailVerified}');
-
-                                return Column(
-                                  //  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    ZoomIn(
-                                      child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Text(
-                                            'Email Verification',
-                                            //tr(LocaleKeys.welcome_signup),
-                                            style: getRegularStyle(
-                                                color: Theme.of(context).textTheme.bodyText1!.color,
-                                                fontSize: Sizer.getW(context) / 22),
-                                          ),
-                                          SizedBox(
-                                            width: AppSize.s6,
-                                          ),
-                                          Icon(Icons.email,color: Theme.of(context).backgroundColor,),
-                                          Text(
-                                            '${user!.emailVerified}',
-                                            //   tr(LocaleKeys.app_name),
-                                            style: getRegularStyle(
-                                                color: Theme.of(context).primaryColor,
-                                                fontSize: Sizer.getW(context) / 16),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: AppSize.s20,),
-                                    if(!user!.emailVerified)
-                                      widgetDoneSendVerifiedEmail(context)
+                      child: Column(
+                        //  mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          ZoomIn(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Email Verification',
+                                  //tr(LocaleKeys.welcome_signup),
+                                  style: getRegularStyle(
+                                      color: Theme.of(context).textTheme.bodyText1!.color,
+                                      fontSize: Sizer.getW(context) / 22),
+                                ),
+                                SizedBox(
+                                  width: AppSize.s6,
+                                ),
+                                Icon(Icons.email,color: Theme.of(context).backgroundColor,),
+                                Text(
+                                  '',
+                                  //   tr(LocaleKeys.app_name),
+                                  style: getRegularStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: Sizer.getW(context) / 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(height: AppSize.s4,),
+                          InkWell(
+                            onTap: (){
+                              profileProvider.logout(context);
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (ctx) => LoginView()));
+                            },
+                            child: Text(
+                                 tr(LocaleKeys.logout),
+                              style: getRegularStyle(
+                                  color: Theme.of(context).primaryColor,
+                                 fontSize: Sizer.getW(context) / 24
+                                ),
+                            ),
+                          ),
+                          SizedBox(height: AppSize.s20,),
+                          StreamBuilder<User?>(
+                            //prints the messages to the screen0
+                              stream:  getIsEmailUserVerifiedFuc(),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState == ConnectionState.waiting) {
+                                  return
+                                    widgetWaitIsVerifiedFromEmail(context);
+                                  //Const.LOADIG(context);
+                                  /// Const.SHOWLOADINGINDECATOR();
+                                }
+                                else if (snapshot.connectionState ==
+                                    ConnectionState.active) {
+                                  if (snapshot.hasError) {
+                                    return const Text('Error');
+                                  } else if (snapshot.hasData) {
+                                    /// Const.SHOWLOADINGINDECATOR();
+                                    // Const.LOADIG(context);
+                                    //  print("d");
+                                    final dataUser=snapshot.data;
+                                    bool isEmailVerified=false;
+                                    print('displayName:${user!.displayName}');
+                                    print('emailVerified:${user!.emailVerified}');
+                                    print('isEmailVerified:${dataUser?.emailVerified}');
+                                    if(dataUser!=null){
+                                      isEmailVerified=dataUser!.emailVerified;
+                                    }
+                                    if(!isEmailVerified)
+                                    return widgetDoneSendVerifiedEmail(context);
 
                                     else
-                                      widgetDoneVerifiedEmail()
+                                     return widgetDoneVerifiedEmail(context);
 
-                                  ],
-                                );
+                                    /// }));
+                                  } else {
+                                    return const Text('Empty data');
+                                  }
+                                }
+                                else {
+                                  return Text('State: ${snapshot.connectionState}');
+                                }
+                              }),
 
-                                /// }));
-                              } else {
-                                return const Text('Empty data');
-                              }
-                            }
-                            else {
-                              return Text('State: ${snapshot.connectionState}');
-                            }
-                          }),
+                        ],
+                      )
 
                 ),
               ),
@@ -192,15 +193,33 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
 
   }
   widgetDoneSendVerifiedEmail(context){
-    return Column(
+    return ( Column(
       children: [
         Text('A verification link has been sent to your email'),
         Text('${profileProvider.user.email}',style: TextStyle(color: Theme.of(context).primaryColor),),
         SizedBox(height: AppSize.s10,),
+        ButtonApp(
+          fontSize: Sizer.getW(context)/24,
+
+            text:
+        'verification',
+            //tr(LocaleKeys.confirm_unban),
+            onTap: () async {
+            await user!.reload();
+            print("ffff ${auth.currentUser!.emailVerified}");
+            }),
+
       ],
-    );
+    ));
   }
-  widgetDoneVerifiedEmail(){
+  widgetDoneVerifiedEmail(context){
+    Timer(Duration(seconds: 2),(){
+        Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+        builder: (ctx) =>
+        GetDataView()
+        ));
+        });
     return Column(
       children: [
         Text('Email Verified'),
@@ -209,45 +228,3 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
     );
   }
 }
-/*
-   ButtonApp(
-                                        text: tr(LocaleKeys.signup),
-                                        onTap: () async {
-                                          await temp();
-                                         /// print('email : ${FirebaseAuth.instance.currentUser!.email}');
-                                           ///final resulte =await FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => 'sendEmailVerification').catchError(FirebaseFun.onError);
-                                           ///print(resulte);
-                                          //FirebaseAuth.instance.currentUser?.updateDisplayName("displayName");
-                                        }),
-                                    SizedBox(
-                                      height: AppSize.s10,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(tr(LocaleKeys.already_have_account)
-                                          ,style: getMediumStyle(
-                                              color: Theme.of(context).textTheme.bodyText1!.color,
-                                              fontSize: Sizer.getW(context) / 24
-                                          ),),
-                                        TextButton(
-                                            style: TextButton.styleFrom(
-                                                padding: EdgeInsets.zero
-                                            ),
-                                            onPressed: (){
-
-                                               Navigator.pushReplacement(context,
-                                                     MaterialPageRoute(builder: (ctx)=>LoginView()));
-                                            }, child: Text(
-                                            tr(LocaleKeys.login),
-                                            style: TextStyle(
-                                                decoration: TextDecoration.underline,
-                                                color: Theme.of(context).primaryColor,
-                                                fontSize: Sizer.getW(context) / 22,
-                                                fontFamily:context.locale == "en"
-                                                    ?FontConstance.fontFamilyEN
-                                                    :FontConstance.fontFamilyAR
-                                            )))
-                                      ],
-                                    )
-    */

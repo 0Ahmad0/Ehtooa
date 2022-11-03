@@ -229,6 +229,7 @@ class Message {
     return {
       'textMessage': textMessage,
       'typeMessage': typeMessage,
+      'senderId': senderId,
       'sendingTime': sendingTime,
       'deleteUserMessage': tempDeleteUserMessage,
       'urlTempPhoto': urlTempPhoto,

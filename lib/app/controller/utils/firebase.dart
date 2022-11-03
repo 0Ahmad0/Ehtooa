@@ -112,6 +112,21 @@ class FirebaseFun{
         .catchError(onError);
     return result;
   }
+  static sendPasswordResetEmail( {required String email})  async {
+    final result=await FirebaseAuth.instance.sendPasswordResetEmail(
+      email: email,///"temp@gmail.com",
+    ).then((onValueSendPasswordResetEmail))
+        .catchError(onError);
+    return result;
+  }
+  static confirmPasswordReset( {required String newPassword,required String code})  async {
+    final result=await FirebaseAuth.instance.confirmPasswordReset(
+      code: code,
+      newPassword: newPassword
+    ).then((onValueConfirmPasswordReset))
+        .catchError(onError);
+    return result;
+  }
   static fetchUser( {required String uid,required String typeUser})  async {
     final result=await FirebaseFirestore.instance.collection(typeUser)
         .where('uid',isEqualTo: uid)
@@ -420,6 +435,26 @@ class FirebaseFun{
       'message':'Account successfully logged',
       'body':{
         'uid':value.user.uid}
+    };
+  }
+  static Future<Map<String,dynamic>>onValueSendPasswordResetEmail(value) async{
+    //print(true);
+   // print(value.user.uid);
+
+    return {
+      'status':true,
+      'message':'Email successfully send code ',
+      'body':{}
+    };
+  }
+  static Future<Map<String,dynamic>>onValueConfirmPasswordReset(value) async{
+    //print(true);
+   // print(value.user.uid);
+
+    return {
+      'status':true,
+      'message':'password successfully rest ',
+      'body':{}
     };
   }
   static Future<Map<String,dynamic>> onValuelogout(value) async{

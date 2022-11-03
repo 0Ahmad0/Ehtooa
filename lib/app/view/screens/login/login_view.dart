@@ -1,3 +1,4 @@
+import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:ehtooa/app/controller/groups_provider.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
@@ -7,6 +8,7 @@ import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/font_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
+import 'package:ehtooa/app/view/screens/confirm_email/confirm_email_view.dart';
 import 'package:ehtooa/app/view/screens/forget_password/forget_password_view.dart';
 import 'package:ehtooa/app/view/screens/signup/signup_view.dart';
 import 'package:ehtooa/app/view/widgets/custome_button.dart';
@@ -25,16 +27,9 @@ import 'package:provider/provider.dart';
 import '../get_data/get_data_view.dart';
 
 class LoginView extends StatelessWidget {
-  /*
-  final email = TextEditingController();
-  final password = TextEditingController();
-  final keyForm = GlobalKey<FormState>();
-*/
   @override
   Widget build(BuildContext context) {
-    final profileProvider = Provider.of<ProfileProvider>(context);
-    final homeProvider = Provider.of<HomeProvider>(context);
-    final groupsProvider = Provider.of<GroupsProvider>(context);
+    final profileProvider = Provider.of<ProfileProvider>(context);;
     final loginProvider = Provider.of<LoginProvider>(context);
     return  ChangeNotifierProvider<LoginProvider>(
         create: (_)=> LoginProvider(),
@@ -139,7 +134,7 @@ class LoginView extends StatelessWidget {
                             Row(
                               children:[
                                 TextButton(
-                                  onPressed:()=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ForgetPasswordView())),
+                                  onPressed:()=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ConfirmEmailView())),
                                   child:Text(tr(LocaleKeys.forget_password))
                                 )
                               ]

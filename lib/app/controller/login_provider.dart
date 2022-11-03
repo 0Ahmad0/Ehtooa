@@ -83,6 +83,19 @@ class LoginProvider with ChangeNotifier{
     }
     return result;
   }
+
+  sendPasswordResetEmail(context,{required String resetEmail}) async{
+    var result =await FirebaseFun.sendPasswordResetEmail(email: resetEmail);
+    print(result);
+    Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+    return result;
+  }
+  confirmPasswordReset(context,{required String newPassword,required String code}) async{
+    var result =await FirebaseFun.confirmPasswordReset(newPassword: newPassword,code: code);
+    print(result);
+    Const.TOAST(context,textToast: FirebaseFun.findTextToast(result['message'].toString()));
+    return result;
+  }
   ///To check is User is logged in
   bool isEmailUserVerified()  {
      final user=  FirebaseAuth.instance.currentUser;
