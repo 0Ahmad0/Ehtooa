@@ -89,8 +89,8 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Email Verification',
-                                  //tr(LocaleKeys.welcome_signup),
+                                  //'Email Verification',
+                                  tr(LocaleKeys.email_verification),
                                   style: getRegularStyle(
                                       color: Theme.of(context).textTheme.bodyText1!.color,
                                       fontSize: Sizer.getW(context) / 22),
@@ -182,7 +182,10 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
   widgetWaitIsVerifiedFromEmail(context){
     return Column(
       children: [
-        Text('Authentication is being checked ..'),
+        Text(
+          tr(LocaleKeys.authentication_checked),
+        //    'Authentication is being checked ..'
+        ),
         SizedBox(height: AppSize.s10,),
        // Const.LOADIG(context),
 
@@ -195,18 +198,22 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
   widgetDoneSendVerifiedEmail(context){
     return ( Column(
       children: [
-        Text('A verification link has been sent to your email'),
+        Text(
+          tr(LocaleKeys.verification_link_sent_email),
+           // 'A verification link has been sent to your email'
+        ),
         Text('${profileProvider.user.email}',style: TextStyle(color: Theme.of(context).primaryColor),),
         SizedBox(height: AppSize.s10,),
         ButtonApp(
           fontSize: Sizer.getW(context)/24,
 
             text:
-        'verification',
+            tr(LocaleKeys.verification),
+       // 'verification',
             //tr(LocaleKeys.confirm_unban),
             onTap: () async {
             await user!.reload();
-            print("ffff ${auth.currentUser!.emailVerified}");
+           // print("ffff ${auth.currentUser!.emailVerified}");
             }),
 
       ],
@@ -222,7 +229,11 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
         });
     return Column(
       children: [
-        Text('Email Verified'),
+
+        Text(
+          tr(LocaleKeys.email_verified),
+           // 'Email Verified'
+        ),
         SizedBox(height: AppSize.s10,),
       ],
     );

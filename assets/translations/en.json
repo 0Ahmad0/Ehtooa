@@ -256,5 +256,11 @@
   "message": "Message",
   "start_session": "has started",
   "forget_password": "Forget Password?",
-  "valid_serial_doctor" : "Enter 10 numbers"
+  "valid_serial_doctor" : "Enter 10 numbers",
+  "email_verification" : "Email Verification",
+  "email_verified" : "Email Verified",
+  "verification" : "verification",
+  "verification_link_sent_email" : "A verification link has been sent to your email",
+  "authentication_checked" : "Authentication is being checked .."
+
 }

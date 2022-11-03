@@ -259,8 +259,12 @@
   "message": "رسالتك",
   "start_session": "قد بدأ",
   "forget_password": "نسيت كلمة المرور؟",
-  "valid_serial_doctor" : "أدخل 10 أرقام فقط"
-
+  "valid_serial_doctor" : "أدخل 10 أرقام فقط",
+  "email_verification" : "التحقق من الايميل",
+  "email_verified" : "تم التحقق من الايميل",
+  "verification" : "تحقق",
+  "verification_link_sent_email" : "تم ارسال رابط التحقق عبر الايميل",
+  "authentication_checked" : "جاري التحقق من المصادقة .."
 }
 
 

@@ -268,7 +268,12 @@ class CodegenLoader extends AssetLoader{
   "message": "رسالتك",
   "start_session": "قد بدأ",
   "forget_password": "نسيت كلمة المرور؟",
-  "valid_serial_doctor": "أدخل 10 أرقام فقط"
+  "valid_serial_doctor": "أدخل 10 أرقام فقط",
+  "email_verification": "التحقق من الايميل",
+  "email_verified": "تم التحقق من الايميل",
+  "verification": "تحقق",
+  "verification_link_sent_email": "تم ارسال رابط التحقق عبر الايميل",
+  "authentication_checked": "جاري التحقق من المصادقة .."
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Specialist name",
@@ -523,7 +528,12 @@ static const Map<String,dynamic> en = {
   "voice_message": "Voice message",
   "message": "Message",
   "forget_password": "Forget Password?",
-  "valid_serial_doctor": "Enter 10 numbers"
+  "valid_serial_doctor": "Enter 10 numbers",
+  "email_verification": "Email Verification",
+  "email_verified": "Email Verified",
+  "verification": "verification",
+  "verification_link_sent_email": "A verification link has been sent to your email",
+  "authentication_checked": "Authentication is being checked .."
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

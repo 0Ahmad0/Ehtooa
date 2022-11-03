@@ -255,5 +255,10 @@ abstract class  LocaleKeys {
   static const start_session = 'start_session';
   static const forget_password = 'forget_password';
   static const valid_serial_doctor = 'valid_serial_doctor';
+  static const email_verification = 'email_verification';
+  static const email_verified = 'email_verified';
+  static const verification = 'verification';
+  static const verification_link_sent_email = 'verification_link_sent_email';
+  static const authentication_checked = 'authentication_checked';
 
 }
