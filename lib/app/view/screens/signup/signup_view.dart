@@ -9,6 +9,7 @@ import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/font_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
+import 'package:ehtooa/app/view/screens/get_data/get_data_view.dart';
 import 'package:ehtooa/app/view/screens/login/login_view.dart';
 import 'package:ehtooa/app/view/screens/questions/questions_view.dart';
 import 'package:ehtooa/app/view/screens/signup/signup_view.dart';
@@ -246,7 +247,7 @@ class SignupView extends StatelessWidget {
                                 Navigator.of(context).pushReplacement(
                                     MaterialPageRoute(
                                         builder: (ctx) =>
-                                            QuestionsView(indexTaken: [],)
+                                            GetDataView()
                                     ));
                               }
 

@@ -67,7 +67,7 @@ temp(groupsProvider,profileProvider,homeProvider) async {
     final groupsProvider = Provider.of<GroupsProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
     Timer(Duration(milliseconds: 1), () async {
-      if(!profileProvider.isEmailUserVerified())
+      if(!await profileProvider.isEmailUserVerified())
        profileProvider.emailUserVerified(context);
       else
       temp(groupsProvider,profileProvider,homeProvider);

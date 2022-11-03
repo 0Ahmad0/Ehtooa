@@ -61,15 +61,16 @@ class ProfileProvider with ChangeNotifier{
      return result;
    }
   ///To check is User is logged in
-  bool isEmailUserVerified()  {
-    final user=  FirebaseAuth.instance.currentUser;
+  Future<bool> isEmailUserVerified()  async {
+    final user=  await FirebaseAuth.instance.currentUser;
+    //print('emailVerified : ${user?.emailVerified}');
     if (user == null) {
       return false;
     }
     return user.emailVerified;
   }
   Future<bool> emailUserVerified(BuildContext context) async {
-    if(!isEmailUserVerified()){
+    if(!await isEmailUserVerified()){
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(
               builder: (ctx) => EmailUserVerifiedView()));

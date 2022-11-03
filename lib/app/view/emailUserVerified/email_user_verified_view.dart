@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:ehtooa/app/controller/utils/firebase.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:ehtooa/app/controller/groups_provider.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
@@ -30,6 +31,7 @@ import '../../controller/profile_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../resources/values_manager.dart';
+import '../screens/get_data/get_data_view.dart';
 import '../screens/login/login_view.dart';
 
 
@@ -39,21 +41,10 @@ class EmailUserVerifiedView extends StatefulWidget {
 }
 
 class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
-
+  var auth = FirebaseAuth.instance;
+  var user=FirebaseAuth.instance.currentUser;
   var getIsEmailUserVerified;
   ProfileProvider profileProvider = ProfileProvider();
-  var acs = ActionCodeSettings(
-    // URL you want to redirect back to. The domain (www.example.com) for this
-    // URL must be whitelisted in the Firebase Console.
-      url: 'https://www.example.com/finishSignUp?cartId=1234',
-      // This must be true
-      handleCodeInApp: true,
-      iOSBundleId: 'com.example.ehtooa',
-      androidPackageName: 'com.example.ehtooa',
-      // installIfNotAvailable
-      androidInstallApp: true,
-      // minimumVersion
-      androidMinimumVersion: '12');
 
   @override
   void initState() {
@@ -62,8 +53,7 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
     super.initState();
   }
   Future<bool> sendEmailVerification() async {
-    final auth = FirebaseAuth.instance;
-        final user= auth.currentUser;
+    //user= auth.currentUser;
         if(user!= null){
           await user?.reload();
           print('email : ${user?.email}');
@@ -72,17 +62,34 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
           //  final resulte =await FirebaseAuth.instance.sendPasswordResetEmail(email: profileProvider.user.email).then((value) => 'sendPasswordResetEmail').catchError(FirebaseFun.onError);
           print(resulte);
           return true;
-        }
+        }else
         return false;
   }
-  getIsEmailUserVerifiedFuc() async {
-    getIsEmailUserVerified = FirebaseAuth.instance.userChanges();
+   getIsEmailUserVerifiedFuc() async {
+    final user=FirebaseAuth.instance.currentUser;
+    await user?.reload();
+    getIsEmailUserVerified = user;
   //  FirebaseAuth.instance.currentUser!.sendEmailVerification().then((value) => print("sendEmailVerification "));
     return getIsEmailUserVerified;
   }
   @override
   Widget build(BuildContext context) {
      profileProvider = Provider.of<ProfileProvider>(context);
+     Timer.periodic(Duration(seconds: 10), (timer) async {
+       await auth!.signInWithEmailAndPassword(email: profileProvider.user.email, password: profileProvider.user.password);
+      user=auth.currentUser;
+       print('emailVerified:${user!.emailVerified}');
+       print('emailVerified:${user!.email}');
+       if(user!.emailVerified){
+         timer.cancel();
+         Navigator.of(context).pushReplacement(
+             MaterialPageRoute(
+                 builder: (ctx) =>
+                     GetDataView()
+             ));
+       }
+
+     });
     // FirebaseAuth.instance.sendPasswordResetEmail(email: profileProvider.user.email).then((value) => print("sendPasswordResetEmail"));
      //profileProvider
     return
@@ -92,15 +99,15 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
               FadeInDownBig(child: SvgPicture.asset(fit: BoxFit.fill, ImagesAssets.signupBack)),
               Expanded(child:Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: AppSize.s20, vertical: AppSize.s10),
-                      child:  StreamBuilder<User?>(
+                    horizontal: AppSize.s20, vertical: AppSize.s40),
+                      child:  FutureBuilder(
                         //prints the messages to the screen0
-                          stream: getIsEmailUserVerified,
+                          future:  sendEmailVerification(),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return
-                                  widgetWaitIsVerifiedFromEmail();
+                                  widgetWaitIsVerifiedFromEmail(context);
                                 //Const.LOADIG(context);
                               /// Const.SHOWLOADINGINDECATOR();
                             }
@@ -112,22 +119,29 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                                 /// Const.SHOWLOADINGINDECATOR();
                                // Const.LOADIG(context);
                               //  print("d");
-                                var dataUser=snapshot.data;
-                                print(dataUser!.displayName);
+                                print('displayName:${user!.displayName}');
+                                print('emailVerified:${user!.emailVerified}');
+
                                 return Column(
+                                  //  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     ZoomIn(
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.center,
                                         children: [
                                           Text(
-                                            tr(LocaleKeys.welcome_signup),
+                                            'Email Verification',
+                                            //tr(LocaleKeys.welcome_signup),
                                             style: getRegularStyle(
                                                 color: Theme.of(context).textTheme.bodyText1!.color,
                                                 fontSize: Sizer.getW(context) / 22),
                                           ),
+                                          SizedBox(
+                                            width: AppSize.s6,
+                                          ),
+                                          Icon(Icons.email,color: Theme.of(context).backgroundColor,),
                                           Text(
-                                            '${snapshot.data!.displayName} ${snapshot.data!.emailVerified}',
+                                            '${user!.emailVerified}',
                                             //   tr(LocaleKeys.app_name),
                                             style: getRegularStyle(
                                                 color: Theme.of(context).primaryColor,
@@ -136,13 +150,13 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      height: AppSize.s20,
-                                    ),
-    if(!dataUser!.emailVerified)
-                                   widgetDoneSendVerifiedEmail()
+                                    SizedBox(height: AppSize.s20,),
+                                    if(!user!.emailVerified)
+                                      widgetDoneSendVerifiedEmail(context)
+
                                     else
                                       widgetDoneVerifiedEmail()
+
                                   ],
                                 );
 
@@ -164,22 +178,24 @@ class _EmailUserVerifiedViewState extends State<EmailUserVerifiedView> {
   buildEmailUserVerifiedView(context){
 
   }
-  widgetWaitIsVerifiedFromEmail(){
+  widgetWaitIsVerifiedFromEmail(context){
     return Column(
       children: [
         Text('Authentication is being checked ..'),
         SizedBox(height: AppSize.s10,),
+       // Const.LOADIG(context),
+
       ],
     );
   }
   widgetVerifiedFromEmail(){
 
   }
-  widgetDoneSendVerifiedEmail(){
+  widgetDoneSendVerifiedEmail(context){
     return Column(
       children: [
         Text('A verification link has been sent to your email'),
-        Text('${profileProvider.user.email}',style: TextStyle(color: Colors.blue),),
+        Text('${profileProvider.user.email}',style: TextStyle(color: Theme.of(context).primaryColor),),
         SizedBox(height: AppSize.s10,),
       ],
     );
