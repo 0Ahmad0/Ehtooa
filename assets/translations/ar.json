@@ -264,7 +264,9 @@
   "email_verified" : "تم التحقق من الايميل",
   "verification" : "تحقق",
   "verification_link_sent_email" : "تم ارسال رابط التحقق عبر الايميل",
-  "authentication_checked" : "جاري التحقق من المصادقة .."
+  "authentication_checked" : "جاري التحقق من المصادقة ..",
+  "reset_password": "إعادة تعيين كلمة السر"
+
 }
 
 

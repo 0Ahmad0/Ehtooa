@@ -6,6 +6,7 @@ import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
+import 'package:ehtooa/app/view/resources/color_manager.dart';
 import 'package:ehtooa/app/view/resources/font_manager.dart';
 import 'package:ehtooa/app/view/resources/style_manager.dart';
 import 'package:ehtooa/app/view/screens/confirm_email/confirm_email_view.dart';
@@ -135,7 +136,7 @@ class LoginView extends StatelessWidget {
                               children:[
                                 TextButton(
                                   onPressed:()=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ConfirmEmailView())),
-                                  child:Text(tr(LocaleKeys.forget_password))
+                                  child:Text(tr(LocaleKeys.forget_password),style: getRegularStyle(color: ColorManager.primary,fontSize: Sizer.getW(context)/28),)
                                 )
                               ]
                             ),
@@ -154,6 +155,8 @@ class LoginView extends StatelessWidget {
                                               builder: (ctx) => GetDataView()/*QuestionsView(indexTaken: [],)*/));
                                     }
                                   }
+                                  FocusManager.instance.primaryFocus!.unfocus();
+
                                 }),
                             ///create group
 

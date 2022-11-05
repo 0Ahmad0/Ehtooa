@@ -28,7 +28,7 @@ class ConfirmEmailView extends StatelessWidget {
           children: [
             CustomTextFiled(controller: email, validator: (String? val){}, onChange: null, prefixIcon: Icons.lock, hintText: tr(LocaleKeys.email),maxLength: null,),
             const SizedBox(height: AppSize.s10,),
-            ButtonApp(text: "email verfiy",
+            ButtonApp(text: tr(LocaleKeys.email_verification),
                 onTap: () async {
               Const.LOADIG(context);
               final result =await loginProvider.sendPasswordResetEmail(context, resetEmail: email.text);
@@ -38,7 +38,8 @@ class ConfirmEmailView extends StatelessWidget {
              /* Navigator.push(context, MaterialPageRoute(builder:
                    (ctx)=>ForgetPasswordView(email: email.text,)));*/
               }
-            }
+              FocusManager.instance.primaryFocus!.unfocus();
+                }
                    ),
           ],
         ),

@@ -6,6 +6,8 @@ import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/color_manager.dart';
 import 'package:ehtooa/app/view/resources/consts_manager.dart';
 import 'package:ehtooa/app/view/resources/values_manager.dart';
+import 'package:ehtooa/app/view/screens/forget_password/forget_password_view.dart';
+import 'package:ehtooa/app/view/screens/home/home_view.dart';
 import 'package:ehtooa/app/view/widgets/custome_button.dart';
 import 'package:ehtooa/app/view/widgets/custome_textfiled.dart';
 import 'package:ehtooa/translations/locale_keys.g.dart';
@@ -21,6 +23,8 @@ import '../../../controller/utils/firebase.dart';
 import '../../../model/utils/const.dart';
 import 'package:flutter_profile_picture/flutter_profile_picture.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+
+import '../confirm_email/confirm_email_view.dart';
 class ProfileView extends StatefulWidget {
   @override
   State<ProfileView> createState() => _ProfileViewState();
@@ -290,6 +294,10 @@ class _ProfileViewState extends State<ProfileView> {
                           prefixIcon: Icons.phone_android,
                           maxLength: null,
                           hintText: tr(LocaleKeys.phone_number)),
+                      const SizedBox(
+                        height: AppSize.s20,
+                      ),
+                      ButtonApp(text: tr(LocaleKeys.reset_password), onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ConfirmEmailView()))),
                       if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
                         Column(
                           children: [

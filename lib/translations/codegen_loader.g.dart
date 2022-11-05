@@ -273,7 +273,8 @@ class CodegenLoader extends AssetLoader{
   "email_verified": "تم التحقق من الايميل",
   "verification": "تحقق",
   "verification_link_sent_email": "تم ارسال رابط التحقق عبر الايميل",
-  "authentication_checked": "جاري التحقق من المصادقة .."
+  "authentication_checked": "جاري التحقق من المصادقة ..",
+  "reset_password": "إعادة تعيين كلمة السر"
 };
 static const Map<String,dynamic> en = {
   "doctor_name": "Specialist name",
@@ -533,7 +534,8 @@ static const Map<String,dynamic> en = {
   "email_verified": "Email Verified",
   "verification": "verification",
   "verification_link_sent_email": "A verification link has been sent to your email",
-  "authentication_checked": "Authentication is being checked .."
+  "authentication_checked": "Authentication is being checked ..",
+  "reset_password": "Reset Password"
 };
 static const Map<String, Map<String,dynamic>> mapLocales = {"ar": ar, "en": en};
 }

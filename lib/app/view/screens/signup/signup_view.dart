@@ -252,6 +252,7 @@ class SignupView extends StatelessWidget {
                               }
 
                               }
+                              FocusManager.instance.primaryFocus!.unfocus();
                             }),
                   /*
                   SizedBox(

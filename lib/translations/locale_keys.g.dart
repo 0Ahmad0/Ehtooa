@@ -260,5 +260,6 @@ abstract class  LocaleKeys {
   static const verification = 'verification';
   static const verification_link_sent_email = 'verification_link_sent_email';
   static const authentication_checked = 'authentication_checked';
+  static const reset_password = 'reset_password';
 
 }

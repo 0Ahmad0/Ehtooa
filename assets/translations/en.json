@@ -261,6 +261,7 @@
   "email_verified" : "Email Verified",
   "verification" : "verification",
   "verification_link_sent_email" : "A verification link has been sent to your email",
-  "authentication_checked" : "Authentication is being checked .."
+  "authentication_checked" : "Authentication is being checked ..",
+  "reset_password": "Reset Password"
 
 }
