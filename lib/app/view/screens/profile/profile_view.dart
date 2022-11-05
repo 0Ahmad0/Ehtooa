@@ -1,6 +1,7 @@
 
 import 'dart:io';
 
+import 'package:ehtooa/app/controller/login_provider.dart';
 import 'package:ehtooa/app/model/utils/sizer.dart';
 import 'package:ehtooa/app/view/resources/assets_manager.dart';
 import 'package:ehtooa/app/view/resources/color_manager.dart';
@@ -78,6 +79,7 @@ class _ProfileViewState extends State<ProfileView> {
   @override
   Widget build(BuildContext context) {
     final profileProvider = Provider.of<ProfileProvider>(context);
+    final loginProvider = Provider.of<LoginProvider>(context);
     profileProvider.serial_number.text=profileProvider.user.serialNumber;
     return ChangeNotifierProvider<ProfileProvider>(
         create: (_) => ProfileProvider(),
@@ -297,7 +299,14 @@ class _ProfileViewState extends State<ProfileView> {
                       const SizedBox(
                         height: AppSize.s20,
                       ),
-                      ButtonApp(text: tr(LocaleKeys.reset_password), onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ConfirmEmailView()))),
+                      ButtonApp(text: tr(LocaleKeys.reset_password), onTap: ()
+                      //=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ConfirmEmailView()))
+                      async {
+                        Const.LOADIG(context);
+                        final result =await loginProvider.sendPasswordResetEmail(context, resetEmail: profileProvider.user.email);
+                        Navigator.of(context).pop();
+                      }
+                      ),
                       if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
                         Column(
                           children: [
