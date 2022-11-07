@@ -26,7 +26,7 @@ class ConfirmEmailView extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomTextFiled(controller: email, validator: (String? val){}, onChange: null, prefixIcon: Icons.lock, hintText: tr(LocaleKeys.email),maxLength: null,),
+            CustomTextFiled(controller: email, validator: (String? val){}, onChange: null, prefixIcon: Icons.email, hintText: tr(LocaleKeys.email),maxLength: null,),
             const SizedBox(height: AppSize.s10,),
             ButtonApp(text: tr(LocaleKeys.email_verification),
                 onTap: () async {

@@ -296,17 +296,11 @@ class _ProfileViewState extends State<ProfileView> {
                           prefixIcon: Icons.phone_android,
                           maxLength: null,
                           hintText: tr(LocaleKeys.phone_number)),
-                      const SizedBox(
-                        height: AppSize.s20,
-                      ),
-                      ButtonApp(text: tr(LocaleKeys.reset_password), onTap: ()
-                      //=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ConfirmEmailView()))
-                      async {
-                        Const.LOADIG(context);
-                        final result =await loginProvider.sendPasswordResetEmail(context, resetEmail: profileProvider.user.email);
-                        Navigator.of(context).pop();
-                      }
-                      ),
+
+                      if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
+                        const SizedBox(
+                          height: AppSize.s20,
+                        ),
                       if(profileProvider.user.typeUser.contains(AppConstants.collectionDoctor))
                         Column(
                           children: [
@@ -342,6 +336,16 @@ class _ProfileViewState extends State<ProfileView> {
                                 hintText: tr(LocaleKeys.description)),
                           ],
                         ),
+                      const SizedBox(
+                        height: AppSize.s20,
+                      ), ButtonApp(text: tr(LocaleKeys.reset_password), onTap: ()
+                      //=>Navigator.push(context, MaterialPageRoute(builder: (ctx)=>ConfirmEmailView()))
+                      async {
+                        Const.LOADIG(context);
+                        final result =await loginProvider.sendPasswordResetEmail(context, resetEmail: profileProvider.user.email);
+                        Navigator.of(context).pop();
+                      }
+                      ),
                       const SizedBox(
                         height: AppSize.s20,
                       ),
