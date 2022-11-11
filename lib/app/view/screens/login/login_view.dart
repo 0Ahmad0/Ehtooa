@@ -1,6 +1,7 @@
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:ehtooa/app/controller/groups_provider.dart';
 import 'package:ehtooa/app/controller/home_provider.dart';
+import 'package:ehtooa/app/controller/signup_provider.dart';
 import 'package:ehtooa/app/controller/text_filed_provider.dart';
 import 'package:ehtooa/app/model/models.dart';
 import 'package:ehtooa/app/model/utils/const.dart';
@@ -158,9 +159,9 @@ class LoginView extends StatelessWidget {
                                   FocusManager.instance.primaryFocus!.unfocus();
 
                                 }),
-                            ///create group
-
-                           /** SizedBox(
+                            ///create
+                          /**
+                            SizedBox(
                               height: AppSize.s20,
                             ),
                             ButtonApp(
@@ -169,14 +170,15 @@ class LoginView extends StatelessWidget {
                                  // print("la :${Localizations.localeOf(context)}");
                                     Const.LOADIG(context);
                                     
+                                    final result =await SignupProvider().signupAD(context);
                                  //   final result =await CreateEnvironmentProvider().addUserToGroup(context);
                                   //  final result =await groupsProvider.fetchGroupsToUser(context, idUser: "Tytxd8ae9TRz1wF70iMC",);
                                  //   final result =await homeProvider.fetchSessions(context);
-                                    final result =await CreateEnvironmentProvider().fetchGroup(context);
+                                   // final result =await CreateEnvironmentProvider().fetchGroup(context);
                                     //CreateEnvironmentProvider().compare();
                                     Navigator.of(context).pop();
-                                }),**/
-
+                                }),
+                            **/
                             SizedBox(
                               height: AppSize.s10,
                             ),

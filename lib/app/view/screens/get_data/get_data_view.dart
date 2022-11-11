@@ -39,23 +39,28 @@ temp(groupsProvider,profileProvider,homeProvider) async {
           MaterialPageRoute(
               builder: (ctx) => BottomNavBarView()));
   }else{
-    final resultPaySession=await profileProvider.fetchPaySession(context);
-    if(resultPaySession['status']){
-      profileProvider.paySession=PaySession.fromJson(resultPaySession['body']);
+    if(!await profileProvider.isEmailUserVerified())
+      profileProvider.emailUserVerified(context);
+    else{
+      final resultPaySession=await profileProvider.fetchPaySession(context);
+      if(resultPaySession['status']){
+        profileProvider.paySession=PaySession.fromJson(resultPaySession['body']);
+      }
+
+      data = await groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id);
+      if(data!=null)
+        groupsProvider.groups=Groups.fromJson(data['body']);
+      if(groupsProvider.groups.groups.length>0){
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+                builder: (ctx) => BottomNavBarView()));
+      }else{
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+                builder: (ctx) => QuestionsView(indexTaken: [],)));
+      }
     }
 
-    data = await groupsProvider.fetchGroupsToUser(context, idUser: profileProvider.user.id);
-    if(data!=null)
-      groupsProvider.groups=Groups.fromJson(data['body']);
-    if(groupsProvider.groups.groups.length>0){
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-              builder: (ctx) => BottomNavBarView()));
-    }else{
-      Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-              builder: (ctx) => QuestionsView(indexTaken: [],)));
-    }
   }
 
 
@@ -67,9 +72,6 @@ temp(groupsProvider,profileProvider,homeProvider) async {
     final groupsProvider = Provider.of<GroupsProvider>(context);
     final homeProvider = Provider.of<HomeProvider>(context);
     Timer(Duration(milliseconds: 1), () async {
-      if(!await profileProvider.isEmailUserVerified())
-       profileProvider.emailUserVerified(context);
-      else
       temp(groupsProvider,profileProvider,homeProvider);
     });
     return
