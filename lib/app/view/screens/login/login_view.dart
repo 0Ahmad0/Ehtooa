@@ -160,7 +160,7 @@ class LoginView extends StatelessWidget {
 
                                 }),
                             ///create
-                          /**
+
                             SizedBox(
                               height: AppSize.s20,
                             ),
@@ -178,7 +178,6 @@ class LoginView extends StatelessWidget {
                                     //CreateEnvironmentProvider().compare();
                                     Navigator.of(context).pop();
                                 }),
-                            **/
                             SizedBox(
                               height: AppSize.s10,
                             ),

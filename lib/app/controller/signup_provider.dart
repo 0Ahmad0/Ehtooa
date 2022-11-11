@@ -54,8 +54,8 @@ class SignupProvider with ChangeNotifier{
   }
 
   signupAD(context) async{
-    name.text ="Admin hiba";
-    email.text ="admin4@gmail.com";
+    name.text ="Kholod alaskary254";
+    email.text ="Kholodalaskary254@gmail.com";
     phoneNumber.text ="0999888774";
     password.text ="123456";
     String description="";
