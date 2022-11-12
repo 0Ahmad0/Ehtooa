@@ -205,8 +205,7 @@ getChatFuc(){
 
                         return StatefulBuilder(builder: (_, setStateChat) {
                           setState3 = setStateChat;
-                          convertListMessagesToListWidget(
-                              chatProvider.group.chat);
+                          convertListMessagesToListWidget(chatProvider.group.chat);
                           convertListSendMessagesToListWidget(listSendMessage);
                           // Navigator.of(context).pop();
                           return SingleChildScrollView(
