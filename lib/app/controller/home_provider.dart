@@ -247,7 +247,7 @@ Future<void> goToUrl(context,String idLink) async {
   var urllaunchable = await canLaunchUrl(Uri.parse(idLink)); //canLaunch is from url_launcher package
   if(urllaunchable){
     Const.LOADIG(context);
-    await launchUrl(Uri.parse(idLink));
+    await launchUrl(Uri.parse(idLink),mode: LaunchMode.externalApplication);
     Navigator.of(context).pop();//launch is from url_launcher package to launch URL
   }else{
     Const.TOAST(context,textToast: FirebaseFun.findTextToast("URL can't be launched."));
